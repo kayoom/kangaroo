@@ -5,16 +5,16 @@ Gem::Specification.new do |s|
   s.authors     = ["Michael Eickenberg", "Marian Theisen"]
   s.email       = 'marian@cice-online.net'
   s.summary     = "Kang! ActiveResource OpenObject"
-  s.homepage    = "http://github.com/cice/ooor"
+  s.homepage    = "http://github.com/cice/kangARoo"
   s.description = "ActiveResource OpenObject Wrapper"
-  
-  s.files        =  Dir["**/*"] - 
-                    Dir["coverage/**/*"] - 
-                    Dir["rdoc/**/*"] - 
-                    Dir["doc/**/*"] - 
-                    Dir["sdoc/**/*"] - 
+
+  s.files        =  Dir["**/*"] -
+                    Dir["coverage/**/*"] -
+                    Dir["rdoc/**/*"] -
+                    Dir["doc/**/*"] -
+                    Dir["sdoc/**/*"] -
                     Dir["rcov/**/*"]
-                    
+
   s.add_dependency "activeresource", ">= 3.0.0"
   s.add_dependency "activesupport", ">= 3.0.0"
 end
