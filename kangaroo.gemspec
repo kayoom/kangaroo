@@ -4,9 +4,9 @@ Gem::Specification.new do |s|
   s.date        = Time.now.strftime("%Y-%m-%d")
   s.authors     = ["Michael Eickenberg", "Marian Theisen"]
   s.email       = 'marian@cice-online.net'
-  s.summary     = "Kang! ActiveResource OpenObject"
+  s.summary     = "Kang! ActiveRecord-ish OpenObject"
   s.homepage    = "http://github.com/cice/kangARoo"
-  s.description = "ActiveResource OpenObject Wrapper"
+  s.description = "ActiveRecord-ish OpenObject Wrapper"
 
   s.files        =  Dir["**/*"] -
                     Dir["coverage/**/*"] -
