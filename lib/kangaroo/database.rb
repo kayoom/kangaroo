@@ -3,7 +3,7 @@ module Kangaroo
     attr_accessor :db_name, :user, :password, :user_id, :base_client
     
     def proxy
-      @proxy ||= Proxy.new(client, self)
+      @proxy ||= DatabaseProxy.new client, self
     end
     
     def client

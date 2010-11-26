@@ -1,5 +1,5 @@
 module Kangaroo
-  class Proxy < Rapuncel::Proxy
+  class DatabaseProxy < Rapuncel::Proxy
     attr_accessor :db_name, :user_id, :password
     
     def __initialize__ client, database

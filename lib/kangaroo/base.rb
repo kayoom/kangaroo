@@ -1,5 +1,10 @@
+require 'active_support/core_ext/module/delegation'
+
 module Kangaroo
   class Base
+    OPERATORS = (%w(= != > >= < <= like ilike in child_of parent_left parent_right) + ['not in']).join("|").freeze
+    CONDITION_PATTERN = /\A(.*)\s*(#{OPERATORS})\s*(.*)\Z/.freeze
+    
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
     include ActiveModel::Validations
@@ -7,6 +12,7 @@ module Kangaroo
     attr_reader :attribute
     
     define_model_callbacks :initialize
+    
     
     def initialize attributes = {}
       _run_initialize_callbacks do
@@ -28,7 +34,32 @@ module Kangaroo
       end
     end
     
-    class << self
+    
+    class << self      
+      delegate  :where, 
+                :to => :relation
+                
+      def relation
+        @relation ||= Relation.new self
+      end
+      
+      def search conditions = []
+        conditions = conditions.sum([]) {|c| convert_condition(c) }
+      end
+      
+      def convert_condition condition
+        case condition
+        when Hash
+          eqs = ['=']*condition.size
+          
+          condition.keys.zip eqs, condition.values
+        when String
+          [CONDITION_PATTERN.match(condition).captures]
+        when Array
+          #TODO
+        end
+      end
+      
       def instantiate attributes
         allocate.tap do |object|
           object.instance_variable_set :@attributes, attributes.stringify_keys
