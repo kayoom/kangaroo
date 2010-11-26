@@ -3,7 +3,7 @@ module Kangaroo
     attr_accessor :db_name, :user_id, :password
     
     def __initialize__ client, database
-      super client
+      super client, nil
       
       @db_name, @user_id, @password = database.db_name, database.user_id, database.password
     end

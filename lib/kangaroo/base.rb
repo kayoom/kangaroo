@@ -1,9 +1,10 @@
 require 'active_support/core_ext/module/delegation'
+require 'kangaroo/relation'
 
 module Kangaroo
   class Base
-    OPERATORS = (%w(= != > >= < <= like ilike in child_of parent_left parent_right) + ['not in']).join("|").freeze
-    CONDITION_PATTERN = /\A(.*)\s*(#{OPERATORS})\s*(.*)\Z/.freeze
+    OPERATORS = (%w(= != > >= < <= ilike like in child_of parent_left parent_right) + ['not in']).join("|").freeze
+    CONDITION_PATTERN = /\A(.*)\s+(#{OPERATORS})\s+(.*)\Z/.freeze
     
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
@@ -43,9 +44,33 @@ module Kangaroo
         @relation ||= Relation.new self
       end
       
+      def database
+        Kangaroo.default
+      end
+      
       def search conditions = []
         conditions = conditions.sum([]) {|c| convert_condition(c) }
+        
+        database.search(self, conditions)
       end
+      
+      def read *ids
+        database.read(self, ids).map do |record|
+          instantiate record
+        end
+      end
+      
+      def all conditions = []
+        ids = search(conditions)
+        
+        read *ids
+      end
+      
+      def oo_model_name
+        name.underscore.gsub('/','.').sub('oo.','')
+      end
+      
+      
       
       def convert_condition condition
         case condition

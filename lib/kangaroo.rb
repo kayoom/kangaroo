@@ -1,7 +1,7 @@
 require 'kangaroo/railtie' if defined?(Rails)
 
 require 'kangaroo/client'
-require 'kangaroo/proxy'
+require 'kangaroo/database_proxy'
 require 'kangaroo/database'
 require 'kangaroo/base'
 

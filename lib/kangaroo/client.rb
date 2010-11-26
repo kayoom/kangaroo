@@ -2,6 +2,7 @@ module Kangaroo
   class Client < Rapuncel::Client
     DB_SERVICE_PATH = '/xmlrpc/db'
     COMMON_SERVICE_PATH = '/xmlrpc/common'
+    OBJECT_SERVICE_PATH = '/xmlrpc/object'
     
     def clone
       super.tap do |c|
@@ -19,6 +20,12 @@ module Kangaroo
       @common_service ||= clone.tap do |c|
         c.connection.path = COMMON_SERVICE_PATH
       end      
+    end
+    
+    def object_service
+      @object_service ||= clone.tap do |c|
+        c.connection.path = OBJECT_SERVICE_PATH
+      end
     end
     
     def database name, user, password
