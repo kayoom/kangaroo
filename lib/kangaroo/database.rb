@@ -14,13 +14,12 @@ module Kangaroo
       @base_client, @db_name, @user, @user_id, @password = base_client, name, user, user_id, password
     end
     
-    def search model, conditions = []
-      proxy.execute model.oo_model_name, 'search', conditions
-    end    
-    
-    def read model, ids
-      proxy.execute model.oo_model_name, 'read', ids
+    %w(search read).each do |action|
+      define_method action do |model, *args|
+        proxy.execute model.oo_model_name, action, *args
+      end
     end
+    
     
     
   end

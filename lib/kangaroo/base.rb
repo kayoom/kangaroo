@@ -1,10 +1,10 @@
 require 'active_support/core_ext/module/delegation'
 require 'kangaroo/relation'
+require 'kangaroo/oo_queries'
+require 'kangaroo/queries'
 
 module Kangaroo
   class Base
-    OPERATORS = (%w(= != > >= < <= ilike like in child_of parent_left parent_right) + ['not in']).join("|").freeze
-    CONDITION_PATTERN = /\A(.*)\s+(#{OPERATORS})\s+(.*)\Z/.freeze
     
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
@@ -13,6 +13,9 @@ module Kangaroo
     attr_reader :attribute
     
     define_model_callbacks :initialize
+    
+    include OoQueries
+    include Queries
     
     
     def initialize attributes = {}
@@ -48,42 +51,9 @@ module Kangaroo
         Kangaroo.default
       end
       
-      def search conditions = []
-        conditions = conditions.sum([]) {|c| convert_condition(c) }
-        
-        database.search(self, conditions)
-      end
-      
-      def read *ids
-        database.read(self, ids).map do |record|
-          instantiate record
-        end
-      end
-      
-      def all conditions = []
-        ids = search(conditions)
-        
-        read *ids
-      end
-      
       def oo_model_name
-        name.underscore.gsub('/','.').sub('oo.','')
-      end
-      
-      
-      
-      def convert_condition condition
-        case condition
-        when Hash
-          eqs = ['=']*condition.size
-          
-          condition.keys.zip eqs, condition.values
-        when String
-          [CONDITION_PATTERN.match(condition).captures]
-        when Array
-          #TODO
-        end
-      end
+        name[4..-1].underscore.gsub('/','.')
+      end      
       
       def instantiate attributes
         allocate.tap do |object|
