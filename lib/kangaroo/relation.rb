@@ -1,7 +1,23 @@
 module Kangaroo
   class Relation
-    ARRAY_DELEGATES = %w(each to_a map map!).freeze #TODO extend this list
+    ARRAY_DELEGATES = %w([] all? any? as_json at b64encode blank? choice class clone collect collect! combination compact compact! concat 
+                          count cycle decode64 delete delete_at delete_if detect drop drop_while dup duplicable? each each_cons each_index
+                          each_slice each_with_index each_with_object empty? encode64 encode_json entries enum_cons enum_for enum_slice
+                          enum_with_index eql? equal? exclude? extract_options! fetch fifth fill find find_all find_index first flatten 
+                          flatten! forty_two fourth freeze frozen? grep group_by hash html_safe? in_groups in_groups_of include? index 
+                          index_by indexes indices inject insert inspect instance_eval instance_exec instance_of? is_a? join kind_of?
+                          last length many? map map! max max_by member? min min_by minmax minmax_by nitems none? one? pack paginate 
+                          partition permutation pop presence present? pretty_inspect pretty_print pretty_print_cycle pretty_print_inspect
+                          pretty_print_instance_variables product push rassoc reduce reject reject! replace respond_to? returning reverse
+                          reverse! reverse_each rindex sample second select shelljoin shift shuffle shuffle! size slice slice! sort sort! 
+                          sort_by split sum take take_while tap third to to_a to_ary to_default_s to_enum to_formatted_s to_json to_matcher
+                          to_param to_query to_s to_sentence to_set to_xml to_xml_rpc to_yaml to_yaml_properties to_yaml_style transpose
+                          type uniq uniq! uniq_by uniq_by! unshift values_at yaml_initialize zip |).freeze
+                          
     attr_accessor :target, :where_clauses, :offset_clause, :limit_clause
+    
+    alias_method :__clone__, :clone
+    alias_method :__tap__, :tap
     
     delegate *(ARRAY_DELEGATES + [:to => :all])
     
@@ -11,19 +27,19 @@ module Kangaroo
     end
     
     def where condition
-      clone.tap do |c|
+      __clone__.__tap__ do |c|
         c.where_clauses += [condition]
       end
     end
     
     def limit limit
-      clone.tap do |c|
+      __clone__.__tap__ do |c|
         c.limit_clause = limit
       end
     end
     
     def offset offset
-      clone.tap do |c|
+      __clone__.__tap__ do |c|
         c.offset_clause = offset
       end
     end
