@@ -3,7 +3,11 @@ class Oo::Ir::Model::Fields < Kangaroo::Base
                             :select_level, :size, :model, :on_delete, :name, :field_description, :groups, :selectable,
                             :translate, :view_load, :state, :domain
                             
-  def model
-    @model ||= Model.read Array(model_id).first
+  # def model
+  #   @model ||= Model.find model_id
+  # end
+  
+  def required?
+    !!required
   end
 end

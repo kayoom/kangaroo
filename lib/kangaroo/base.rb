@@ -10,7 +10,8 @@ module Kangaroo
     extend ActiveModel::Callbacks
     include ActiveModel::Validations
     
-    attr_reader :attribute
+    attr_reader :attributes
+    attr_accessor :database
     
     define_model_callbacks :initialize
     
@@ -40,15 +41,24 @@ module Kangaroo
     
     
     class << self      
-      delegate  :where, 
+      delegate  :where,
+                :offset,
+                :limit,
+                :using,
                 :to => :relation
                 
       def relation
         @relation ||= Relation.new self
       end
       
-      def database
-        Kangaroo.default
+      def database db_name = nil
+        if db_name.nil?
+          Kangaroo.default
+        elsif db_name.is_a?(Database)
+          db_name
+        else
+          Kangaroo.databases[db_name.to_sym]
+        end
       end
       
       def oo_model_name

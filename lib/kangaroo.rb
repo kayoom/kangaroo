@@ -20,6 +20,7 @@ module Kangaroo
       db_name = cfg["db_name"] || name
       database = base_client.database db_name, cfg["user"], cfg["password"]
       
+      database.load_models cfg['models'] || :all
       databases[name.to_sym] = database
       self.default = database if cfg["default"]
     end

@@ -1,6 +1,6 @@
 module Kangaroo
   class Database
-    attr_accessor :db_name, :user, :password, :user_id, :base_client
+    attr_accessor :db_name, :user, :password, :user_id, :base_client, :models
     
     def proxy
       @proxy ||= DatabaseProxy.new client, self
@@ -20,7 +20,28 @@ module Kangaroo
       end
     end
     
+    def load_models model_names = :all
+      model_names = if model_names == :all
+        %w(%)
+      else
+        model_names.map do |m|
+          m.gsub('*', '%')
+        end
+      end
+      
+      @models = model_names.sum([]) do |m|
+        Oo::Ir::Model.using(self).where("model ilike #{m}").all
+      end.sort_by do |m|
+        m.model.length
+      end
+      
+      create_models
+    end
     
-    
+    def create_models      
+      @models.map do |model|
+        model.create_class
+      end      
+    end
   end
 end

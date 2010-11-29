@@ -1,7 +1,7 @@
 module Kangaroo
   module OoQueries
     OPERATORS = (%w(= != > >= < <= ilike like in child_of parent_left parent_right) + ['not in']).join("|").freeze
-    CONDITION_PATTERN = /\A(.*)\s+(#{OPERATORS})\s+(.*)\Z/.freeze
+    CONDITION_PATTERN = /\A(.*)\s+(#{OPERATORS})\s+(.*)\Z/i.freeze
     
     def self.included base
       base.extend ClassMethods
@@ -17,12 +17,17 @@ module Kangaroo
         args[1] = query_parameters[:offset] if query_parameters[:offset]
         args << query_parameters[:limit] if query_parameters[:limit]
         
-        database.search(self, *args)
+        database(query_parameters[:db_name]).search(self, *args)
       end
       
       def read *ids
+        options = ids.extract_options!
+                
+        database = database(options[:db_name])
         database.read(self, ids).map do |record|
-          instantiate record
+          instantiate(record).tap do |r|
+            r.database = database
+          end
         end
       end
       
@@ -30,9 +35,12 @@ module Kangaroo
       def convert_condition condition
         case condition
         when Hash
-          eqs = ['=']*condition.size
-          
-          condition.keys.zip eqs, condition.values
+          [].tap do |arr|
+            condition.each do |key, value|
+              op = value.is_a?(Array) ? 'in' : '='
+              arr << [key, op, value]
+            end
+          end
         when String
           [CONDITION_PATTERN.match(condition).captures]
         when Array

@@ -1,12 +1,31 @@
+require 'kangaroo/model_class_creator'
+
 module Oo
   module Ir
     class Model < Kangaroo::Base
       define_attribute_methods :state, :osv_memory, :name, :model, :info, :field_id, :access_ids
       
       def fields
-        @fields ||= Fields.read *field_id
+        @fields ||= Fields.using(database).find field_id
       end
       
+      def required_fields
+        fields.select do |field|
+          field.required?
+        end
+      end
+      
+      def model_class
+        @model_class ||= model_class_name.constantize
+      end
+      
+      def model_class_name
+        "Oo::" + model.gsub('.','/').camelize
+      end
+      
+      def create_class
+        @model_class ||= Kangaroo::ModelClassCreator.new(self).create
+      end
     end
   end
 end
