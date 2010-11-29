@@ -1,6 +1,6 @@
 module Kangaroo
   class Database
-    attr_accessor :db_name, :user, :password, :user_id, :base_client, :models
+    attr_accessor :db_name, :user, :password, :user_id, :base_client, :models, :fields
     
     def proxy
       @proxy ||= DatabaseProxy.new client, self
@@ -29,11 +29,18 @@ module Kangaroo
         end
       end
       
-      @models = model_names.sum([]) do |m|
-        Oo::Ir::Model.using(self).where("model ilike #{m}").all
-      end.sort_by do |m|
+      
+      @fields = []
+      @models = []
+      model_names.each do |m|
+        @fields += Oo::Ir::Model::Fields.using(self).where("model ilike #{m}").all
+        @models += Oo::Ir::Model.using(self).where("model ilike #{m}").all
+      end
+      
+      @models = @models.sort_by do |m|
         m.model.length
       end
+      
       
       create_models
     end

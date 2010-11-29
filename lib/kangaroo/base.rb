@@ -42,13 +42,13 @@ module Kangaroo
     end
     
     def inspect
-      "#<#{self.class}".tap do |s|
-        s << " " << self.class.column_names.first << ": " << send(self.class.column_names.first).inspect
-        
-        self.class.column_names[1..-1].each do |c|
-          s << ", " << c << ": " << send(c).inspect
+      "#<#{self.class} ".tap do |s|
+        attr = self.class.column_names.map do |c|
+          [c.to_s, send(c).inspect] * ": "
         end
         
+        s << attr * ", "
+      
         s << ">"
       end
     end

@@ -3,10 +3,13 @@ require 'kangaroo/model_class_creator'
 module Oo
   module Ir
     class Model < Kangaroo::Base
-      define_attribute_methods :state, :osv_memory, :name, :model, :info, :field_id, :access_ids
+      self.column_names = %w(state osv_memory name model info field_id access_ids)
+      define_attribute_methods *column_names
       
       def fields
-        @fields ||= Fields.using(database).find field_id
+        @fields ||= database.fields.select do |f| 
+          f.model == model
+        end
       end
       
       def required_fields
@@ -14,6 +17,7 @@ module Oo
           field.required?
         end
       end
+      
       
       def model_class
         @model_class ||= model_class_name.constantize

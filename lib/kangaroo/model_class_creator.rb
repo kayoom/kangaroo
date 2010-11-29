@@ -40,6 +40,7 @@ module Kangaroo
       end
       
       scope.const_set constants.last, Class.new(Kangaroo::Base) unless scope.const_defined?(constants.last)
+      scope.const_get constants.last
     end
   end
 end
