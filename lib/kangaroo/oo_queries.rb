@@ -9,7 +9,7 @@ module Kangaroo
     
     
     module ClassMethods
-      def search conditions = []
+      def search *conditions
         conditions = conditions.sum([]) {|c| convert_condition(c) }
         
         database.search(self, conditions)
