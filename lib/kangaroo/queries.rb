@@ -5,10 +5,8 @@ module Kangaroo
     end
     
     module ClassMethods
-      def all query_parameters = {}
-        conditions = query_parameters[:conditions]
-        
-        ids = search *conditions
+      def all query_parameters = {}        
+        ids = search query_parameters
         
         read *ids
       end      

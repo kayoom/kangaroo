@@ -9,10 +9,15 @@ module Kangaroo
     
     
     module ClassMethods
-      def search *conditions
+      def search query_parameters = {}
+        conditions = query_parameters[:conditions] || []
         conditions = conditions.sum([]) {|c| convert_condition(c) }
         
-        database.search(self, conditions)
+        args = [conditions, 0]
+        args[1] = query_parameters[:offset] if query_parameters[:offset]
+        args << query_parameters[:limit] if query_parameters[:limit]
+        
+        database.search(self, *args)
       end
       
       def read *ids
