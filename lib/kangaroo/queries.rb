@@ -4,6 +4,28 @@ module Kangaroo
       base.extend ClassMethods
     end
     
+    def reload
+      @attributes = database.read(self.class, id).stringify_keys
+      @changed_attributes = {}
+      
+      self
+    end
+    
+    def save  
+      if valid? && database.write(self.class, [id], updateable_attributes)
+        @changed_attributes = {}
+        
+        true
+      else
+        false
+      end
+    end
+    
+    protected
+    def updateable_attributes
+      @attributes.slice *changed.map(&:to_s)
+    end
+    
     module ClassMethods
       def all query_parameters = {}        
         ids = search query_parameters

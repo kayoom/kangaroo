@@ -20,9 +20,19 @@ module Kangaroo
     end
     
     def define_attribute_methods
-      column_names = @model.fields.map(&:name)
-      @klass.define_attribute_methods *column_names
-      @klass.column_names = column_names.sort
+      writeable_column_names = []
+      readonly_column_names = []
+      @model.fields.each do |field|
+        if field.readonly?
+          readonly_column_names << field.name
+        else
+          writeable_column_names << field.name
+        end
+      end
+      
+      @klass.define_attribute_methods *writeable_column_names
+      @klass.define_reader_methods *readonly_column_names
+      @klass.column_names = (writeable_column_names + readonly_column_names).sort
     end
     
     def create_class

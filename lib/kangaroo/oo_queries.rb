@@ -31,6 +31,7 @@ module Kangaroo
         end
       end
       
+      
       protected      
       def convert_condition condition
         case condition

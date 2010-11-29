@@ -9,11 +9,11 @@ module Kangaroo
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
     include ActiveModel::Validations
+    include ActiveModel::Dirty
     
     class_attribute :column_names
     
-    attr_reader :attributes
-    attr_accessor :database
+    attr_accessor :database, :id
     
     define_model_callbacks :initialize
     
@@ -22,6 +22,8 @@ module Kangaroo
     
     
     def initialize attributes = {}
+      @new_record = true
+      
       _run_initialize_callbacks do
         self.attributes = attributes
       end
@@ -36,13 +38,23 @@ module Kangaroo
     end
     
     def attributes= attributes
-      attributes.map do |key, value|
-        __send__ "#{key}=", value
+      attributes.except('id', :id).map do |key_value|
+        __send__ "#{key_value.first}=", key_value.last
+      end
+    end
+    
+    def attributes
+      {}.tap do |attributes|
+        @attributes.keys.each do |key|
+          attributes[key] = send(key)
+        end
       end
     end
     
     def inspect
       "#<#{self.class} ".tap do |s|
+        s << "id: " << id.to_s << ", "
+        
         attr = self.class.column_names.map do |c|
           [c.to_s, send(c).inspect] * ": "
         end
@@ -80,8 +92,10 @@ module Kangaroo
       end      
       
       def instantiate attributes
+        attributes = attributes.stringify_keys
         allocate.tap do |object|
-          object.instance_variable_set :@attributes, attributes.stringify_keys
+          object.instance_variable_set :@attributes, attributes.except('id')
+          object.instance_variable_set :@id, attributes['id']
           # object.instance_variable_set :@attributes_cache, {}
           
           object.instance_variable_set :@new_record, false
@@ -96,13 +110,24 @@ module Kangaroo
         end
       end
       
+      def define_reader_methods *methods
+        methods.each do |method|
+          define_method method do
+            read_attribute method
+          end
+        end
+      end
+      
       def define_attribute_methods *methods
+        super methods.map(&:to_s)
+        
         methods.each do |method|
           define_method method do
             read_attribute method
           end
           
           define_method "#{method}=" do |value|
+            attribute_will_change! method
             write_attribute method, value
           end
         end

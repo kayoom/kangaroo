@@ -27,7 +27,7 @@ module Oo
         "Oo::" + model.gsub('.','/').camelize
       end
       
-      def create_class
+      def create_class #TODO: initialize fields via 'fields_get'
         @model_class ||= Kangaroo::ModelClassCreator.new(self).create
       end
     end
