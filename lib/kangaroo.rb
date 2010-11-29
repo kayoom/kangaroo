@@ -10,8 +10,12 @@ require 'oo/ir/model'
 module Kangaroo
   mattr_accessor :databases, :default
   
-  def self.initialize config_file
-    configuration = YAML.load_file(config_file)
+  def self.initialize config_file_or_hash
+    configuration = if config_file_or_hash.is_a?(Hash)
+      config_file_or_hash
+    else
+      YAML.load_file(config_file_or_hash)
+    end
         
     base_client = Client.new configuration.slice("host", "port")
     

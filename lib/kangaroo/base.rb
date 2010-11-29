@@ -10,6 +10,8 @@ module Kangaroo
     extend ActiveModel::Callbacks
     include ActiveModel::Validations
     
+    class_attribute :column_names
+    
     attr_reader :attributes
     attr_accessor :database
     
@@ -36,6 +38,18 @@ module Kangaroo
     def attributes= attributes
       attributes.map do |key, value|
         __send__ "#{key}=", value
+      end
+    end
+    
+    def inspect
+      "#<#{self.class}".tap do |s|
+        s << " " << self.class.column_names.first << ": " << send(self.class.column_names.first).inspect
+        
+        self.class.column_names[1..-1].each do |c|
+          s << ", " << c << ": " << send(c).inspect
+        end
+        
+        s << ">"
       end
     end
     

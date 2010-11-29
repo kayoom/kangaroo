@@ -5,7 +5,6 @@ module Kangaroo
     end
     
     def create
-      puts "Creating #{@model.model_class_name}"
       create_class
       define_attribute_methods
       validations_for_required_fields
@@ -21,7 +20,9 @@ module Kangaroo
     end
     
     def define_attribute_methods
-      @klass.define_attribute_methods *@model.fields.map(&:name)
+      column_names = @model.fields.map(&:name)
+      @klass.define_attribute_methods *column_names
+      @klass.column_names = column_names.sort
     end
     
     def create_class
