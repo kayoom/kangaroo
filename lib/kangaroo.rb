@@ -26,7 +26,6 @@ module Kangaroo
     
     self.database = base_client.database cfg["name"], cfg["user"], cfg["password"]
     
-    debugger
     self.database.load_models cfg['models'] || :all
   end
 end

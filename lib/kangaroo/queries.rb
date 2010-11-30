@@ -65,7 +65,6 @@ module Kangaroo
         
         return [] if ids.empty?
         
-        ids << {:db_name => query_parameters[:db_name]}
         read ids, column_names
       end      
       

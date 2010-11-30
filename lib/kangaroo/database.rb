@@ -29,9 +29,8 @@ module Kangaroo
         end
       end
       
-      
       @models = model_names.sum([]) do |m|
-        Oo::Ir::Model.using(self).where("model ilike #{m}").all
+        Oo::Ir::Model.where("model ilike #{m}").all
       end
       
       @models = @models.sort_by do |m|

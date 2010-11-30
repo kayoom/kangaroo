@@ -59,7 +59,6 @@ module Kangaroo
       delegate  :where,
                 :offset,
                 :limit,
-                :using,
                 :to => :relation
                 
       def relation
