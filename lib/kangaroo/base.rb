@@ -26,10 +26,15 @@ module Kangaroo
     def initialize attributes = {}
       @new_record = true
       @attributes = {}
+      @database = self.class.database
       
       _run_initialize_callbacks do
         self.attributes = attributes
       end
+    end
+    
+    def new_record?
+      @new_record
     end
     
     def inspect

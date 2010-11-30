@@ -14,7 +14,7 @@ module Kangaroo
       @base_client, @db_name, @user, @user_id, @password = base_client, name, user, user_id, password
     end
     
-    %w(search read write).each do |action|
+    %w(search read write create).each do |action|
       define_method action do |model, *args|
         proxy.execute model.oo_model_name, action, *args
       end

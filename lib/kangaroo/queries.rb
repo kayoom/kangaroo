@@ -14,9 +14,21 @@ module Kangaroo
     def save options = {}
       skip_validation = !options[:validate]
       
-      if (skip_validation || valid?) && database.write(self.class, [id], updateable_attributes)
+      (skip_validation || valid?) && create_or_update
+    end
+    
+    def create attributes = {}
+      new(attributes).save
+    end
+    
+    protected
+    def create_or_update
+      new_record? ? create_record : write_record
+    end
+    
+    def write_record
+      if database.write(self.class, [id], updateable_attributes)
         reload
-        @changed_attributes = {}
         
         true
       else
@@ -24,12 +36,24 @@ module Kangaroo
       end
     end
     
-    protected
+    def create_record
+      id = database.create(self.class, updateable_attributes)
+      if id.is_a?(Integer)
+        @id = id
+        @new_record = false
+        
+        reload        
+      else
+        false
+      end
+    end
+    
     def updateable_attributes
       @attributes.slice *changed.map(&:to_s)
     end
     
     module ClassMethods
+      
       def create attributes = {}
         new(attributes).save
       end
