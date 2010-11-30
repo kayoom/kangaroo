@@ -39,7 +39,6 @@ module Kangaroo
     
     def create_class
       @klass = supplement_constants *@model.model_class_name.split("::")[1..-1]
-      @klass.ir_model = @model
       
       @klass
     end

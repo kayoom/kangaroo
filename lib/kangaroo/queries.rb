@@ -11,8 +11,10 @@ module Kangaroo
       self
     end
     
-    def save  
-      if valid? && database.write(self.class, [id], updateable_attributes)
+    def save options = {}
+      skip_validation = !options[:validate]
+      
+      if (skip_validation || valid?) && database.write(self.class, [id], updateable_attributes)
         reload
         @changed_attributes = {}
         

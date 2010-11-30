@@ -3,53 +3,32 @@ require 'kangaroo/relation'
 require 'kangaroo/oo_queries'
 require 'kangaroo/queries'
 require 'kangaroo/column'
+require 'kangaroo/attributes'
 
 module Kangaroo
-  class Base
-    
+  class Base    
     extend ActiveModel::Naming
     extend ActiveModel::Callbacks
     include ActiveModel::Validations
     include ActiveModel::Dirty
+    include OoQueries
+    include Queries
+    include Attributes  
     
-    class_attribute :ir_model
     class_attribute :columns
     
     attr_accessor :database, :id
     
     define_model_callbacks :initialize
-    
-    include OoQueries
-    include Queries
-    
+    define_model_callbacks :find
+      
     
     def initialize attributes = {}
       @new_record = true
+      @attributes = {}
       
       _run_initialize_callbacks do
         self.attributes = attributes
-      end
-    end
-    
-    def read_attribute name
-      @attributes[name.to_s]
-    end
-    
-    def write_attribute name, value
-      @attributes[name.to_s] = value
-    end
-    
-    def attributes= attributes
-      attributes.except('id', :id).map do |key_value|
-        __send__ "#{key_value.first}=", key_value.last
-      end
-    end
-    
-    def attributes
-      {}.tap do |attributes|
-        @attributes.keys.each do |key|
-          attributes[key] = send(key)
-        end
       end
     end
     
@@ -65,8 +44,7 @@ module Kangaroo
       
         s << ">"
       end
-    end
-    
+    end    
     
     class << self      
       delegate  :where,
@@ -76,7 +54,7 @@ module Kangaroo
                 :to => :relation
                 
       def relation
-        @relation ||= Relation.new self
+        Relation.new self
       end
       
       def database db_name = nil
@@ -90,12 +68,8 @@ module Kangaroo
       end
       
       def oo_model_name
-        name[4..-1].underscore.gsub('/','.')
-      end      
-      
-      def column_names
-        columns.map &:name
-      end
+        name[4..-1].underscore.gsub '/', '.'
+      end     
       
       def instantiate attributes
         attributes = attributes.stringify_keys
@@ -111,33 +85,10 @@ module Kangaroo
           # object.instance_variable_set :@previously_changed, {}
           # object.instance_variable_set :@changed_attributes, {}
 
-          # object.send :_run_find_callbacks
+          object.send :_run_find_callbacks
           object.send :_run_initialize_callbacks
         end
-      end
-      
-      def define_reader_methods *methods
-        methods.each do |method|
-          define_method method do
-            read_attribute method
-          end
-        end
-      end
-      
-      def define_attribute_methods *methods
-        super methods.map(&:to_s)
-        
-        methods.each do |method|
-          define_method method do
-            read_attribute method
-          end
-          
-          define_method "#{method}=" do |value|
-            attribute_will_change! method
-            write_attribute method, value
-          end
-        end
-      end
+      end      
     end    
   end
 end
