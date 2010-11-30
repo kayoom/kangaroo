@@ -17,7 +17,7 @@ module Kangaroo
     
     class_attribute :columns
     
-    attr_accessor :database, :id
+    attr_accessor :id
     
     define_model_callbacks :initialize
     define_model_callbacks :find
@@ -26,7 +26,6 @@ module Kangaroo
     def initialize attributes = {}
       @new_record = true
       @attributes = self.class.default_attributes.stringify_keys
-      @database = self.class.database
       
       _run_initialize_callbacks do
         self.attributes = attributes
@@ -51,6 +50,11 @@ module Kangaroo
       end
     end    
     
+    protected
+    def database
+      self.class.database
+    end
+    
     class << self      
       delegate  :where,
                 :offset,
@@ -62,14 +66,8 @@ module Kangaroo
         Relation.new self
       end
       
-      def database db_name = nil
-        if db_name.nil?
-          Kangaroo.default
-        elsif db_name.is_a?(Database)
-          db_name
-        else
-          Kangaroo.databases[db_name.to_sym]
-        end
+      def database
+        Kangaroo.database
       end
       
       def oo_model_name

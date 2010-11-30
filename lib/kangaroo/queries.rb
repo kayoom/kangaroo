@@ -17,10 +17,6 @@ module Kangaroo
       (skip_validation || valid?) && create_or_update
     end
     
-    def create attributes = {}
-      new(attributes).save
-    end
-    
     protected
     def create_or_update
       new_record? ? create_record : write_record
@@ -53,15 +49,17 @@ module Kangaroo
       @attributes.slice *changed.map(&:to_s)
     end
     
-    module ClassMethods      
+    module ClassMethods    
+      def create attributes = {}
+        new(attributes).tap do |record|
+          record.save
+        end
+      end
+      
       def default_attributes
         default_get *column_names
       end
-      
-      def create attributes = {}
-        new(attributes).save
-      end
-      
+            
       def all query_parameters = {}        
         ids = search query_parameters
         

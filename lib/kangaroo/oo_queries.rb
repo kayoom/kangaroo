@@ -17,24 +17,18 @@ module Kangaroo
         args[1] = query_parameters[:offset] if query_parameters[:offset]
         args << query_parameters[:limit] if query_parameters[:limit]
         
-        database(query_parameters[:db_name]).search(self, *args)
+        database.search(self, *args)
       end
       
       def read ids, column_names = nil
-        options = ids.extract_options!
                 
-        database = database(options[:db_name])
         database.read(self, ids, column_names).map do |record|
-          instantiate(record).tap do |r|
-            r.database = database
-          end
+          instantiate(record)
         end
       end
       
       def default_get *fields
-        options = fields.extract_options!
-        
-        database(options[:db_name]).default_get(self, fields)
+        database.default_get(self, fields)
       end
       
       protected      
