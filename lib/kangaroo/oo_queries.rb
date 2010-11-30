@@ -21,7 +21,7 @@ module Kangaroo
       end
       
       def read ids, column_names = nil
-                
+        
         database.read(self, ids, column_names).map do |record|
           instantiate(record)
         end

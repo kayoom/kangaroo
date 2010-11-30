@@ -19,11 +19,7 @@ module Kangaroo
     end
         
     base_client = Client.new configuration.slice("host", "port")
-    
-    base_client.common_service
-    
-    cfg = configuration["database"]
-    
+    cfg = configuration["database"]    
     self.database = base_client.database cfg["name"], cfg["user"], cfg["password"]
     
     self.database.load_models cfg['models'] || :all

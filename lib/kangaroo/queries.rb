@@ -5,7 +5,7 @@ module Kangaroo
     end
     
     def reload
-      @attributes = database.read(self.class, id).stringify_keys
+      @attributes = database.read(self.class, id, self.class.column_names).stringify_keys
       @changed_attributes = {}
       
       self
