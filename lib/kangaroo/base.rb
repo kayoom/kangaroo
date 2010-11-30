@@ -61,6 +61,15 @@ module Kangaroo
                 :limit,
                 :to => :relation
                 
+      def inspect
+        "".tap do |s|
+          s << self.name << "("
+          s << "id, "
+          s << columns.map {|c| "#{c.name}: #{c.type}"} * ", "
+          s << ")"
+        end
+      end
+                
       def relation
         Relation.new self
       end
