@@ -1,5 +1,6 @@
 require 'kangaroo/railtie' if defined?(Rails)
 
+require 'prettyprint'
 require 'kangaroo/client'
 require 'kangaroo/database_proxy'
 require 'kangaroo/database'

@@ -6,37 +6,42 @@ module Kangaroo
     
     def create
       create_class
-      define_attribute_methods
-      validations_for_required_fields
+      define_columns
       
       @klass
     end
     
-    protected
-    def validations_for_required_fields
-      @model.required_fields.each do |field|
-        @klass.validates_presence_of field.name
+    protected    
+    def define_columns
+      @klass.columns = []
+      
+      @model.fields.each do |name, properties|        
+        @klass.columns << (c = Column.new(name, properties))
+        
+        define_attribute_methods c
+        add_validations c
+      end      
+    end
+    
+    def define_attribute_methods column
+      if column.readonly?
+        @klass.define_reader_methods column.name
+      else
+        @klass.define_attribute_methods column.name
       end
     end
     
-    def define_attribute_methods
-      writeable_column_names = []
-      readonly_column_names = []
-      @model.fields.each do |field|
-        if field.readonly?
-          readonly_column_names << field.name
-        else
-          writeable_column_names << field.name
-        end
+    def add_validations column
+      if column.required?
+        @klass.validates_presence_of column.name
       end
-      
-      @klass.define_attribute_methods *writeable_column_names
-      @klass.define_reader_methods *readonly_column_names
-      @klass.column_names = (writeable_column_names + readonly_column_names).sort
     end
     
     def create_class
       @klass = supplement_constants *@model.model_class_name.split("::")[1..-1]
+      @klass.ir_model = @model
+      
+      @klass
     end
     
     private

@@ -1,3 +1,3 @@
-class Oo::Ir::Model::Data < Kangaroo::Base
-  
-end
+# class Oo::Ir::Model::Data < Kangaroo::Base
+#   
+# end

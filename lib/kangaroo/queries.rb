@@ -13,6 +13,7 @@ module Kangaroo
     
     def save  
       if valid? && database.write(self.class, [id], updateable_attributes)
+        reload
         @changed_attributes = {}
         
         true
@@ -27,6 +28,10 @@ module Kangaroo
     end
     
     module ClassMethods
+      def create attributes = {}
+        new(attributes).save
+      end
+      
       def all query_parameters = {}        
         ids = search query_parameters
         

@@ -2,6 +2,7 @@ require 'active_support/core_ext/module/delegation'
 require 'kangaroo/relation'
 require 'kangaroo/oo_queries'
 require 'kangaroo/queries'
+require 'kangaroo/column'
 
 module Kangaroo
   class Base
@@ -11,7 +12,8 @@ module Kangaroo
     include ActiveModel::Validations
     include ActiveModel::Dirty
     
-    class_attribute :column_names
+    class_attribute :ir_model
+    class_attribute :columns
     
     attr_accessor :database, :id
     
@@ -90,6 +92,10 @@ module Kangaroo
       def oo_model_name
         name[4..-1].underscore.gsub('/','.')
       end      
+      
+      def column_names
+        columns.map &:name
+      end
       
       def instantiate attributes
         attributes = attributes.stringify_keys

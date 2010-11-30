@@ -3,19 +3,14 @@ require 'kangaroo/model_class_creator'
 module Oo
   module Ir
     class Model < Kangaroo::Base
-      self.column_names = %w(state osv_memory name model info field_id access_ids)
+      def self.column_names
+        %w(state osv_memory name model info field_id access_ids)
+      end
+      
       define_attribute_methods *column_names
       
       def fields
-        @fields ||= database.fields.select do |f| 
-          f.model == model
-        end
-      end
-      
-      def required_fields
-        fields.select do |field|
-          field.required?
-        end
+        @fields ||= database.proxy.execute model, 'fields_get'
       end
       
       
