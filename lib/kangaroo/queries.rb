@@ -12,7 +12,7 @@ module Kangaroo
     end
     
     def save options = {}
-      skip_validation = !options[:validate]
+      skip_validation = (options[:validate] == false)
       
       (skip_validation || valid?) && create_or_update
     end
@@ -41,8 +41,9 @@ module Kangaroo
       if id.is_a?(Integer)
         @id = id
         @new_record = false
+        reload
         
-        reload        
+        true    
       else
         false
       end

@@ -20,6 +20,7 @@ module Kangaroo
         
     base_client = Client.new configuration.slice("host", "port")
     
+    base_client.common_service
     self.databases = {}
     configuration["databases"].each do |name, cfg|      
       db_name = cfg["db_name"] || name
