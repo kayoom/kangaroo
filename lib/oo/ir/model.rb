@@ -10,7 +10,8 @@ module Oo
       define_attribute_methods *column_names
       
       def fields
-        @fields ||= database.proxy.execute model, 'fields_get'
+        puts model_class_name
+        @fields ||= database.proxy.execute(model, 'fields_view_get', false, 'form', {})[:fields]
       end
       
       

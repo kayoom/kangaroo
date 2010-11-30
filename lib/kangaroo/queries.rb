@@ -53,7 +53,10 @@ module Kangaroo
       @attributes.slice *changed.map(&:to_s)
     end
     
-    module ClassMethods
+    module ClassMethods      
+      def default_attributes
+        default_get *column_names
+      end
       
       def create attributes = {}
         new(attributes).save
@@ -65,7 +68,7 @@ module Kangaroo
         return [] if ids.empty?
         
         ids << {:db_name => query_parameters[:db_name]}
-        read *ids
+        read ids, column_names
       end      
       
       def first query_parameters = {}

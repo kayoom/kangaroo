@@ -25,7 +25,7 @@ module Kangaroo
     
     def initialize attributes = {}
       @new_record = true
-      @attributes = {}
+      @attributes = self.class.default_attributes.stringify_keys
       @database = self.class.database
       
       _run_initialize_callbacks do

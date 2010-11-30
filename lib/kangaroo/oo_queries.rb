@@ -20,17 +20,22 @@ module Kangaroo
         database(query_parameters[:db_name]).search(self, *args)
       end
       
-      def read *ids
+      def read ids, column_names = nil
         options = ids.extract_options!
                 
         database = database(options[:db_name])
-        database.read(self, ids).map do |record|
+        database.read(self, ids, column_names).map do |record|
           instantiate(record).tap do |r|
             r.database = database
           end
         end
       end
       
+      def default_get *fields
+        options = fields.extract_options!
+        
+        database(options[:db_name]).default_get(self, fields)
+      end
       
       protected      
       def convert_condition condition
