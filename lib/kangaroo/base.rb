@@ -59,6 +59,8 @@ module Kangaroo
       delegate  :where,
                 :offset,
                 :limit,
+                :select,
+                :[],
                 :to => :relation
                 
       def inspect

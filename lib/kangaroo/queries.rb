@@ -60,7 +60,10 @@ module Kangaroo
         default_get *column_names
       end
             
-      def all query_parameters = {}        
+      def all query_parameters = {}     
+        column_names = query_parameters.delete(:select)
+        column_names = self.column_names if column_names.blank?
+        
         ids = search query_parameters
         
         return [] if ids.empty?
