@@ -13,22 +13,22 @@ module Kangaroo
         conditions = query_parameters[:conditions] || []
         conditions = conditions.sum([]) {|c| convert_condition(c) }
         
-        args = [conditions, 0]
-        args[1] = query_parameters[:offset] if query_parameters[:offset]
-        args << query_parameters[:limit] if query_parameters[:limit]
+        offset = query_parameters[:offset] || 0
+        limit = query_parameters[:limit] || false
+        context = {}
         
-        database.search(self, *args)
+        database.search(self, conditions, offset, limit, context)
       end
       
       def read ids, column_names = nil
         
-        database.read(self, ids, column_names).map do |record|
+        database.read(self, ids, column_names, {}).map do |record|
           instantiate(record)
         end
       end
       
       def default_get *fields
-        database.default_get(self, fields)
+        database.default_get(self, fields, {})
       end
       
       protected      
