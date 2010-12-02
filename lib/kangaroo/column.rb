@@ -25,6 +25,10 @@ module Kangaroo
       RELATION_TYPES.include? type
     end
     
+    def selection?
+      type.to_s == 'selection'
+    end
+    
     def selection= value
       @selection = Hash[value]
     end

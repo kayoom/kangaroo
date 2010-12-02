@@ -35,6 +35,10 @@ module Kangaroo
       if column.required?
         @klass.validates_presence_of column.name
       end
+      
+      if column.selection?
+        @klass.validates_inclusion_of column.name, :in => column.selection.keys
+      end
     end
     
     def create_class
