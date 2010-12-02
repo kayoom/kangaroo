@@ -33,7 +33,7 @@ module Kangaroo
         end
       end 
       
-      def define_reader_method name, attribute      
+      def define_reader_method name, attribute = nil   
         attribute ||= name
         
         define_method name do

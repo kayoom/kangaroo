@@ -10,7 +10,7 @@ module Kangaroo
     
     def call! name, *args
       args = [@db_name, @user_id, @password] + args
-      
+
       super name, *args
     end
   end
