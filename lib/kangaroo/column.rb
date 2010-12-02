@@ -30,7 +30,13 @@ module Kangaroo
     end
     
     def selection= value
-      @selection = Hash[value]
+      @selection = ActiveSupport::OrderedHash.new.tap do |h|
+        value.each do |key_val|
+          key, val = key_val
+          
+          h[key] = val unless key.blank? || val.blank?
+        end
+      end
     end
   end
 end

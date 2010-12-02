@@ -16,7 +16,7 @@ module Kangaroo
       @klass.columns = []
       
       @model.fields.each do |name, properties|        
-        @klass.columns << (c = Column.new(name, properties))
+        @klass.columns << (c = Column.new(name, properties).freeze)
         
         define_attribute_methods c
         add_validations c
@@ -37,7 +37,10 @@ module Kangaroo
       end
       
       if column.selection?
-        @klass.validates_inclusion_of column.name, :in => column.selection.keys
+        @klass.validates_inclusion_of column.name, 
+                                      :in => column.selection.keys, 
+                                      :allow_nil => !column.required?,
+                                      :message => "must be one of (#{column.selection.keys * ','})"
       end
     end
     
