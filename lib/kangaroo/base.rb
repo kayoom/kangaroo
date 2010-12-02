@@ -15,7 +15,8 @@ module Kangaroo
     include Queries
     include Attributes  
     
-    class_attribute :columns
+    class_attribute :columns           
+    class_attribute :new_attributes
     
     attr_accessor :id
     
@@ -25,7 +26,7 @@ module Kangaroo
     
     def initialize attributes = {}
       @new_record = true
-      @attributes = self.class.default_attributes.stringify_keys
+      @attributes = self.class.default_attributes
       
       _run_initialize_callbacks do
         self.attributes = attributes

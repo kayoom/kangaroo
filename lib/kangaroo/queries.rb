@@ -57,7 +57,7 @@ module Kangaroo
       end
       
       def default_attributes
-        default_get *column_names
+        self.new_attributes ||= default_get(*column_names).stringify_keys
       end
             
       def all query_parameters = {}     
