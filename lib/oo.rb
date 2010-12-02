@@ -8,11 +8,15 @@ module Oo
   end
   
   def self.const_missing const
-    models = const.underscore + ".*"
+    models = const.to_s.underscore + ".*"
     
     Kangaroo.database.load_models [models]
     
-    const_get(const) || super
+    if const_defined?(const)
+      const_get(const)
+    else
+      super
+    end
   end
 end
 
