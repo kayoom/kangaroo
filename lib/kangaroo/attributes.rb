@@ -29,28 +29,38 @@ module Kangaroo
     module ClassMethods
       def define_reader_methods *methods
         methods.each do |method|
-          define_method method do
-            read_attribute method
-          end
+          define_reader_method method, method
         end
       end 
       
+      def define_reader_method name, attribute        
+        define_method name do
+          read_attribute attribute
+        end
+      end
+      
       def column_names
-        columns.map &:name
+        @column_names ||= []
+      end
+      
+      def define_attribute_method name, attribute = nil
+        attribute ||= name
+        
+        define_method name do
+          read_attribute attribute
+        end
+        
+        define_method "#{name}=" do |value|
+          attribute_will_change! name
+          write_attribute attribute, value
+        end
       end
       
       def define_attribute_methods *methods
         super methods.map(&:to_s)
         
         methods.each do |method|
-          define_method method do
-            read_attribute method
-          end
-          
-          define_method "#{method}=" do |value|
-            attribute_will_change! method
-            write_attribute method, value
-          end
+          define_attribute_method method, method
         end
       end
     end

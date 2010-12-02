@@ -41,10 +41,12 @@ module Kangaroo
         s << "id: " << id.to_s << ", "
         
         attr = self.class.column_names.map do |c|
-          [c.to_s, send(c).inspect] * ": "
+          if respond_to?(c)
+            [c.to_s, send(c).inspect] * ": "
+          end
         end
         
-        s << attr * ", "
+        s << attr.compact * ", "
       
         s << ">"
       end
@@ -81,7 +83,7 @@ module Kangaroo
       end
       
       def oo_model_name
-        name[4..-1].underscore.gsub '/', '.'
+        Oo.ruby_name_to_oo name
       end     
       
       def instantiate attributes

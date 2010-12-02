@@ -12,6 +12,8 @@ module Kangaroo
     
     def initialize base_client, name, user, user_id, password
       @base_client, @db_name, @user, @user_id, @password = base_client, name, user, user_id, password
+      
+      @models = []
     end
     
     %w(search read write create default_get).each do |action|
@@ -29,20 +31,23 @@ module Kangaroo
         end
       end
       
-      @models = model_names.sum([]) do |m|
+      models_to_load = model_names.sum([]) do |m|
         Oo::Ir::Model.where("model ilike #{m}").all
       end
       
-      @models = @models.sort_by do |m|
+      models_to_load = models_to_load.sort_by do |m|
         m.model.length
       end
       
       
-      create_models
+      create_models models_to_load
     end
     
-    def create_models      
-      @models.map do |model|
+    protected
+    def create_models models_to_load
+      @models += models_to_load
+      
+      models_to_load.map do |model|
         model.create_class
       end      
     end

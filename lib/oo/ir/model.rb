@@ -19,7 +19,7 @@ module Oo
       end
       
       def model_class_name
-        "Oo::" + model.gsub('.','/').camelize
+        Oo.oo_name_to_ruby model
       end
       
       def create_class #TODO: initialize fields via 'fields_get'

@@ -6,7 +6,7 @@ require 'kangaroo/database_proxy'
 require 'kangaroo/database'
 require 'kangaroo/base'
 
-require 'oo/ir/model'
+require 'oo'
 
 module Kangaroo
   mattr_accessor :database

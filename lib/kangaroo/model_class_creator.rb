@@ -20,16 +20,49 @@ module Kangaroo
         
         define_attribute_methods c
         add_validations c
+        add_associations c
       end      
     end
     
     def define_attribute_methods column
+      name, field = column.name, nil
+      
+      if column.association?
+        name, field = column.association.id_name, column.association.field
+      end
+      
       if column.readonly?
-        @klass.define_reader_methods column.name
+        @klass.define_reader_method name, field
       else
-        @klass.define_attribute_methods column.name
+        @klass.define_attribute_method name, field
+      end
+      
+      @klass.column_names << name
+    end
+    
+    def add_associations column      
+      if column.association? && !column.association.property?
+        send "add_#{column.association.type*'2'}_association", column
       end
     end
+    
+    def add_many2many_association column ; end
+    def add_one2many_association column ; end
+    def add_one2one_association column ; end
+    
+    def add_many2one_association column
+      a = column.association
+      
+      @klass.class_eval <<-RUBY
+        def #{a.name}
+          id = #{a.id_name}.first
+          return nil unless id
+          
+          @#{a.name}_relation ||= Relation.new('#{a.target_class_name}'.constantize).where(:id => id).first
+        end
+      RUBY
+    end
+    
     
     def add_validations column
       if column.required?
