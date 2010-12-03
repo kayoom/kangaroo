@@ -20,7 +20,7 @@ module Kangaroo
         database.search(self, conditions, offset, limit, context)
       end
       
-      def read ids, column_names = nil
+      def read ids, column_names = []
         
         database.read(self, ids, column_names, {}).map do |record|
           instantiate(record)

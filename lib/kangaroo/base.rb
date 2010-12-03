@@ -15,7 +15,9 @@ module Kangaroo
     include Queries
     include Attributes  
     
-    class_attribute :columns           
+    class_attribute :columns   
+    # class_attribute :column_names    
+    # class_attribute :attribute_names    
     class_attribute :new_attributes
     
     attr_accessor :id
@@ -41,7 +43,7 @@ module Kangaroo
       "#<#{self.class} ".tap do |s|
         s << "id: " << id.to_s << ", "
         
-        attr = self.class.column_names.map do |c|
+        attr = self.class.attribute_names.map do |c|
           if respond_to?(c)
             [c.to_s, send(c).inspect] * ": "
           end

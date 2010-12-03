@@ -15,7 +15,15 @@ module Kangaroo
       end
       
       def id_name
-        @id_name ||= name.singularize + ((type.last == 'many') ? "_ids" : "_id")
+        @id_name ||= name.singularize + (to_many? ? "_ids" : "_id")
+      end
+      
+      def to_many?
+        type.last == 'many'
+      end
+      
+      def from_many?
+        type.first == 'many'
       end
       
       def joined?
@@ -73,7 +81,15 @@ module Kangaroo
         send acc, value if respond_to?(acc)
       end
     end
-                  
+    
+    def attribute
+      association? ? association.id_name : name
+    end
+    
+    def column
+      association? ? association.field : name
+    end
+
     def required?
       !!required
     end

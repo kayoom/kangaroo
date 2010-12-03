@@ -20,7 +20,7 @@ module Kangaroo
     
     def attributes
       {}.tap do |attributes|
-        @attributes.keys.each do |key|
+        self.class.attribute_names.each do |key|
           attributes[key] = send(key)
         end
       end
@@ -43,6 +43,10 @@ module Kangaroo
       
       def column_names
         @column_names ||= []
+      end
+      
+      def attribute_names
+        @attribute_names ||= []
       end
       
       def define_attribute_method name, attribute = nil

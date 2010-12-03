@@ -32,12 +32,13 @@ module Kangaroo
       end
       
       if column.readonly?
-        @klass.define_reader_method name, field
+        @klass.define_reader_method column.attribute, column.column
       else
-        @klass.define_attribute_method name, field
+        @klass.define_attribute_method column.attribute, column.column
       end
       
-      @klass.column_names << name
+      @klass.column_names << column.column
+      @klass.attribute_names << column.attribute
     end
     
     def add_associations column      
@@ -55,7 +56,7 @@ module Kangaroo
       
       @klass.class_eval <<-RUBY
         def #{a.name}
-          id = #{a.id_name}.first
+          id = #{a.id_name}.try :first
           return nil unless id
           
           @#{a.name}_relation ||= Relation.new('#{a.target_class_name}'.constantize).where(:id => id).first
@@ -66,11 +67,11 @@ module Kangaroo
     
     def add_validations column
       if column.required?
-        @klass.validates_presence_of column.name
+        @klass.validates_presence_of column.attribute
       end
       
-      if column.selection?
-        @klass.validates_inclusion_of column.name, 
+      if column.selection? && !column.association?
+        @klass.validates_inclusion_of column.attribute, 
                                       :in => column.selection.keys, 
                                       :allow_nil => !column.required?,
                                       :message => "must be one of (#{column.selection.keys * ','})"
