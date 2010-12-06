@@ -28,12 +28,16 @@ module Kangaroo
       end
     end
     
-    def database name, user, password
-      if user_id = common_service.call_to_ruby('login', name, user, password)
-        Database.new self, name, user, user_id, password
-      else
-        nil
+    def database name, user, password, options = {}
+      try_login = options[:login] || false
+      
+      db = Database.new self, name, user, password
+      
+      if try_login
+        db.login || Kangaroo.logger.warn("OpenERP login failed.")
       end
+      
+      db
     end
   end
 end

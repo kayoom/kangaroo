@@ -10,7 +10,7 @@ module Kangaroo
       @client ||= base_client.object_service
     end
     
-    def initialize base_client, name, user, user_id, password
+    def initialize base_client, name, user, password, user_id = nil
       @base_client, @db_name, @user, @user_id, @password = base_client, name, user, user_id, password
       
       @models = []
@@ -22,7 +22,26 @@ module Kangaroo
       end
     end
     
+    def logged_in?
+      !!user_id
+    end
+    
+    def login!
+      @user_id = base_client.common_service.call_to_ruby('login', db_name, user, password)
+      
+      true
+    end
+    
+    def login
+      login!      
+    rescue
+      Kangaroo.logger.warn "Login to OpenERP database #{db_name} with user #{user} failed!"
+      false
+    end
+    
     def load_models model_names = :all
+      logged_in? || login!
+      
       model_names = if model_names == :all
         %w(%)
       else
@@ -37,8 +56,7 @@ module Kangaroo
       
       models_to_load = models_to_load.sort_by do |m|
         m.model.length
-      end
-      
+      end      
       
       create_models models_to_load
     end
