@@ -8,8 +8,12 @@ module Oo
   end
   
   def self.const_missing const
-    if Kangaroo.configured?      
+    if Kangaroo.configured?
       Kangaroo.load
+    end
+    
+    if const_defined?(const)
+      return const_get(const)
     end
     
     if Kangaroo.loaded?

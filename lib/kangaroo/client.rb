@@ -4,6 +4,10 @@ module Kangaroo
     COMMON_SERVICE_PATH = '/xmlrpc/common'
     OBJECT_SERVICE_PATH = '/xmlrpc/object'
     
+    def initialize configuration
+      super configuration.merge(:raise_on => :both)
+    end
+    
     def clone
       super.tap do |c|
         c.connection = connection.clone

@@ -56,7 +56,8 @@ module Kangaroo
       
       @klass.class_eval <<-RUBY
         def #{a.name}
-          id = #{a.id_name}.try :first
+          id = #{a.id_name}.try(:first)
+          
           return nil unless id
           
           @#{a.name}_relation ||= Relation.new('#{a.target_class_name}'.constantize).where(:id => id).first
