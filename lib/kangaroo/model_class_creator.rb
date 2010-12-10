@@ -37,8 +37,8 @@ module Kangaroo
         @klass.define_attribute_method column.attribute, column.column
       end
       
-      @klass.column_names << column.column
-      @klass.attribute_names << column.attribute
+      @klass.column_names << column.column.to_s
+      @klass.attribute_names << column.attribute.to_s
     end
     
     def add_associations column      
