@@ -1,0 +1,6 @@
+Kangaroo
+========
+
+Kangaroo is an OpenObject client/wrapper for Rails 3, based on ActiveModel. It provides CRUD access to OpenERP objects via XMLRPC.
+It's fast, provides default data for new objects and basic validations (for required fields etc), as well as a simple ARel like
+query syntax and (not yet fully, but it's coming) associations. This is pre-pre-alpha ;).
