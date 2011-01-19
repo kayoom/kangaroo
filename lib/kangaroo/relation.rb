@@ -47,9 +47,11 @@ module Kangaroo
       end
     end
     
-    def select select
+    def select *select
+      select.flatten!
+      select.map! &:to_s
       __clone__.__tap__ do |c|
-        c.select_clause += [select.to_s]
+        c.select_clause += select
       end      
     end
     

@@ -1,4 +1,6 @@
 require 'active_support/core_ext/module/delegation'
+require 'active_model'
+
 require 'kangaroo/relation'
 require 'kangaroo/oo_queries'
 require 'kangaroo/queries'

@@ -1,6 +1,11 @@
+# -*- encoding: utf-8 -*-
+$:.push File.expand_path("../lib", __FILE__)
+require "kangaroo/version"
+
 Gem::Specification.new do |s|
   s.name        = "kangaroo"
-  s.version     = "0.0.1.alpha"
+  s.version     = Kangaroo::VERSION
+  s.platform    = Gem::Platform::RUBY
   s.date        = Time.now.strftime("%Y-%m-%d")
   s.authors     = ["Michael Eickenberg", "Marian Theisen"]
   s.email       = 'marian@cice-online.net'
@@ -8,13 +13,12 @@ Gem::Specification.new do |s|
   s.homepage    = "http://github.com/cice/kangARoo"
   s.description = "ActiveRecord-ish OpenObject Wrapper"
 
-  s.files        =  Dir["**/*"] -
-                    Dir["coverage/**/*"] -
-                    Dir["rdoc/**/*"] -
-                    Dir["doc/**/*"] -
-                    Dir["sdoc/**/*"] -
-                    Dir["rcov/**/*"]
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.require_paths = ["lib"]
 
-  s.add_dependency "activeresource", ">= 3.0.0"
+  s.add_dependency 'rapuncel'
+  s.add_dependency "activerecord", ">= 3.0.0"
   s.add_dependency "activesupport", ">= 3.0.0"
 end

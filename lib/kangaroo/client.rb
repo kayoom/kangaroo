@@ -1,3 +1,5 @@
+require 'rapuncel'
+
 module Kangaroo
   class Client < Rapuncel::Client
     DB_SERVICE_PATH = '/xmlrpc/db'
