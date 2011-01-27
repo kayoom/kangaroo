@@ -15,9 +15,10 @@ module Kangaroo
         
         offset = query_parameters[:offset] || 0
         limit = query_parameters[:limit] || false
+        order = query_parameters[:order] || []
         context = {}
         
-        database.search(self, conditions, offset, limit, context)
+        database.search(self, conditions, offset, limit, order, context)
       end
       
       def read ids, column_names = []
