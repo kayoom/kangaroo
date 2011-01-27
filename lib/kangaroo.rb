@@ -9,7 +9,7 @@ require 'kangaroo/base'
 require 'oo'
 
 module Kangaroo
-  mattr_accessor :database, :models, :status
+  mattr_accessor :database, :models, :status, :client
   mattr_writer :logger
   
   def self.logger
@@ -40,11 +40,11 @@ module Kangaroo
       YAML.load_file(config_file_or_hash)
     end
         
-    base_client = Client.new configuration.slice("host", "port")
+    self.client = Client.new configuration.slice("host", "port")
     cfg = configuration["database"]    
     self.models = cfg['models'] || :all
     
-    self.database = base_client.database cfg["name"], cfg["user"], cfg["password"]
+    self.database = client.database cfg["name"], cfg["user"], cfg["password"]
     
     logger.info "Configured OpenERP database #{cfg['name']} at #{configuration['host']}, with user #{cfg['user']}."
     self.status = :configured
