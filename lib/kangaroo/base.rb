@@ -65,6 +65,7 @@ module Kangaroo
                 :offset,
                 :limit,
                 :select,
+                :context,
                 :[],
                 :to => :relation
                 

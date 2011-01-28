@@ -63,12 +63,12 @@ module Kangaroo
       def all query_parameters = {}     
         column_names = query_parameters.delete(:select)
         column_names = self.column_names if column_names.blank?
-        
+        context = query_parameters.delete(:context) || {}
         ids = search query_parameters
         
         return [] if ids.empty?
         
-        read ids, column_names
+        read ids, column_names, context
       end      
       
       def first query_parameters = {}

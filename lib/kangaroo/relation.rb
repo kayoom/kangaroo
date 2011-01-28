@@ -16,7 +16,7 @@ module Kangaroo
                           
     BASE_DELEGATES = %w(all first find count size length).freeze
                           
-    attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause
+    attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause, :context_clause
     
     alias_method :__clone__, :clone
     alias_method :__tap__, :tap
@@ -28,6 +28,7 @@ module Kangaroo
       @where_clauses = []
       @select_clause = []
       @order_clause  = []
+      @context_clause = {}
     end
     
     def where condition
@@ -53,6 +54,12 @@ module Kangaroo
       __clone__.__tap__ do |c|
         c.select_clause += selects
       end      
+    end
+    
+    def context context
+      __clone__.__tap__ do |c|
+        c.context_clause = c.context_clause.merge(context)
+      end
     end
     
     def order column
@@ -100,7 +107,8 @@ module Kangaroo
         :offset => @offset_clause,
         :limit => @limit_clause,
         :select => @select_clause,
-        :order => @order_clause
+        :order => @order_clause,
+        :context => @context_clause
       }
     end
   end

@@ -21,9 +21,9 @@ module Kangaroo
         database.search(self, conditions, offset, limit, order, context)
       end
       
-      def read ids, column_names = []
+      def read ids, column_names = [], context = {}
         
-        database.read(self, ids, column_names, {}).map do |record|
+        database.read(self, ids, column_names, context).map do |record|
           instantiate(record)
         end
       end
