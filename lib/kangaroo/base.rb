@@ -30,7 +30,11 @@ module Kangaroo
     
     def initialize attributes = {}
       @new_record = true
-      @attributes = self.class.default_attributes
+      @attributes = {}
+      
+      self.class.default_attributes.each do |key, val|
+        write_attribute key, val
+      end
       
       _run_initialize_callbacks do
         self.attributes = attributes

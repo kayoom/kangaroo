@@ -16,7 +16,7 @@ module Kangaroo
       @models = []
     end
     
-    %w(search read write create default_get).each do |action|
+    %w(search read write create default_get unlink).each do |action|
       define_method action do |model, *args|
         execute model, action, *args
       end

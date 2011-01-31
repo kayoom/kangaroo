@@ -27,7 +27,18 @@ module Kangaroo
       end
     end
     
+    
+    
     module ClassMethods
+      def extend_attribute_methods *attributes
+        attributes.flatten.each do |attr|
+          next if column_names.include?(attr.to_s)
+          define_attribute_method attr
+          column_names << attr.to_s
+          attribute_names << attr.to_s
+        end
+      end
+      
       def define_reader_methods *methods
         methods.each do |method|
           define_reader_method method, method

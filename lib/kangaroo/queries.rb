@@ -18,7 +18,12 @@ module Kangaroo
     end
     
     def save!
-      save || raise("Could not save OpenObject record #{self.inspect}")
+      save || raise("Could not save OpenObject record #{updateable_attributes.inspect}")
+    end
+    
+    def destroy
+      return if new_record?
+      database.unlink(self.class, [id])
     end
     
     protected
@@ -27,7 +32,6 @@ module Kangaroo
     end
     
     def write_record
-      puts updateable_attributes.inspect
       if database.write(self.class, [id], updateable_attributes)
         reload
         
@@ -38,7 +42,6 @@ module Kangaroo
     end
     
     def create_record
-      puts updateable_attributes.inspect
       id = database.create(self.class, updateable_attributes)
       if id.is_a?(Integer)
         @id = id
