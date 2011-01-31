@@ -18,8 +18,12 @@ module Kangaroo
     
     %w(search read write create default_get).each do |action|
       define_method action do |model, *args|
-        proxy.execute model.oo_model_name, action, *args
+        execute model, action, *args
       end
+    end
+    
+    def execute model, action, *args
+      proxy.execute model.oo_model_name, action, *args
     end
     
     def logged_in?

@@ -4,6 +4,7 @@ require 'kangaroo/oo_queries'
 require 'kangaroo/queries'
 require 'kangaroo/column'
 require 'kangaroo/attributes'
+require 'kangaroo/execute'
 
 module Kangaroo
   class Base    
@@ -14,6 +15,7 @@ module Kangaroo
     include OoQueries
     include Queries
     include Attributes  
+    include Execute
     
     class_attribute :columns   
     # class_attribute :column_names    

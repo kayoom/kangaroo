@@ -33,11 +33,11 @@ module Kangaroo
         name, field = column.association.id_name, column.association.field
       end
       
-      if column.readonly?
-        @klass.define_reader_method column.attribute, column.column
-      else
+      # if column.readonly?
+      #   @klass.define_reader_method column.attribute, column.column
+      # else
         @klass.define_attribute_method column.attribute, column.column
-      end
+      # end
       
       @klass.column_names << column.column.to_s
       @klass.attribute_names << column.attribute.to_s
@@ -71,7 +71,7 @@ module Kangaroo
       
       @klass.class_eval <<-RUBY
         def #{a.name}
-          id = #{a.id_name}.try(:first)
+          id = Array(#{a.id_name}).first
           
           return nil unless id
           
@@ -89,7 +89,7 @@ module Kangaroo
       if column.selection? && !column.association?
         @klass.validates_inclusion_of column.attribute, 
                                       :in => column.selection.keys, 
-                                      :allow_nil => !column.required?,
+                                      :unless => proc {|record| !column.required? && !record.send(column.attribute)},
                                       :message => "must be one of (#{column.selection.keys * ','})"
       end
     end

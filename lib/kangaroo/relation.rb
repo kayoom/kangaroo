@@ -60,7 +60,7 @@ module Kangaroo
       end      
     end
     
-    def context context
+    def context context = {}
       __clone__.__tap__ do |c|
         c.context_clause = c.context_clause.merge(context)
       end

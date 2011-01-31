@@ -9,6 +9,7 @@ module Kangaroo
     end
     
     def write_attribute name, value
+      attribute_will_change! name
       @attributes[name.to_s] = value
     end
     
@@ -65,7 +66,6 @@ module Kangaroo
         end
         
         define_method "#{name}=" do |value|
-          attribute_will_change! attribute
           write_attribute attribute, value
         end
       end
