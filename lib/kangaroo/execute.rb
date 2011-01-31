@@ -3,13 +3,12 @@ module Kangaroo
     def execute name, *args
       ids = new_record? ? [] : [id]
       values = database.execute self.class, name, ids, *args
-      values = values[:value]
       
-      if values.is_a?(Hash)
-        values.keys.each do |key|
+      if values.is_a?(Hash) && values[:value]
+        values[:value].keys.each do |key|
           attribute_will_change! key
         end
-        @attributes.merge! values.stringify_keys
+        @attributes.merge! values[:value].stringify_keys
       end
       
       values
