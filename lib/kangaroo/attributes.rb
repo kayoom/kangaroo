@@ -49,6 +49,14 @@ module Kangaroo
         @attribute_names ||= []
       end
       
+      def clear_column_names
+        @column_names = []
+      end
+      
+      def clear_attribute_names
+        @attribute_names = []
+      end
+      
       def define_attribute_method name, attribute = nil
         attribute ||= name
         
@@ -57,7 +65,7 @@ module Kangaroo
         end
         
         define_method "#{name}=" do |value|
-          attribute_will_change! name
+          attribute_will_change! attribute
           write_attribute attribute, value
         end
       end

@@ -14,6 +14,8 @@ module Kangaroo
     protected    
     def define_columns
       @klass.columns = []
+      @klass.clear_column_names
+      @klass.clear_attribute_names
       
       @model.fields.each do |name, properties|        
         @klass.columns << (c = Column.new(name, properties).freeze)
@@ -48,8 +50,21 @@ module Kangaroo
     end
     
     def add_many2many_association column ; end
-    def add_one2many_association column ; end
     def add_one2one_association column ; end
+
+    def add_one2many_association column
+      a = column.association
+
+      @klass.class_eval <<-RUBY
+        def #{a.name}
+          ids = #{a.id_name}
+          
+          return [] if ids.blank?
+          
+          @#{a.name}_relation ||= '#{a.target_class_name}'.constantize.where(:id => ids)
+        end
+      RUBY
+    end
     
     def add_many2one_association column
       a = column.association
@@ -60,7 +75,7 @@ module Kangaroo
           
           return nil unless id
           
-          @#{a.name}_relation ||= Relation.new('#{a.target_class_name}'.constantize).where(:id => id).first
+          @#{a.name}_relation ||= '#{a.target_class_name}'.constantize.where(:id => id).limit(1)
         end
       RUBY
     end

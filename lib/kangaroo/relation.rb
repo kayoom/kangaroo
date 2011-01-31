@@ -14,7 +14,7 @@ module Kangaroo
                           to_param to_query to_s to_sentence to_set to_xml to_xml_rpc to_yaml to_yaml_properties to_yaml_style transpose
                           type uniq uniq! uniq_by uniq_by! unshift values_at yaml_initialize zip |).freeze
                           
-    BASE_DELEGATES = %w(all first find count size length).freeze
+    BASE_DELEGATES = %w(first find count size length).freeze
                           
     attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause, :context_clause
     
@@ -29,6 +29,10 @@ module Kangaroo
       @select_clause = []
       @order_clause  = []
       @context_clause = {}
+    end
+    
+    def all
+      @target.execute_query query_parameters
     end
     
     def where condition

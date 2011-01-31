@@ -78,8 +78,16 @@ module Kangaroo
         end
       end
                 
-      def relation
-        Relation.new self
+      def relation default_scope = true
+        if default_scope && @default_scope
+          @relation = send(@default_scope) 
+        else
+          @relation = Relation.new self
+        end
+      end
+      
+      def default_scope relation_method
+        @default_scope = relation_method
       end
       
       def database
