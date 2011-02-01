@@ -6,16 +6,11 @@ module Kangaroo
       attr_reader :type, :field
       
       def name
-        @name ||= case type.last
-        when 'many'
-          field.sub(/_ids?\Z/,'')
-        when 'one'
-          field.sub(/_ids?\Z/,'')
-        end
+        @name ||= field + "_obj"
       end
       
       def id_name
-        @id_name ||= name + (to_many? ? "_ids" : "_id")
+        @id_name ||= field
       end
       
       def to_many?
