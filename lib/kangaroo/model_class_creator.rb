@@ -20,55 +20,52 @@ module Kangaroo
       @model.fields.each do |name, properties|        
         @klass.columns << (c = Column.new(name, properties).freeze)
         
-        define_attribute_methods c
+        if c.association?
+          define_association_methods c
+        else
+          define_attribute_methods c.attribute.to_s, c.column.to_s
+        end
+        
         add_validations c
-        add_associations c
       end      
     end
     
-    def define_attribute_methods column
-      name, field = column.name, nil
-      
-      if column.association?
-        name, field = column.association.id_name, column.association.field
-      end
-      
-      # if column.readonly?
-      #   @klass.define_reader_method column.attribute, column.column
-      # else
-        @klass.define_attribute_method column.attribute, column.column
-      # end
-      
-      @klass.column_names << column.column.to_s
-      @klass.attribute_names << column.attribute.to_s
+    def define_attribute_methods attribute, column
+      @klass.define_attribute_method attribute, column
+
+      @klass.column_names << column
+      @klass.attribute_names << attribute
     end
     
-    def add_associations column      
-      if column.association? && !column.association.property?
-        send "add_#{column.association.type*'2'}_association", column
-      end
+    def define_association_methods column
+      define_attribute_methods column.association.id_name, column.column
+      add_associations column.association
     end
     
-    def add_many2many_association column ; end
-    def add_one2one_association column ; end
+    def add_associations association   
+      send "add_#{association.type.last}_association", association
+    end
+    
 
-    def add_one2many_association column
-      a = column.association
-
+    def add_many_association a
       @klass.class_eval <<-RUBY
         def #{a.name}
           ids = #{a.id_name}
           
           return [] if ids.blank?
-          
           @#{a.name}_relation ||= '#{a.target_class_name}'.constantize.where(:id => ids)
+        end
+        
+        def #{a.name}= records
+          ids = (records || []).map :id
+          
+          write_attribute '#{a.id_name}', ids
+          records
         end
       RUBY
     end
     
-    def add_many2one_association column
-      a = column.association
-      
+    def add_one_association a
       @klass.class_eval <<-RUBY
         def #{a.name}
           id = Array(#{a.id_name}).first
@@ -76,6 +73,15 @@ module Kangaroo
           return nil unless id
           
           @#{a.name}_relation ||= '#{a.target_class_name}'.constantize.where(:id => id).limit(1)
+        end
+        
+        def #{a.name}= record
+          return nil if record.nil?
+          
+          id = record.id
+          
+          write_attribute '#{a.id_name}', id
+          record
         end
       RUBY
     end

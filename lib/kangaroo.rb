@@ -28,8 +28,8 @@ module Kangaroo
     
     logger.info "Loaded OpenERP models matching #{models.inspect}."
     self.status = :loaded
-  rescue Exception => e
-    logger.error "Could not load OpenERP models."
+  # rescue Exception => e
+  #   logger.error "Could not load OpenERP models."
   end
   
   def self.configure config_file_or_hash

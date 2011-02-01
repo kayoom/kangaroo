@@ -67,6 +67,7 @@ module Kangaroo
       
       def default_attributes
         self.new_attributes ||= default_get(*column_names).stringify_keys
+          
       end
       
       def all

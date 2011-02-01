@@ -8,14 +8,14 @@ module Kangaroo
       def name
         @name ||= case type.last
         when 'many'
-          field.sub(/_ids?\Z/,'').pluralize
+          field.sub(/_ids?\Z/,'')
         when 'one'
-          field.sub(/_ids?\Z/,'').singularize
+          field.sub(/_ids?\Z/,'')
         end
       end
       
       def id_name
-        @id_name ||= name.singularize + (to_many? ? "_ids" : "_id")
+        @id_name ||= name + (to_many? ? "_ids" : "_id")
       end
       
       def to_many?
