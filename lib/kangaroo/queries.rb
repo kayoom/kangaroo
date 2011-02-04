@@ -43,6 +43,7 @@ module Kangaroo
     
     def create_record
       id = database.create(self.class, updateable_attributes)
+
       if id.is_a?(Integer)
         @id = id
         @new_record = false

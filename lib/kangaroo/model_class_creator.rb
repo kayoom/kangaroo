@@ -17,7 +17,7 @@ module Kangaroo
       @klass.clear_column_names
       @klass.clear_attribute_names
       
-      @model.fields.each do |name, properties|        
+      @model.fields.except(:id).each do |name, properties|        
         @klass.columns << (c = Column.new(name, properties).freeze)
         
         if c.association?

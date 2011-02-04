@@ -3,6 +3,10 @@ module Oo
     self.name + "::" + oo_name.gsub('.','/').camelize
   end
   
+  def self.class_for oo_name
+    oo_name_to_ruby(oo_name).constantize
+  end
+  
   def self.ruby_name_to_oo ruby_name
      ruby_name.sub(self.name + "::",'').underscore.gsub '/', '.'
   end
