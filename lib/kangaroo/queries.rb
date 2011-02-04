@@ -17,8 +17,8 @@ module Kangaroo
       (skip_validation || valid?) && create_or_update
     end
     
-    def save!
-      save || raise("Could not save OpenObject record #{updateable_attributes.inspect}")
+    def save! options = {}
+      save(options) || raise("Could not save OpenObject record #{updateable_attributes.inspect}")
     end
     
     def destroy
@@ -62,6 +62,12 @@ module Kangaroo
       def create attributes = {}
         new(attributes).tap do |record|
           record.save
+        end
+      end
+      
+      def create! attributes = {}
+        new(attributes).tap do |record|
+          record.save!
         end
       end
       
