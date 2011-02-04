@@ -17,6 +17,15 @@ module Kangaroo
       (skip_validation || valid?) && create_or_update
     end
     
+    def save!
+      save || raise("Could not save OpenObject record #{updateable_attributes.inspect}")
+    end
+    
+    def destroy
+      return if new_record?
+      database.unlink(self.class, [id])
+    end
+    
     protected
     def create_or_update
       new_record? ? create_record : write_record
@@ -59,30 +68,34 @@ module Kangaroo
       def default_attributes
         self.new_attributes ||= default_get(*column_names).stringify_keys
       end
+      
+      def all
+        relation.all
+      end
             
-      def all query_parameters = {}     
+      def execute_query query_parameters = {}     
         column_names = query_parameters.delete(:select)
         column_names = self.column_names if column_names.blank?
-        
+        context = query_parameters.delete(:context) || {}
         ids = search query_parameters
         
         return [] if ids.empty?
         
-        read ids, column_names
+        read ids, column_names, context
       end      
       
       def first query_parameters = {}
-        all(query_parameters.merge(:limit => 1)).first
+        execute_query(query_parameters.merge(:limit => 1)).first
       end
       
       def find id_or_keyword, query_parameters = {}
         case id_or_keyword
         when :all
-          all query_parameters
+          execute_query query_parameters
         when :first
           first query_parameters
         when Array
-          all merge_condition(query_parameters, :id => id_or_keyword)
+          execute_query merge_condition(query_parameters, :id => id_or_keyword)
         else
           first merge_condition(query_parameters, :id => id_or_keyword)
         end

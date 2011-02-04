@@ -14,9 +14,9 @@ module Kangaroo
                           to_param to_query to_s to_sentence to_set to_xml to_xml_rpc to_yaml to_yaml_properties to_yaml_style transpose
                           type uniq uniq! uniq_by uniq_by! unshift values_at yaml_initialize zip |).freeze
                           
-    BASE_DELEGATES = %w(all first find count size length).freeze
+    BASE_DELEGATES = %w(first find count size length).freeze
                           
-    attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause
+    attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause, :context_clause
     
     alias_method :__clone__, :clone
     alias_method :__tap__, :tap
@@ -27,6 +27,12 @@ module Kangaroo
       @target     = target
       @where_clauses = []
       @select_clause = []
+      @order_clause  = []
+      @context_clause = {}
+    end
+    
+    def all
+      @target.execute_query query_parameters
     end
     
     def where condition
@@ -47,12 +53,23 @@ module Kangaroo
       end
     end
     
-    def select *select
-      select.flatten!
-      select.map! &:to_s
+    def select *selects
+      selects = selects.flatten.map &:to_s
       __clone__.__tap__ do |c|
-        c.select_clause += select
+        c.select_clause += selects
       end      
+    end
+    
+    def context context = {}
+      __clone__.__tap__ do |c|
+        c.context_clause = c.context_clause.merge(context)
+      end
+    end
+    
+    def order column
+      __clone__.__tap__ do |c|
+        c.order_clause += column.to_s
+      end
     end
     
     def [] start_or_range, stop = nil
@@ -93,7 +110,9 @@ module Kangaroo
         :conditions => @where_clauses,
         :offset => @offset_clause,
         :limit => @limit_clause,
-        :select => @select_clause
+        :select => @select_clause,
+        :order => @order_clause,
+        :context => @context_clause
       }
     end
   end

@@ -14,6 +14,8 @@ module Kangaroo
     protected    
     def define_columns
       @klass.columns = []
+      @klass.clear_column_names
+      @klass.clear_attribute_names
       
       @model.fields.each do |name, properties|        
         @klass.columns << (c = Column.new(name, properties).freeze)
@@ -31,11 +33,11 @@ module Kangaroo
         name, field = column.association.id_name, column.association.field
       end
       
-      if column.readonly?
-        @klass.define_reader_method column.attribute, column.column
-      else
+      # if column.readonly?
+      #   @klass.define_reader_method column.attribute, column.column
+      # else
         @klass.define_attribute_method column.attribute, column.column
-      end
+      # end
       
       @klass.column_names << column.column.to_s
       @klass.attribute_names << column.attribute.to_s
@@ -48,19 +50,32 @@ module Kangaroo
     end
     
     def add_many2many_association column ; end
-    def add_one2many_association column ; end
     def add_one2one_association column ; end
+
+    def add_one2many_association column
+      a = column.association
+
+      @klass.class_eval <<-RUBY
+        def #{a.name}
+          ids = #{a.id_name}
+          
+          return [] if ids.blank?
+          
+          @#{a.name}_relation ||= '#{a.target_class_name}'.constantize.where(:id => ids)
+        end
+      RUBY
+    end
     
     def add_many2one_association column
       a = column.association
       
       @klass.class_eval <<-RUBY
         def #{a.name}
-          id = #{a.id_name}.try(:first)
+          id = Array(#{a.id_name}).first
           
           return nil unless id
           
-          @#{a.name}_relation ||= Relation.new('#{a.target_class_name}'.constantize).where(:id => id).first
+          @#{a.name}_relation ||= '#{a.target_class_name}'.constantize.where(:id => id).limit(1)
         end
       RUBY
     end
@@ -74,7 +89,7 @@ module Kangaroo
       if column.selection? && !column.association?
         @klass.validates_inclusion_of column.attribute, 
                                       :in => column.selection.keys, 
-                                      :allow_nil => !column.required?,
+                                      :unless => proc {|record| !column.required? && !record.send(column.attribute)},
                                       :message => "must be one of (#{column.selection.keys * ','})"
       end
     end

@@ -6,6 +6,7 @@ require 'kangaroo/oo_queries'
 require 'kangaroo/queries'
 require 'kangaroo/column'
 require 'kangaroo/attributes'
+require 'kangaroo/execute'
 
 module Kangaroo
   class Base    
@@ -16,6 +17,7 @@ module Kangaroo
     include OoQueries
     include Queries
     include Attributes  
+    include Execute
     
     class_attribute :columns   
     # class_attribute :column_names    
@@ -30,7 +32,11 @@ module Kangaroo
     
     def initialize attributes = {}
       @new_record = true
-      @attributes = self.class.default_attributes
+      @attributes = {}
+      
+      self.class.default_attributes.each do |key, val|
+        write_attribute key, val
+      end
       
       _run_initialize_callbacks do
         self.attributes = attributes
@@ -67,6 +73,7 @@ module Kangaroo
                 :offset,
                 :limit,
                 :select,
+                :context,
                 :[],
                 :to => :relation
                 
@@ -79,8 +86,16 @@ module Kangaroo
         end
       end
                 
-      def relation
-        Relation.new self
+      def relation default_scope = true
+        if default_scope && @default_scope
+          @relation = send(@default_scope) 
+        else
+          @relation = Relation.new self
+        end
+      end
+      
+      def default_scope relation_method
+        @default_scope = relation_method
       end
       
       def database

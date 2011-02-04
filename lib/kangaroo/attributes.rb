@@ -9,6 +9,7 @@ module Kangaroo
     end
     
     def write_attribute name, value
+      attribute_will_change! name
       @attributes[name.to_s] = value
     end
     
@@ -26,7 +27,18 @@ module Kangaroo
       end
     end
     
+    
+    
     module ClassMethods
+      def extend_attribute_methods *attributes
+        attributes.flatten.each do |attr|
+          next if column_names.include?(attr.to_s)
+          define_attribute_method attr
+          column_names << attr.to_s
+          attribute_names << attr.to_s
+        end
+      end
+      
       def define_reader_methods *methods
         methods.each do |method|
           define_reader_method method, method
@@ -49,6 +61,14 @@ module Kangaroo
         @attribute_names ||= []
       end
       
+      def clear_column_names
+        @column_names = []
+      end
+      
+      def clear_attribute_names
+        @attribute_names = []
+      end
+      
       def define_attribute_method name, attribute = nil
         attribute ||= name
         
@@ -57,7 +77,6 @@ module Kangaroo
         end
         
         define_method "#{name}=" do |value|
-          attribute_will_change! name
           write_attribute attribute, value
         end
       end
