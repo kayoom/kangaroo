@@ -37,6 +37,10 @@ module TestServerHelper
   def object_service
     @test_server.object_service
   end
+  
+  def common_service
+    @test_server.common_service
+  end
 end
 
 class TestServer
