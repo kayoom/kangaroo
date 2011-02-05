@@ -19,6 +19,10 @@ module Kangaroo
     
     autoload :CommonProxy, 'kangaroo/util/common_proxy'
     autoload :DbProxy, 'kangaroo/util/db_proxy'
+    autoload :SuperadminProxy, 'kangaroo/util/superadmin_proxy'
+    autoload :ObjectProxy, 'kangaroo/util/object_proxy'
+    autoload :WorkflowProxy, 'kangaroo/util/workflow_proxy'
+    autoload :ReportProxy, 'kangaroo/util/report_proxy'
         # 
         # class DbProxy < Proxy
         #   # Create a new OpenERP database

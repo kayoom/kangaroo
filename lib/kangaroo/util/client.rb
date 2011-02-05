@@ -25,6 +25,10 @@ module Kangaroo
           end
         RUBY
       end
+      
+      def superadmin super_password
+        SuperadminProxy.new db_service, super_password
+      end
         
       def common
         @common_proxy ||= CommonProxy.new common_service

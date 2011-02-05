@@ -1,4 +1,3 @@
-require 'kangaroo/util/database_proxy'
 
 module Kangaroo
   module Util
@@ -11,22 +10,22 @@ module Kangaroo
         @models = []
       end
       
-      delegate :db, :to => :client
+      delegate :db, :common, :to => :client
       
-      def common
-        @common_proxy ||= CommonProxy.new client.common_service, db_name, user_id, password
+      def workflow
+        @workflow_proxy ||= WorkflowProxy.new client.object_service, db_name, user_id, password
       end
-
+      
       def object
         @object_proxy ||= ObjectProxy.new client.object_service, db_name, user_id, password
       end
       
       def wizard
-        @wizard_proxy ||= WizardProxy.new client.wizard_service
+        @wizard_proxy ||= WizardProxy.new client.wizard_service, db_name, user_id, password
       end
       
       def report
-        @report_proxy ||= ReportProxy.new client.report_service
+        @report_proxy ||= ReportProxy.new client.report_service, db_name, user_id, password
       end
     
       def logged_in?
@@ -43,37 +42,6 @@ module Kangaroo
         login! unless logged_in?
       rescue
         false
-      end
-    
-      # DISCUSS doesn't belong here
-      def load_models model_names = ['*']
-        login!
-        model_names = model_names.map do |name|
-          replace_wildcard name
-        end
-      
-        models_to_load = model_names.sum([]) do |m|
-          Oo::Ir::Model.where("model ilike #{m}").all
-        end
-      
-        models_to_load = models_to_load.sort_by do |m|
-          m.model.length
-        end      
-      
-        create_models models_to_load
-      end
-    
-      protected
-      def replace_wildcard string
-        string.gsub '*', '%'
-      end
-      
-      def create_models models_to_load
-        @models += models_to_load
-      
-        models_to_load.map do |model|
-          model.create_class
-        end      
       end
     end
   end
