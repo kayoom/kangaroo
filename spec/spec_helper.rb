@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'bundler/setup'
 
-require 'kangaroo' # and any other gems you need
+require 'kangaroo'
 
 RSpec.configure do |config|
   # some (optional) config here

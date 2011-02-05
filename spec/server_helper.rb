@@ -7,7 +7,12 @@ require 'webrick'
 module TestServices
   class ObjectService
     def execute *args
+      xmlrpc_call 'execute', *args
       args
+    end
+    
+    protected
+    def xmlrpc_call name, *args
     end
   end
   

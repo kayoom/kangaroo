@@ -25,6 +25,11 @@ module Kangaroo
       end
     
       def load_models
+        if models.blank?
+          logger.info "No models to load."
+          return
+        end
+        
         Loader.new(models).load!
         logger.info "Loaded OpenERP models matching #{models.inspect}."
       rescue Exception => e
