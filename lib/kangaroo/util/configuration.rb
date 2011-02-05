@@ -1,4 +1,5 @@
 require 'logger'
+require 'active_support/core_ext/hash'
 require 'kangaroo/util/client'
 
 module Kangaroo

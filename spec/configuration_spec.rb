@@ -15,8 +15,8 @@ module Kangaroo
       it "configures Kangaroo by config file" do
         config = Kangaroo::Util::Configuration.new(config_file)
         
-        config.models.should be(['res.*'])
-        config.database.db_name.should be('kangaroo_test_database')
+        config.models.should == ['res.*']
+        config.database.db_name.should == 'kangaroo_test_database'
       end
     end
   end
