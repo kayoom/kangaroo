@@ -1,6 +1,6 @@
 module Kangaroo
   module Util
-    class DbProxy < Proxy
+    class Proxy::Db < Proxy
       # Check if a database exists
       #
       # @param db_name Name of database to check

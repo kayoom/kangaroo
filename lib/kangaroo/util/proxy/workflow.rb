@@ -1,6 +1,6 @@
 module Kangaroo
   module Util
-    class WorkflowProxy < Proxy
+    class Proxy::Workflow < Proxy
       # Advance workflow via exec_workflow on OpenERPs object service.
       #
       # @param name function name to call

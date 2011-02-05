@@ -1,6 +1,6 @@
 module Kangaroo
   module Util
-    class SuperadminProxy < Proxy
+    class Proxy::Superadmin < Proxy
       # Create a new database
       #
       # @param [String] db_name name for new database

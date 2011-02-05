@@ -1,6 +1,6 @@
 module Kangaroo
   module Util
-    class ReportProxy < Proxy
+    class Proxy::Report < Proxy
       # Initiate report generation
       #
       # @param object

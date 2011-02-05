@@ -31,24 +31,12 @@ module Kangaroo
       end
         
       def common
-        @common_proxy ||= CommonProxy.new common_service
+        @common_proxy ||= Proxy::Common.new common_service
       end
 
       def db
-        @db_proxy ||= DbProxy.new db_service
-      end
-      
-      def configure_database name, user, password, options = {}
-        try_login = options[:login] || false
-      
-        db = Database.new self, name, user, password
-      
-        if try_login
-          db.login || Kangaroo.logger.warn("OpenERP login failed.")
-        end
-      
-        db
-      end
+        @db_proxy ||= Proxy::Db.new db_service
+      end      
     end
   end
 end

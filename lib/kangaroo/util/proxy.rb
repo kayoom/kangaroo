@@ -3,6 +3,13 @@ require 'rapuncel'
 module Kangaroo
   module Util
     class Proxy < Rapuncel::Proxy
+      autoload :CommonProxy, 'kangaroo/util/proxy/common'
+      autoload :DbProxy, 'kangaroo/util/proxy/db'
+      autoload :SuperadminProxy, 'kangaroo/util/proxy/superadmin'
+      autoload :ObjectProxy, 'kangaroo/util/proxy/object'
+      autoload :WorkflowProxy, 'kangaroo/util/proxy/workflow'
+      autoload :ReportProxy, 'kangaroo/util/proxy/report'
+
       def __initialize__ client, *curry_args
         @curry_args = curry_args
       end
@@ -16,19 +23,5 @@ module Kangaroo
         curry_args + args
       end
     end
-    
-    autoload :CommonProxy, 'kangaroo/util/common_proxy'
-    autoload :DbProxy, 'kangaroo/util/db_proxy'
-    autoload :SuperadminProxy, 'kangaroo/util/superadmin_proxy'
-    autoload :ObjectProxy, 'kangaroo/util/object_proxy'
-    autoload :WorkflowProxy, 'kangaroo/util/workflow_proxy'
-    autoload :ReportProxy, 'kangaroo/util/report_proxy'
-        # 
-        # class DbProxy < Proxy
-        #   # Create a new OpenERP database
-        #   def create db_name
-        #     call! :create, *args
-        #   end
-        # end
   end
 end

@@ -44,7 +44,7 @@ module Kangaroo
       end
     
       def configure_database db_config
-        @database = @client.configure_database *db_config.values_at('name', 'user', 'password')
+        @database = Database.new @client, *db_config.values_at('name', 'user', 'password')
         @models =  db_config['models']
         logger.info %Q(Configured OpenERP database "#{db_config['name']}" at "#{db_config['host']}")
         if @database.login

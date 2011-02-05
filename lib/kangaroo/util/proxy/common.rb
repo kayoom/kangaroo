@@ -1,6 +1,6 @@
 module Kangaroo
   module Util
-    class CommonProxy < Proxy
+    class Proxy::Common < Proxy
       # Login to an OpenERP database
       #
       # @param [String] db_name The database to log in

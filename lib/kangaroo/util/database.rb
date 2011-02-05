@@ -13,19 +13,19 @@ module Kangaroo
       delegate :db, :common, :to => :client
       
       def workflow
-        @workflow_proxy ||= WorkflowProxy.new client.object_service, db_name, user_id, password
+        @workflow_proxy ||= Proxy::Workflow.new client.object_service, db_name, user_id, password
       end
       
       def object
-        @object_proxy ||= ObjectProxy.new client.object_service, db_name, user_id, password
+        @object_proxy ||= Proxy::Object.new client.object_service, db_name, user_id, password
       end
       
       def wizard
-        @wizard_proxy ||= WizardProxy.new client.wizard_service, db_name, user_id, password
+        @wizard_proxy ||= Proxy::Wizard.new client.wizard_service, db_name, user_id, password
       end
       
       def report
-        @report_proxy ||= ReportProxy.new client.report_service, db_name, user_id, password
+        @report_proxy ||= Proxy::Report.new client.report_service, db_name, user_id, password
       end
     
       def logged_in?
