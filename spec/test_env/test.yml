@@ -1,0 +1,12 @@
+host: 127.0.0.1
+port: 8069
+
+database:
+  name: kangaroo_test_database
+  default: true
+  user: admin
+  password: admin
+  
+  models:
+    - res.*
+    
