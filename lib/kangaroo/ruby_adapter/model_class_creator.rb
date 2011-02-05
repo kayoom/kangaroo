@@ -1,4 +1,9 @@
 module Kangaroo
+  module RubyAdapter
+    class Base
+      
+    end
+  end
   class ModelClassCreator    
     def initialize model
       @model = model

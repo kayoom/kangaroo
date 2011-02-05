@@ -2,9 +2,8 @@ source :rubygems
 gemspec
 
 
-gem 'activesupport'
-gem 'activerecord'
-gem 'activemodel'
+gem 'activesupport', '>= 3.0.0'
+gem 'activemodel', '>= 3.0.0'
 
-gem 'rapuncel', :path => '../rapuncel'
+gem 'rapuncel'
 gem 'rspec'
