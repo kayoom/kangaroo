@@ -3,7 +3,6 @@ require 'server_helper'
 
 require 'kangaroo/util/proxy'
 
-require 'ruby-debug'
 module Kangaroo
   module Util
     describe Proxy do

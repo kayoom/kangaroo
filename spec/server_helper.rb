@@ -32,7 +32,7 @@ class TestServer
   
   def initialize    
     @server = WEBrick::HTTPServer.new(:Port => 8069, :BindAddress => '127.0.0.1', :MaxClients => 1, 
-                                      :Logger => WEBrick::Log.new(STDOUT))
+                                      :Logger => WEBrick::Log.new(File.open('/dev/null', 'w')))
 
     SERVICES.each do |service|
       mount_service service
