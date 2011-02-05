@@ -6,17 +6,7 @@ require 'kangaroo/util/proxy'
 module Kangaroo
   module Util
     describe Proxy do
-      before :all do
-        @test_server = TestServer.start
-      end
-      
-      after :all do
-        @test_server.stop
-      end
-      
-      def object_service
-        @test_server.object_service
-      end
+      include TestServerHelper
       
       def client
         Rapuncel::Client.new :host => '127.0.0.1', :port => 8069, :path => '/xmlrpc/object'

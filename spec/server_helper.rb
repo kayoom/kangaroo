@@ -23,6 +23,22 @@ module TestServices
   end
 end
 
+module TestServerHelper
+  def self.included klass
+    klass.before :all do
+      @test_server = TestServer.start
+    end
+  
+    klass.after :all do
+      @test_server.stop
+    end    
+  end
+  
+  def object_service
+    @test_server.object_service
+  end
+end
+
 class TestServer
   SERVICES = %w(ObjectService CommonService)
   SERVICES.each do |service|
