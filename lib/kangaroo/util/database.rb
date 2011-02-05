@@ -10,7 +10,8 @@ module Kangaroo
         @models = []
       end
       
-      delegate :db, :common, :to => :client
+      delegate :superadmin, :db, :common, :to => :client
+      
       
       def workflow
         @workflow_proxy ||= Proxy::Workflow.new client.object_service, db_name, user_id, password
@@ -33,7 +34,7 @@ module Kangaroo
       end
     
       def login!
-        @user_id = common_proxy.login db_name, user, password
+        @user_id = common.login db_name, user, password
       
         true
       end

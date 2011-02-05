@@ -1,5 +1,6 @@
 require 'rapuncel'
 require 'kangaroo/util/database'
+require 'kangaroo/util/proxy'
 
 module Kangaroo
   module Util

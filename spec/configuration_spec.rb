@@ -13,7 +13,7 @@ module Kangaroo
       end
       
       it "configures Kangaroo by config file" do
-        config = Kangaroo::Util::Configuration.new(config_file)
+        config = Kangaroo::Util::Configuration.new(config_file, Logger.new('/dev/null'))
         
         config.models.should == ['res.*']
         config.database.db_name.should == 'kangaroo_test_database'
@@ -21,12 +21,13 @@ module Kangaroo
         config.database.password.should == 'admin'
       end
       
-      it 'can authorize the configured user' do
-        config = Kangaroo::Util::Configuration.new(config_file)
+      it 'authorizes the configured user before model loading' do
+        config = Kangaroo::Util::Configuration.new(config_file, Logger.new('/dev/null'))
+        Loader.stub! :new
         
         common_service.should_receive(:xmlrpc_call).
                         with('login', 'kangaroo_test_database', 'admin', 'admin')
-        config.login    
+        config.load_models
       end
     end
   end

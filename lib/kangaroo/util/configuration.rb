@@ -1,13 +1,15 @@
 require 'logger'
 require 'active_support/core_ext/hash'
 require 'kangaroo/util/client'
+require 'kangaroo/util/loader'
 
 module Kangaroo
   module Util
     class Configuration
       attr_accessor :logger, :database, :models, :client
     
-      def initialize config_file_or_hash
+      def initialize config_file_or_hash, logger = Logger.new(STDOUT)
+        @logger = logger
         case config_file_or_hash
         when String
           configure_by_file config_file_or_hash
@@ -34,7 +36,6 @@ module Kangaroo
       end
     
       def configure_by_hash config
-        @logger = config['logger'] || Logger.new(STDOUT)
         @client = Client.new config.slice('host', 'port')
         configure_database config['database']
       end
@@ -42,14 +43,14 @@ module Kangaroo
       def configure_database db_config
         @database = Database.new @client, *db_config.values_at('name', 'user', 'password')
         @models =  db_config['models']
-        logger.info %Q(Configured OpenERP database "#{db_config['name']}" at "#{db_config['host']}")
+        logger.info %Q(Configured OpenERP database "#{db_config['name']}" at "#{client.connection.host}")
       end
       
       def login
         if @database.login
-          logger.info %Q(Authenticated user "#{db_config['user']}" for OpenERP database "#{db_config['name']}")
+          logger.info %Q(Authenticated user "#{@database.user}" for OpenERP database "#{@database.db_name}")
         else
-          logger.warn %Q(Login to OpenERP database "#{db_name}" with user "#{user}" failed!)
+          logger.warn %Q(Login to OpenERP database "#{@database.db_name}" with user "#{@database.user}" failed!)
         end
       end
     end

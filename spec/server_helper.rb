@@ -18,7 +18,12 @@ module TestServices
   
   class CommonService
     def login *args
+      xmlrpc_call 'login', *args
       args
+    end
+    
+    protected
+    def xmlrpc_call name, *args
     end
   end
 end
