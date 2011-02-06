@@ -15,6 +15,8 @@ module Kangaroo
       
       include Attributes
       include DefaultAttributes
+      
+      attr_accessor :id
 
       # Initialize a new object, and set attributes
       #

@@ -10,6 +10,7 @@ module Kangaroo
       end
       
       it 'sets attributes on initialization' do
+        @klass.stub!(:default_attributes).and_return({})
         @object = @klass.new :a => 'one'
         @object.instance_variable_get('@attributes')['a'].should == 'one'
       end

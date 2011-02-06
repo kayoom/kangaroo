@@ -9,6 +9,10 @@ module Kangaroo
         @klass.define_multiple_accessors :a, :b
       end
       
+      before :each do
+        @klass.stub!(:default_attributes).and_return({})
+      end
+      
       it 'allows to read attributes via read_attribute' do
         @object = @klass.new :a => 'one'
         @object.read_attribute(:a).should == 'one'
