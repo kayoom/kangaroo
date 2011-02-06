@@ -7,6 +7,7 @@ module Kangaroo
     end
 
     module ClassMethods
+      # @private
       def add_default_attribute_initializer
         before_initialize do
           self.class.default_attributes.each do |name, value|
@@ -15,6 +16,9 @@ module Kangaroo
         end
       end
       
+      # Fetch default attribute values from OpenERP database
+      #
+      # @return [Hash] default values
       def default_attributes
         remote.default_get field_names
       end
