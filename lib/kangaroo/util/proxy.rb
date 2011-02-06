@@ -17,7 +17,7 @@ module Kangaroo
       end
       
       def call! name, *args
-        super name, __curry__(*args)
+        super name, *__curry__(*args)
       end
       
       def self.new *args

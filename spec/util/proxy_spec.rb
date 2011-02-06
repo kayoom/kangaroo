@@ -12,11 +12,22 @@ module Kangaroo
         Rapuncel::Client.new :host => '127.0.0.1', :port => 8069, :path => '/xmlrpc/object'
       end
       
-      it 'curries predefined arguments' do
-        proxy = Proxy.new client, 'a', 'b'
+      def common_client
+        Rapuncel::Client.new :host => '127.0.0.1', :port => 8069, :path => '/xmlrpc/common'
+      end
+      
+      it 'proxies method calls' do
+        proxy = Proxy.new common_client
         
-        object_service.should_receive(:xmlrpc_call).with('execute', 'a', 'b', 'c')
-        proxy.execute 'c'
+        common_service.should_receive(:xmlrpc_call).with('some_method')
+        proxy.some_method
+      end
+      
+      it 'curries predefined arguments' do
+        proxy = Proxy.new common_client, 'a', 'b'
+        
+        common_service.should_receive(:xmlrpc_call).with('some_method', 'a', 'b', 'd')
+        proxy.some_method 'd'
       end
       
       describe Object do

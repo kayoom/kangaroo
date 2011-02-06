@@ -22,6 +22,11 @@ module TestServices
       args
     end
     
+    def some_method *args
+      xmlrpc_call 'some_method', *args
+      args
+    end
+    
     protected
     def xmlrpc_call name, *args
     end

@@ -71,9 +71,10 @@ module Kangaroo
       
       # Get servers OS time
       #
+      # @param [String] super_password Superadmin password
       # @return servers OS time
-      def get_os_time
-        call! :get_os_time
+      def get_os_time super_password
+        call! :get_os_time, super_password
       end
       
       # Get SQL count, needs loglevel DEBUG_SQL

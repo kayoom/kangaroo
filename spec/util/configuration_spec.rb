@@ -9,7 +9,7 @@ module Kangaroo
       include TestServerHelper
       
       def config_file
-        File.join File.dirname(__FILE__), 'test_env', 'test.yml'
+        File.join File.dirname(__FILE__), '..', 'test_env', 'test.yml'
       end
       
       it "configures Kangaroo by config file" do
