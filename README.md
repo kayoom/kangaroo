@@ -1,6 +1,10 @@
 Kangaroo
 ========
 
+NOTE
+----
+This branch is NOT functional. We're refactoring big time!
+
 Overview
 --------
 
