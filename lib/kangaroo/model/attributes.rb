@@ -1,24 +1,47 @@
+require 'active_model/dirty'
+
 module Kangaroo
   module Attributes
+    # @private
     def self.included base
+      base.send :include, ActiveModel::Dirty
       base.extend ClassMethods      
     end
     
+    # Read an attribute value by name
+    #
+    # @param [String, Symbol] name attribute name
+    # @return attribute value
     def read_attribute name
       @attributes[name.to_s]
     end
     
+    # Write an attribute by name
+    #
+    # @param [String, Symbol] name attribute name
+    # @param value attribute value to set
+    # @return attribute value
     def write_attribute name, value
-      attribute_will_change! name
+      attribute_will_change! name.to_s
       @attributes[name.to_s] = value
     end
     
+    # Mass set attributes. Attribute values are set via setters, not directly stored
+    # in the @attributes Hash.
+    #
+    # @param [Hash] attributes Hash of attribute names and values
+    # @return [Hash] attributes
     def attributes= attributes
       attributes.except('id', :id).map do |key_value|
         __send__ "#{key_value.first}=", key_value.last
       end
+      
+      self.attributes
     end
     
+    # Read all attributes. Attributes are read via getters.
+    #
+    # @return [Hash] attributes
     def attributes
       {}.tap do |attributes|
         self.class.attribute_names.each do |key|
@@ -27,65 +50,66 @@ module Kangaroo
       end
     end
     
-    
-    
     module ClassMethods
+      # If you need to customize your models, e.g. add attributes
+      # not covered by fields_get, you can call {extend_attribute_methods}
+      #
+      # @param [Array] attributes list of attribute names to define accessors for
       def extend_attribute_methods *attributes
         attributes.flatten.each do |attr|
-          next if column_names.include?(attr.to_s)
-          define_attribute_method attr
-          column_names << attr.to_s
-          attribute_names << attr.to_s
+          next if attribute_names.include?(attr.to_s)
+          define_accessors attr
         end
       end
       
-      def define_reader_methods *methods
-        methods.each do |method|
-          define_reader_method method, method
+      # Define getters for attributes
+      #
+      # @param [Array] attribute_names
+      def define_getters *attribute_names
+        attribute_names.flatten.each do |name|
+          define_getter name
         end
       end 
       
-      def define_reader_method name, attribute = nil   
-        attribute ||= name
-        
-        define_method name do
-          read_attribute attribute
+      # Define getter
+      #
+      # @param [String, Symbol] attribute_name
+      def define_getter attribute_name
+        define_method attribute_name do
+          read_attribute attribute_name
         end
       end
       
-      def column_names
-        @column_names ||= []
-      end
-      
+      # Get a list of available attributes
+      #
+      # @return [Array] attribute names
       def attribute_names
         @attribute_names ||= []
       end
       
-      def clear_column_names
-        @column_names = []
-      end
-      
-      def clear_attribute_names
-        @attribute_names = []
-      end
-      
-      def define_attribute_method name, attribute = nil
-        attribute ||= name
-        
-        define_method name do
-          read_attribute attribute
+      # Define getter and setter for an attribute
+      #
+      # @param [String, Symbol] attribute_name
+      def define_accessors attribute_name
+        define_method attribute_name do
+          read_attribute attribute_name
         end
         
-        define_method "#{name}=" do |value|
-          write_attribute attribute, value
+        define_method "#{attribute_name}=" do |value|
+          write_attribute attribute_name, value
         end
+        
+        attribute_names << attribute_name.to_s
       end
       
-      def define_attribute_methods *methods
-        super methods.map(&:to_s)
+      # Define getters and setters for attributes
+      #
+      # @param [Array] attribute_names
+      def define_multiple_accessors *attribute_names
+        define_attribute_methods attribute_names.map(&:to_s)
         
-        methods.each do |method|
-          define_attribute_method method, method
+        attribute_names.each do |attribute_name|
+          define_accessors attribute_name
         end
       end
     end

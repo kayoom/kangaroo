@@ -1,7 +1,31 @@
+require 'kangaroo/model/relation'
+require 'kangaroo/model/attributes'
+require 'active_model/callbacks'
+
 module Kangaroo
   module Model
     class Base
+      extend ActiveModel::Callbacks
+      include Attributes
       
+      define_model_callbacks :initialize
+
+      # Initialize a new object, and set attributes
+      #
+      # @param [Hash] attributes
+      def initialize attributes = {}
+        @new_record = true
+        @attributes = {}
+      
+        # to module DefaultAttributes
+        # self.class.default_attributes.each do |key, val|
+        #   write_attribute key, val
+        # end
+      
+        _run_initialize_callbacks do
+          self.attributes = attributes
+        end
+      end
     end
   end
 end

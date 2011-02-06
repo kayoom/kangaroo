@@ -31,6 +31,43 @@ module TestServices
     def xmlrpc_call name, *args
     end
   end
+  
+  class DbService
+    def list *args
+      xmlrpc_call 'list', *args
+      args
+    end
+    
+    def rename *args
+      xmlrpc_call 'rename', *args
+      args
+    end
+    
+    protected
+    def xmlrpc_call name, *args
+    end
+  end
+  
+  class ReportService
+    def create *args
+      xmlrpc_call 'create', *args
+      args
+    end
+    
+    protected
+    def xmlrpc_call name, *args
+    end
+  end
+  
+  class WizardService
+    def create *args
+      xmlrpc_call 'create', *args
+    end
+    
+    protected
+    def xmlrpc_call name, *args
+    end
+  end
 end
 
 module TestServerHelper
@@ -51,10 +88,22 @@ module TestServerHelper
   def common_service
     @test_server.common_service
   end
+  
+  def db_service
+    @test_server.db_service
+  end
+  
+  def report_service
+    @test_server.report_service
+  end
+  
+  def wizard_service
+    @test_server.wizard_service
+  end
 end
 
 class TestServer
-  SERVICES = %w(ObjectService CommonService)
+  SERVICES = %w(ObjectService CommonService DbService WizardService ReportService)
   SERVICES.each do |service|
     attr_accessor service.underscore
   end
@@ -97,11 +146,6 @@ class TestServer
     server.add_handler(XMLRPC::iPIMethods(''), inst)
   end
   
-  def check
-    client = Rapuncel::Client.new :port => 8069, :path => '/xmlrpc/object'
-    client.proxy.execute *%w(a b c d)
-  end
-
   def stop
     @server.shutdown
   end
