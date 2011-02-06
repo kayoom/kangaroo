@@ -40,6 +40,12 @@ module Kangaroo
         Oo::C::D.should be_a(Class)
         Oo::C::D::E.should be_a(Class)
       end
+      
+      it 'raises an error if trying to define a parent model after a child model' do
+        child_model = adapt_oo_model 'Oo::Sale::Order::Line'
+        
+        lambda { adapt_oo_model('Oo::Sale::Order') }.should raise_error(Kangaroo::RubyAdapter::ChildDefinedBeforeParentError)
+      end
     end
   end
 end

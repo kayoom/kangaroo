@@ -1,4 +1,5 @@
 require 'kangaroo/model/base'
+require 'kangaroo/ruby_adapter/exceptions'
 
 module Kangaroo
   module RubyAdapter
@@ -14,7 +15,13 @@ module Kangaroo
       end
       
       def define_model_class
-        set_const_in @namespace, constant_names.last, model_subclass
+        @ruby_model = set_const_in @namespace, constant_names.last, model_subclass
+        
+        if !@ruby_model.is_a?(Class)
+          raise ChildDefinedBeforeParentError
+        end
+        
+        @ruby_model
       end
       
       def initialize_namespace
@@ -26,7 +33,7 @@ module Kangaroo
       end
       
       def constant_names
-        @constant_names ||= @model.model_class_name.split("::")
+        @constant_names ||= @oo_model.model_class_name.split("::")
       end
       
       # Set constant only if not already defined
