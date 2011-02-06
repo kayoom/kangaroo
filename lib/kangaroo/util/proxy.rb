@@ -9,6 +9,7 @@ module Kangaroo
       autoload :Object, 'kangaroo/util/proxy/object'
       autoload :Workflow, 'kangaroo/util/proxy/workflow'
       autoload :Report, 'kangaroo/util/proxy/report'
+      autoload :Wizard, 'kangaroo/util/proxy/wizard'
 
       def __initialize__ client, *curry_args
         super client, nil
