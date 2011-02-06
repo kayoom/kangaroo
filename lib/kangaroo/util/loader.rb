@@ -7,11 +7,18 @@ module Kangaroo
     class Loader
       attr_accessor :model_names, :models
       
+      # Initialize a Loader instance
+      #
+      # @param [Array] model_names List of model names / patterns to load
       def initialize model_names
         @model_names = model_names
         sanitize_model_names
       end
       
+      # Loads matching models and uses {Kangaroo::RubyAdapter::Base RubyAdapter} to
+      # create the neccessary Ruby classes.
+      #
+      # @return [void]
       def load!
         load_oo_models
         sort_oo_models
