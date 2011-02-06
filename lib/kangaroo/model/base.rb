@@ -1,14 +1,20 @@
 require 'kangaroo/model/relation'
 require 'kangaroo/model/attributes'
+require 'kangaroo/model/default_attributes'
 require 'active_model/callbacks'
+require 'active_support/core_ext/class'
 
 module Kangaroo
   module Model
     class Base
-      extend ActiveModel::Callbacks
-      include Attributes
+      class_attribute :database
+      class_inheritable_array :field_names
       
+      extend ActiveModel::Callbacks
       define_model_callbacks :initialize
+      
+      include Attributes
+      include DefaultAttributes
 
       # Initialize a new object, and set attributes
       #
@@ -17,13 +23,27 @@ module Kangaroo
         @new_record = true
         @attributes = {}
       
-        # to module DefaultAttributes
-        # self.class.default_attributes.each do |key, val|
-        #   write_attribute key, val
-        # end
-      
         _run_initialize_callbacks do
           self.attributes = attributes
+        end
+      end
+      
+      # Send method calls via xmlrpc to OpenERP
+      #
+      def remote
+        self.class.remote
+      end
+      
+      class << self
+        # Return this models OpenObject name
+        def oo_name
+          Oo.ruby_name_to_oo self.name
+        end
+
+        # Send method calls via xmlrpc to OpenERP
+        #        
+        def remote
+          @remote ||= database.object oo_name
         end
       end
     end

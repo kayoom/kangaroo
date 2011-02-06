@@ -45,8 +45,8 @@ module Kangaroo
       # Access to the {Kangaroo::Util::Proxy::Object Object Proxy}
       #
       # @return object service proxy
-      def object
-        @object_proxy ||= Proxy::Object.new client.object_service, db_name, user_id, password
+      def object model_name
+        Proxy::Object.new client.object_service, db_name, user_id, password, model_name
       end
       
       # Access to the {Kangaroo::Util::Proxy::Wizard Wizard Proxy}

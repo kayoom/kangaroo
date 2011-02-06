@@ -28,18 +28,18 @@ module Kangaroo
       
       describe Proxy::Object do
         it 'sends method calls via #execute to object service' do
-          proxy = Proxy::Object.new client('object')
+          proxy = Proxy::Object.new client('object'), 'model'
           
           object_service.should_receive(:xmlrpc_call).with('execute', 'model', 'some_method', 'a')
-          proxy.some_method 'model', 'a'
+          proxy.some_method 'a'
         end
         
         it 'curries database authentication' do
-          proxy = Proxy::Object.new client('object'), 'some_db', 'a_user', 'my_password'
+          proxy = Proxy::Object.new client('object'), 'some_db', 'a_user', 'my_password', 'model'
           
           object_service.should_receive(:xmlrpc_call).with('execute', 'some_db', 'a_user', 'my_password', 
                                                             'model', 'some_method', 'a')
-          proxy.some_method 'model', 'a'
+          proxy.some_method 'a'
         end
       end
       
