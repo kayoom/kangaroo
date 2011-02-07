@@ -8,10 +8,6 @@ module Kangaroo
     describe Proxy do
       include TestServerHelper
       
-      def client service
-        Rapuncel::Client.new :host => '127.0.0.1', :port => 8069, :path => "/xmlrpc/#{service}"
-      end
-      
       it 'proxies method calls' do
         proxy = Proxy.new client('common')
         

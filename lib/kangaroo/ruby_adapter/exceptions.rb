@@ -1,6 +1,7 @@
+require 'kangaroo/exception'
+
 module Kangaroo
   module RubyAdapter
-    class Exception < ::Exception ; end
-    class ChildDefinedBeforeParentError < Exception ; end
+    class ChildDefinedBeforeParentError < Kangaroo::Exception ; end
   end
 end

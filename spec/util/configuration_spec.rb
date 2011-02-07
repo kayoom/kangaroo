@@ -23,7 +23,9 @@ module Kangaroo
       
       it 'authorizes the configured user before model loading' do
         config = Kangaroo::Util::Configuration.new(config_file, Logger.new('/dev/null'))
-        Loader.stub! :new
+        loader = mock('loader')
+        loader.stub! :load!
+        Loader.stub!(:new).and_return loader
         
         common_service.should_receive(:xmlrpc_call).
                         with('login', 'kangaroo_test_database', 'admin', 'admin')

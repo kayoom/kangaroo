@@ -2,6 +2,8 @@ require 'kangaroo/model/relation'
 require 'kangaroo/model/attributes'
 require 'kangaroo/model/default_attributes'
 require 'kangaroo/model/inspector'
+require 'kangaroo/model/persistence'
+require 'kangaroo/model/open_object_orm'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 
@@ -13,10 +15,13 @@ module Kangaroo
       
       extend ActiveModel::Callbacks
       define_model_callbacks :initialize
+      define_model_callbacks :find
       
       include Attributes
       include DefaultAttributes
       include Inspector
+      include Persistence
+      extend OpenObjectOrm
       
       attr_reader :id
 
@@ -24,26 +29,11 @@ module Kangaroo
       #
       # @param [Hash] attributes
       def initialize attributes = {}
-        @new_record = true
         @attributes = {}
       
         _run_initialize_callbacks do
           self.attributes = attributes
         end
-      end
-      
-      # Check if this record hasnt been persisted yet
-      #
-      # @return [boolean] true/false
-      def new_record?
-        @new_record
-      end
-      
-      # Check if this record has been persisted yet
-      #
-      # @return [boolean] true/false
-      def persisted?
-        !new_record?
       end
       
       # Send method calls via xmlrpc to OpenERP
@@ -90,53 +80,10 @@ end
 #     include Execute
 #     
 #     class_attribute :columns   
-#     # class_attribute :column_names    
-#     # class_attribute :attribute_names    
-#     class_attribute :new_attributes
 #     
-#     attr_accessor :id
-#     
-#     define_model_callbacks :initialize
 #     define_model_callbacks :find
 #       
 #     
-#     def initialize attributes = {}
-#       @new_record = true
-#       @attributes = {}
-#       
-#       self.class.default_attributes.each do |key, val|
-#         write_attribute key, val
-#       end
-#       
-#       _run_initialize_callbacks do
-#         self.attributes = attributes
-#       end
-#     end
-#     
-#     def new_record?
-#       @new_record
-#     end
-#     
-#     def inspect
-#       "#<#{self.class} ".tap do |s|
-#         s << "id: " << id.to_s << ", "
-#         
-#         attr = self.class.attribute_names.map do |c|
-#           if respond_to?(c)
-#             [c.to_s, send(c).inspect] * ": "
-#           end
-#         end
-#         
-#         s << attr.compact * ", "
-#       
-#         s << ">"
-#       end
-#     end    
-#     
-#     protected
-#     def database
-#       self.class.database
-#     end
 #     
 #     class << self      
 #       delegate  :where,

@@ -80,6 +80,14 @@ module TestServerHelper
       @test_server.stop
     end    
   end
+      
+  def client service
+    Rapuncel::Client.new :host => '127.0.0.1', :port => 8069, :path => "/xmlrpc/#{service}"
+  end
+  
+  def proxy service, *args
+    Kangaroo::Util::Proxy.const_get(service.camelize).new client(service), *args
+  end
   
   def object_service
     @test_server.object_service
