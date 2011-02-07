@@ -1,6 +1,7 @@
 require 'kangaroo/model/relation'
 require 'kangaroo/model/attributes'
 require 'kangaroo/model/default_attributes'
+require 'kangaroo/model/inspector'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 
@@ -15,8 +16,9 @@ module Kangaroo
       
       include Attributes
       include DefaultAttributes
+      include Inspector
       
-      attr_accessor :id
+      attr_reader :id
 
       # Initialize a new object, and set attributes
       #
@@ -28,6 +30,20 @@ module Kangaroo
         _run_initialize_callbacks do
           self.attributes = attributes
         end
+      end
+      
+      # Check if this record hasnt been persisted yet
+      #
+      # @return [boolean] true/false
+      def new_record?
+        @new_record
+      end
+      
+      # Check if this record has been persisted yet
+      #
+      # @return [boolean] true/false
+      def persisted?
+        !new_record?
       end
       
       # Send method calls via xmlrpc to OpenERP
