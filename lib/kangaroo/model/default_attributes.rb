@@ -2,7 +2,7 @@ module Kangaroo
   module DefaultAttributes
     # @private
     def self.included klass
-      klass.extend ClassMethods      
+      klass.extend ClassMethods
 
       klass.before_initialize do
         self.class.default_attributes.each do |name, value|

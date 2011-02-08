@@ -8,14 +8,14 @@ module Kangaroo
       def db_exist db_name
         call! :db_exist, db_name
       end
-      
+
       # Get a list of available databases
       #
       # @return list of databases
       def list
         call! :list
       end
-      
+
       # Get a list of available languages
       #
       # @return list of languages

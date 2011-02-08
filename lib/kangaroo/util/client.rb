@@ -6,7 +6,7 @@ module Kangaroo
   module Util
     class Client < Rapuncel::Client
       SERVICES = %w(db common object wizard report).freeze
-      
+
       # Initialize a Kangaroo XMLRPC Client
       #
       # @param [Hash] configuration configuration Hash
@@ -15,14 +15,14 @@ module Kangaroo
       def initialize configuration
         super configuration.merge(:raise_on => :both)
       end
-    
+
       # @private
       def clone
         super.tap do |c|
           c.connection = connection.clone
         end
       end
-      
+
       SERVICES.each do |name|
         class_eval <<-RUBY
           def #{name}_service
@@ -32,15 +32,15 @@ module Kangaroo
           end
         RUBY
       end
-      
-      # Access the {Kangaroo::Util::Proxy::Superadmin Superadmin Proxy} 
+
+      # Access the {Kangaroo::Util::Proxy::Superadmin Superadmin Proxy}
       #
       # @param [String] super_password Superadmin password
       # @return [Kangaroo::Util::Proxy::Superadmin] Superadmin proxy
       def superadmin super_password
         Proxy::Superadmin.new db_service, super_password
       end
-        
+
       # Access the {Kangaroo::Util::Proxy::Common Common Proxy}
       #
       # @return [Kangaroo::Util::Proxy::Common] Common proxy
@@ -53,7 +53,7 @@ module Kangaroo
       # @return [Kangaroo::Util::Proxy::Db] Db proxy
       def db
         @db_proxy ||= Proxy::Db.new db_service
-      end      
+      end
     end
   end
 end

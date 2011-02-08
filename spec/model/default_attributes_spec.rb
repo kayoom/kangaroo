@@ -8,20 +8,20 @@ module Kangaroo
         @klass = Class.new(Kangaroo::Model::Base)
         @klass.define_multiple_accessors :a, :b
       end
-      
+
       it 'sets default values on initialization' do
         @klass.stub!(:default_attributes).and_return(:a => 'one')
         @object = @klass.new
         @object.a.should == 'one'
         @object.should be_a_changed
       end
-      
+
       it 'sets default values before initial values' do
         @klass.stub!(:default_attributes).and_return(:a => 'one')
         @object = @klass.new :a => 'two'
         @object.a.should == 'two'
       end
-      
+
       it 'fetches default values via default_get on the object service' do
         @klass = Class.new(Kangaroo::Model::Base)
         @klass.define_multiple_accessors :a, :b

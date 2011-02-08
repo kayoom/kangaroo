@@ -18,7 +18,7 @@ Installation
 If you're on Rails 3, just add Kangaroo to your Gemfile:
 
     gem 'kangaroo'
-    
+
 And create a **kangaroo.yml** configuration file in **[RAILS\_ROOT]/config**, containing these options:
 
     host: 127.0.0.1
@@ -28,7 +28,7 @@ And create a **kangaroo.yml** configuration file in **[RAILS\_ROOT]/config**, co
       name: my_openerp
       user: admin
       password: admin
-  
+
       models:
         - account.*
         - product.*

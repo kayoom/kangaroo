@@ -9,7 +9,7 @@ module Kangaroo
       def create name, datas = {}
         call! :create, name, datas
       end
-      
+
       # Execute an action on a wizard
       #
       # @param [Number] id wizard id

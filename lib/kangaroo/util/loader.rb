@@ -6,7 +6,7 @@ module Kangaroo
   module Util
     class Loader
       attr_accessor :model_names, :models
-      
+
       # Initialize a Loader instance
       #
       # @param [Array] model_names List of model names / patterns to load
@@ -14,7 +14,7 @@ module Kangaroo
         @model_names = model_names
         sanitize_model_names
       end
-      
+
       # Loads matching models and uses {Kangaroo::RubyAdapter::Base RubyAdapter} to
       # create the neccessary Ruby classes.
       #
@@ -24,24 +24,24 @@ module Kangaroo
         sort_oo_models
         adapt_oo_models
       end
-      
+
       protected
       def load_oo_models
         @models = model_names.sum([]) do |model_name|
           Oo::Ir::Model.where("model ilike #{model_name}").all
         end.uniq
       end
-      
+
       def sort_oo_models
         @models = @models.sort_by &:length_of_model_name
       end
-      
+
       def adapt_oo_models
         @models.map do |model|
           RubyAdapter::Base.new(model).to_ruby
         end
       end
-      
+
       def sanitize_model_names
         @model_names = case @model_names
         when nil, []
@@ -56,7 +56,7 @@ module Kangaroo
           raise "Expected list of models or :all, got #{@model_names.inspect}"
         end
       end
-      
+
       def replace_wildcard string
         string.gsub '*', '%'
       end

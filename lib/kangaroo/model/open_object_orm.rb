@@ -4,10 +4,10 @@ module Kangaroo
   module Model
     module OpenObjectOrm
       include ConditionNormalizer
-      
+
       def self.included klass
       end
-      
+
       # Search for records in the OpenERP database
       #
       # @param [Hash, Array, String] conditions
@@ -23,15 +23,15 @@ module Kangaroo
           :limit  => false,
           :offset => 0
         }.merge(options)
-        
-        remote.search normalize_conditions(conditions), 
-                      options[:offset], 
-                      options[:limit], 
-                      options[:order], 
+
+        remote.search normalize_conditions(conditions),
+                      options[:offset],
+                      options[:limit],
+                      options[:order],
                       options[:context],
                       options[:count]
       end
-      
+
       def read ids, fields, context = {}
         remote.read(ids, fields, context).map do |attributes|
           instantiate attributes, context

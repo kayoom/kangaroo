@@ -15,17 +15,17 @@ module Kangaroo
         super client, nil
         @curry_args = curry_args
       end
-      
+
       def call! name, *args
         super name, *__curry__(*args)
       end
-      
+
       def self.new *args
         allocate.__tap__ do |proxy|
           proxy.__initialize__ *args
         end
       end
-      
+
       protected
       def __curry__ *args
         @curry_args + args

@@ -11,7 +11,7 @@ module Kangaroo
       def report object, ids, datas = {}, context = {}
         call! :report, object, ids, data, context
       end
-      
+
       # Check status on/get report by id
       #
       # @param id

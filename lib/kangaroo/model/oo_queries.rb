@@ -2,37 +2,37 @@ module Kangaroo
   module OoQueries
     OPERATORS = (%w(= != > >= < <= ilike like in child_of parent_left parent_right) + ['not in']).join("|").freeze
     CONDITION_PATTERN = /\A(.*)\s+(#{OPERATORS})\s+(.*)\Z/i.freeze
-    
+
     def self.included base
       base.extend ClassMethods
     end
-    
-    
+
+
     module ClassMethods
       def search query_parameters = {}
         conditions = query_parameters[:conditions] || []
         conditions = conditions.sum([]) {|c| convert_condition(c) }
-        
+
         offset = query_parameters[:offset] || 0
         limit = query_parameters[:limit] || false
         order = query_parameters[:order] || []
         context = {}
-        
+
         database.search(self, conditions, offset, limit, order, context)
       end
-      
+
       def read ids, column_names = [], context = {}
-        
+
         database.read(self, ids, column_names, context).map do |record|
           instantiate(record)
         end
       end
-      
+
       def default_get *fields
         database.default_get(self, fields, {})
       end
-      
-      protected      
+
+      protected
       def convert_condition condition
         case condition
         when Hash

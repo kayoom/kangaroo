@@ -5,9 +5,9 @@ module Kangaroo
     # @private
     def self.included base
       base.send :include, ActiveModel::Dirty
-      base.extend ClassMethods      
+      base.extend ClassMethods
     end
-    
+
     # Read an attribute value by name
     #
     # @param [String, Symbol] name attribute name
@@ -15,7 +15,7 @@ module Kangaroo
     def read_attribute name
       @attributes[name.to_s]
     end
-    
+
     # Write an attribute by name
     #
     # @param [String, Symbol] name attribute name
@@ -25,7 +25,7 @@ module Kangaroo
       attribute_will_change! name.to_s
       @attributes[name.to_s] = value
     end
-    
+
     # Mass set attributes. Attribute values are set via setters, not directly stored
     # in the @attributes Hash.
     #
@@ -35,10 +35,10 @@ module Kangaroo
       attributes.except('id', :id).map do |key_value|
         __send__ "#{key_value.first}=", key_value.last
       end
-      
+
       self.attributes
     end
-    
+
     # Read all attributes. Attributes are read via getters.
     #
     # @return [Hash] attributes
@@ -49,7 +49,7 @@ module Kangaroo
         end
       end
     end
-    
+
     module ClassMethods
       # If you need to customize your models, e.g. add attributes
       # not covered by fields_get, you can call {extend_attribute_methods}
@@ -61,7 +61,7 @@ module Kangaroo
           define_accessors attr
         end
       end
-      
+
       # Define getters for attributes
       #
       # @param [Array] attribute_names
@@ -69,8 +69,8 @@ module Kangaroo
         attribute_names.flatten.each do |name|
           define_getter name
         end
-      end 
-      
+      end
+
       # Define getter
       #
       # @param [String, Symbol] attribute_name
@@ -79,14 +79,14 @@ module Kangaroo
           read_attribute attribute_name
         end
       end
-      
+
       # Get a list of available attributes
       #
       # @return [Array] attribute names
       def attribute_names
         @attribute_names ||= []
       end
-      
+
       # Define getter and setter for an attribute
       #
       # @param [String, Symbol] attribute_name
@@ -94,20 +94,20 @@ module Kangaroo
         define_method attribute_name do
           read_attribute attribute_name
         end
-        
+
         define_method "#{attribute_name}=" do |value|
           write_attribute attribute_name, value
         end
-        
+
         attribute_names << attribute_name.to_s
       end
-      
+
       # Define getters and setters for attributes
       #
       # @param [Array] attribute_names
       def define_multiple_accessors *attribute_names
         define_attribute_methods attribute_names.map(&:to_s)
-        
+
         attribute_names.each do |attribute_name|
           define_accessors attribute_name
         end

@@ -3,16 +3,16 @@ module Kangaroo
     module ConditionNormalizer
       CONDITION_OPERATORS = *%w(= != > >= < <= ilike like in child_of parent_left parent_right).freeze
       CONDITION_PATTERN = /\A(.*)\s+(#{CONDITION_OPERATORS * "|"})\s+(.*)\Z/i.freeze
-      
+
       protected
       def normalize_conditions conditions
         conditions = Hash === conditions ? [conditions] : Array(conditions)
-        
+
         conditions.map do |condition|
           normalize_condition condition
         end
       end
-      
+
       def normalize_condition condition
         case condition
         when Array
@@ -25,13 +25,13 @@ module Kangaroo
           raise "Expected Array, Hash or String"
         end
       end
-      
+
       def convert_hash_condition condition
         condition.sum([]) do |key_val|
           convert_key_value_condition *key_val
         end
       end
-      
+
       def convert_key_value_condition field, value
         operator = if Array === value
           value = value.map &:to_s
@@ -43,7 +43,7 @@ module Kangaroo
 
         [field.to_s, operator, value]
       end
-      
+
       def convert_string_condition string
         # Ugly workaround, if you know how to make 'not in' work along the other operators
         # with a single RegExp, please let me now

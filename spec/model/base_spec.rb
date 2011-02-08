@@ -8,7 +8,7 @@ module Kangaroo
         @klass = Class.new(Kangaroo::Model::Base)
         @klass.define_multiple_accessors :a, :b
       end
-      
+
       it 'sets attributes on initialization' do
         @klass.stub!(:default_attributes).and_return({})
         @object = @klass.new :a => 'one'
