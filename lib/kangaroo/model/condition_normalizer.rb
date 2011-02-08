@@ -1,7 +1,7 @@
 module Kangaroo
   module Model
     module ConditionNormalizer
-      CONDITION_OPERATORS = ['not in', *%w(= != > >= < <= ilike like in child_of parent_left parent_right)].freeze
+      CONDITION_OPERATORS = *%w(= != > >= < <= ilike like in child_of parent_left parent_right).freeze
       CONDITION_PATTERN = /\A(.*)\s+(#{CONDITION_OPERATORS * "|"})\s+(.*)\Z/i.freeze
       
       protected
@@ -45,9 +45,14 @@ module Kangaroo
       end
       
       def convert_string_condition string
-        CONDITION_PATTERN.match(string).try(:captures) || []
+        # Ugly workaround, if you know how to make 'not in' work along the other operators
+        # with a single RegExp, please let me now
+        if (key_val = string.split("not in")).length > 1
+          [key_val.first.strip, 'not in', key_val.last.strip]
+        else
+          CONDITION_PATTERN.match(string).try(:captures) || string
+        end
       end
-
     end
   end
 end

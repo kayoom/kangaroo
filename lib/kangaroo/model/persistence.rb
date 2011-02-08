@@ -13,6 +13,8 @@ module Kangaroo
         klass.after_destroy :mark_destroyed
         klass.after_save :mark_persisted
         
+        klass.send :attr_accessor, :context
+        
         klass.before_initialize do
           @destroyed  = false
           @readonly   = false
@@ -47,11 +49,13 @@ module Kangaroo
       
       module ClassMethods
         protected
-        def instantiate attributes
+        def instantiate attributes, context = {}
           allocate.tap do |instance|
-            instance.instance_exec(attributes.stringify_keys) do |attributes|
+            instance.instance_exec(attributes.stringify_keys, context) do |attributes, context|
               @attributes = attributes.except 'id'
               @id = attributes['id']
+              puts context.inspect
+              @context = context
               raise InstantiatedRecordNeedsIDError if @id.nil?
             
               @new_record = false

@@ -8,7 +8,6 @@ module TestServices
   class ObjectService
     def execute *args
       xmlrpc_call 'execute', *args
-      args
     end
     
     protected
