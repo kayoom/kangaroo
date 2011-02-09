@@ -14,7 +14,7 @@ module Kangaroo
       # @param [Array] list of field names, nil for all
       # @param [Hash] context
       # @return [Hash] field names and properties
-      def fields_get fields = nil, context = {}
+      def fields_get fields = nil, context = nil
         call! :fields_get, fields, context
       end
 
@@ -22,7 +22,8 @@ module Kangaroo
       #
       # @param [Array] fields list of field names
       # @param [Hash] context
-      def default_get fields = nil, context = {}
+      # @return [Hash]
+      def default_get fields = nil, context = nil
         call! :default_get, fields, context
       end
 
@@ -31,7 +32,7 @@ module Kangaroo
       # @param [Array] ids
       # @param [Hash] context
       # @return [Array<Array>] List of arrays [id, name]
-      def name_get ids, context = {}
+      def name_get ids, context = nil
         call! :name_get, ids, context
       end
 
@@ -58,7 +59,7 @@ module Kangaroo
       # @param [Hash] context
       # @param [boolean] details
       # @return [Array] list of Hashes with metadata
-      def read_perm ids, context = {}, details = false
+      def read_perm ids, context = nil, details = false
         call! :read_perm, ids, context, details
       end
 
@@ -68,7 +69,7 @@ module Kangaroo
       # @param default values to override on copy (defaults to nil)
       # @param [Hash] context
       # @return attributes of copied record
-      def copy id, default = nil, context = {}
+      def copy id, default = nil, context = nil
         call! :copy, id, default, context
       end
 
@@ -77,7 +78,7 @@ module Kangaroo
       # @param ids
       # @param context
       # @return [boolean] true if all exist, else false
-      def exists ids, context = {}
+      def exists ids, context = nil
         call! :exists, ids, context
       end
 
@@ -113,7 +114,7 @@ module Kangaroo
       # @param [Array] fields fields to read
       # @param [Hash] context
       # @return [Array] Array of Hashes with field names and values
-      def read ids, fields = [], context = {}
+      def read ids, fields = [], context = nil
         call! :read, ids, fields
       end
 

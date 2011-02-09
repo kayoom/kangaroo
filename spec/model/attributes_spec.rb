@@ -12,6 +12,10 @@ module Kangaroo
       before :each do
         @klass.stub!(:default_attributes).and_return({})
       end
+      
+      it 'stores the attribute names' do
+        @klass.attribute_names.should == ['a', 'b']
+      end
 
       it 'allows to read attributes via read_attribute' do
         @object = @klass.new :a => 'one'

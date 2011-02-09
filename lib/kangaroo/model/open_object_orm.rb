@@ -1,4 +1,5 @@
 require 'kangaroo/model/condition_normalizer'
+require 'kangaroo/model/field'
 
 module Kangaroo
   module Model
@@ -32,10 +33,84 @@ module Kangaroo
                       options[:count]
       end
 
-      def read ids, fields, context = {}
-        remote.read(ids, fields, context).map do |attributes|
+      # Read records and instantiate them
+      #
+      # @param [Array] ids
+      # @param [Hash] options
+      # @option options [Array] fields
+      # @option options [Hash] context
+      # @return [Array] list of Kangaroo::Model::Base instances
+      def read ids, options = {}
+        options = {
+          :fields => attribute_names
+        }.merge(options)
+        
+        context = options[:context]
+        remote.read(ids, options[:fields], context).map do |attributes|
           instantiate attributes, context
         end
+      end
+      
+      # Retrieve field informations
+      #
+      # @param [Hash] options
+      # @option options [Array] fields
+      # @option options [Hash] context
+      # @return [Hash]
+      def fields_get options = {}
+        options = {
+          :fields => attribute_names
+        }.merge(options)
+        
+        remote.fields_get(options[:fields], options[:context]).map do |key, val|
+          Field.new key, val
+        end
+      end
+      
+      # Create a OpenObject record.
+      #
+      # @param [Hash] attributes
+      # @param [Hash] options
+      # @option options [Hash] context
+      # @return [Number] id
+      def create_record attributes, options = {}
+        remote.create attributes, options[:context]
+      end
+      
+      
+      # Fetch default attribute values from OpenERP database
+      #
+      # @param [Hash] options
+      # @option options [Array] fields
+      # @option options [Hash] context
+      # @return [Hash] default values
+      def default_get options = {}
+        options = {
+          :fields => attribute_names
+        }.merge(options)
+        
+        remote.default_get options[:fields], options[:context]
+      end
+      
+      # Write values to records
+      #
+      # @param [Array] ids
+      # @param [Hash] attributes
+      # @param [Hash] options
+      # @option options [Hash] context
+      # @return [boolean] true/false
+      def write_record ids, attributes, options = {}
+        remote.write ids, attributes, options[:context]
+      end
+      
+      # Remove records
+      #
+      # @param [Array] ids
+      # @param [Hash] options
+      # @option options [Hash] context
+      # @return [boolean] true/false
+      def unlink ids, options = {}
+        remote.unlink ids, options[:context]
       end
     end
   end

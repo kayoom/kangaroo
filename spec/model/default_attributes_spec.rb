@@ -27,7 +27,7 @@ module Kangaroo
         @klass.define_multiple_accessors :a, :b
         @klass.field_names = %w(a b)
         @klass.stub!(:remote).and_return mock('object_service')
-        @klass.remote.should_receive(:default_get).with(%w(a b)).and_return :a => 'one', :b => 'two'
+        @klass.remote.should_receive(:default_get).with(%w(a b), anything).and_return :a => 'one', :b => 'two'
         @object = @klass.new
         @object.a.should == 'one'
         @object.b.should == 'two'

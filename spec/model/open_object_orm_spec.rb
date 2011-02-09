@@ -19,13 +19,40 @@ module Kangaroo
           object_service.stub!(:xmlrpc_call).
             with('execute', 'some_class', 'read', [1], ['a', 'b']).
             and_return([{:a => 'one', :id => 1}])
-          @klass.read([1], ['a', 'b']).first.a.should == 'one'
+          @klass.read([1], :fields => ['a', 'b']).first.a.should == 'one'
         end
 
         it 'passes on the "context"' do
           object_service.stub!(:xmlrpc_call).
             and_return([{:a => 'one', :id => 1}])
-          @klass.read([1], ['a', 'b'], :lang => 'de').first.context[:lang].should == 'de'
+          @klass.read([1], :fields => ['a', 'b'], :context => {:lang => 'de'}).first.context[:lang].should == 'de'
+        end
+        
+        it 'uses attribute_names as default value for field list' do
+          object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'read', [1], ['a', 'b']).
+            and_return([{:a => 'one', :id => 1}])
+          @klass.read([1])
+        end
+      end
+      
+      describe '#fields_get' do
+        it 'fetches details about fields of this model' do
+          object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'fields_get', ['a'], false).
+            and_return({:a => {:type => "selection"}})
+          @klass.fields_get(:fields => ['a']).first.read_attribute(:type).should == 'selection'
+        end
+        
+        it 'stores the name in the Field model' do
+          object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'fields_get', ['a'], false).
+            and_return({:a => {:type => "selection"}})
+          @klass.fields_get(:fields => ['a']).first.name.should == :a
+        end
+        
+        it 'uses attribute_names as default value for field list' do
+          object_service.should_receive(:xmlrpc_call).
+            with('execute', 'some_class', 'fields_get', ['a', 'b'], false).
+            and_return({:a => {:type => 'selection'}})
+          @klass.fields_get
         end
       end
 

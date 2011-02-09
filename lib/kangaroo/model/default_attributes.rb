@@ -12,11 +12,8 @@ module Kangaroo
     end
 
     module ClassMethods
-      # Fetch default attribute values from OpenERP database
-      #
-      # @return [Hash] default values
       def default_attributes
-        remote.default_get field_names
+        default_get :fields => attribute_names
       end
     end
   end
