@@ -4,6 +4,7 @@ require 'kangaroo/model/default_attributes'
 require 'kangaroo/model/inspector'
 require 'kangaroo/model/persistence'
 require 'kangaroo/model/open_object_orm'
+require 'kangaroo/model/finder'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 
@@ -22,6 +23,7 @@ module Kangaroo
       include Inspector
       include Persistence
       extend OpenObjectOrm
+      extend Finder
 
       attr_reader :id
 

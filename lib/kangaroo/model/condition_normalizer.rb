@@ -6,8 +6,13 @@ module Kangaroo
 
       protected
       def normalize_conditions conditions
-        conditions = Hash === conditions ? [conditions] : Array(conditions)
-
+        conditions = if Hash === conditions
+          return [] if conditions.blank?
+          [conditions]
+        else
+          Array(conditions)
+        end
+        
         conditions.map do |condition|
           normalize_condition condition
         end

@@ -62,6 +62,15 @@ module Kangaroo
             with 'execute', 'some_class', 'search', [['a', '=', 'one']], 0, false, false, false, false
           @klass.search [['a', '=', 'one']]
         end
+        
+        it 'allows empty conditions' do
+          object_service.should_receive(:xmlrpc_call).exactly(4).times.
+            with 'execute', 'some_class', 'search', [], 0, false, false, false, false
+          @klass.search []
+          @klass.search ''
+          @klass.search nil
+          @klass.search({})
+        end
 
         it 'converts simple hash conditions' do
           object_service.should_receive(:xmlrpc_call).twice.

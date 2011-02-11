@@ -24,7 +24,7 @@ module Kangaroo
           :limit  => false,
           :offset => 0
         }.merge(options)
-
+        
         remote.search normalize_conditions(conditions),
                       options[:offset],
                       options[:limit],
