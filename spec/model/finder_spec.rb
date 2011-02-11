@@ -14,6 +14,57 @@ module Kangaroo
         @klass.stub!(:remote).and_return @remote_stub
       end
       
+      describe 'relational' do
+        it 'allows specifying conditions via #where' do
+          @remote_stub.should_receive(:search).with([["a", "=", "one"]], *anythings(5)).
+            and_return [1]
+          @remote_stub.stub!(:read).and_return [{:a => 'one', :id => 1}]
+          @klass.where(:a => 'one').all
+        end
+        
+        it 'allows specifying a limit via #limit' do
+          @remote_stub.should_receive(:search).with([], nil, 10, *anythings(3)).
+            and_return [1]
+          @remote_stub.stub!(:read).and_return [{:a => 'one', :id => 1}]
+          @klass.limit(10).all          
+        end
+        
+        it 'allows specifying an offset via #offset' do
+          @remote_stub.should_receive(:search).with([], 10, nil, *anythings(3)).
+            and_return [1]
+          @remote_stub.stub!(:read).and_return [{:a => 'one', :id => 1}]
+          @klass.offset(10).all          
+        end
+                
+        it 'allows specifying a sort order via #order' do
+          @remote_stub.should_receive(:search).with([], nil, nil, ['a'], *anythings(2)).
+            and_return [1]
+          @remote_stub.stub!(:read).and_return [{:a => 'one', :id => 1}]
+          @klass.order('a').all
+        end
+        
+        it 'allows specifying descending sort order via #order(column, true)' do
+          @remote_stub.should_receive(:search).with([], nil, nil, ['a desc'], *anythings(2)).
+            and_return [1]
+          @remote_stub.stub!(:read).and_return [{:a => 'one', :id => 1}]
+          @klass.order('a', true).all
+        end
+        
+        it 'allows specifying fields to read via #select' do
+          @remote_stub.stub!(:search).and_return [1]
+          @remote_stub.should_receive(:read).with([1], ['a'], {}).
+            and_return [{:a => 'one', :id => 1}]
+          @klass.select('a').all
+        end
+        
+        it 'allows specifying the context via #context' do
+          @remote_stub.stub!(:search).and_return [1]
+          @remote_stub.should_receive(:read).with([1], ['a', 'b'], :lang => 'de_DE').
+            and_return [{:a => 'one', :id => 1}]
+          @klass.context(:lang => 'de_DE').all
+        end
+      end
+      
       describe '#all' do
         it 'searches for all records, and reads all attributes' do
           @remote_stub.should_receive(:search).with([], *anythings(5)).

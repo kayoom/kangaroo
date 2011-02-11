@@ -12,7 +12,7 @@ module Kangaroo
                             partition permutation pop presence present? pretty_inspect pretty_print pretty_print_cycle pretty_print_inspect
                             pretty_print_instance_variables product push rassoc reduce reject reject! replace respond_to? returning reverse
                             reverse! reverse_each rindex sample second shelljoin shift shuffle shuffle! slice slice! sort sort!
-                            sort_by split sum take take_while tap third to to_a to_ary to_default_s to_enum to_formatted_s to_json to_matcher
+                            sort_by split sum take take_while tap third to to_ary to_default_s to_enum to_formatted_s to_json to_matcher
                             to_param to_query to_s to_sentence to_set to_xml to_xml_rpc to_yaml to_yaml_properties to_yaml_style transpose
                             type uniq uniq! uniq_by uniq_by! unshift values_at yaml_initialize zip |).freeze
       # @private
@@ -24,7 +24,7 @@ module Kangaroo
       alias_method :__clone__, :clone
       alias_method :__tap__, :tap
 
-      delegate *(ARRAY_DELEGATES + [:to => :all])
+      delegate *(ARRAY_DELEGATES + [:to => :to_a])
 
       # @private
       def initialize target
@@ -35,10 +35,11 @@ module Kangaroo
         @context_clause = {}
       end
 
-      # DISCUSS
-      def all
-        @target.execute_query query_parameters
+      # Submit the query
+      def to_a
+        @target.search_and_read @where_clauses, query_parameters
       end
+      alias_method :all, :to_a
 
       # Clone this relation and add the condition to the where clause
       #
@@ -98,7 +99,7 @@ module Kangaroo
       def order column, desc = false
         column = column.to_s + " desc" if desc
         __clone__.__tap__ do |c|
-          c.order_clause += column.to_s
+          c.order_clause += [column.to_s]
         end
       end
 
@@ -150,7 +151,6 @@ module Kangaroo
       protected
       def query_parameters
         {
-          :conditions => @where_clauses,
           :offset => @offset_clause,
           :limit => @limit_clause,
           :select => @select_clause,
