@@ -14,7 +14,7 @@ module Kangaroo
         @klass.stub!(:remote).and_return @remote_stub
       end
       
-      describe 'relational' do
+      describe 'relational #all' do
         it 'allows specifying conditions via #where' do
           @remote_stub.should_receive(:search).with([["a", "=", "one"]], *anythings(5)).
             and_return [1]
