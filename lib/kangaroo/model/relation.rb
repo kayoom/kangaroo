@@ -15,8 +15,6 @@ module Kangaroo
                             sort_by split sum take take_while tap third to to_ary to_default_s to_enum to_formatted_s to_json to_matcher
                             to_param to_query to_s to_sentence to_set to_xml to_xml_rpc to_yaml to_yaml_properties to_yaml_style transpose
                             type uniq uniq! uniq_by uniq_by! unshift values_at yaml_initialize zip |).freeze
-      # @private
-      BASE_DELEGATES = %w(first find count size length).freeze
 
       # @private
       attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause, :context_clause
@@ -37,9 +35,15 @@ module Kangaroo
 
       # Submit the query
       def to_a
-        @target.search_and_read @where_clauses, query_parameters
+        @target.search_and_read @where_clauses, search_parameters, read_parameters
       end
       alias_method :all, :to_a
+      
+      def count
+        @target.count @where_clauses, search_parameters
+      end
+      alias_method :size, :count
+      alias_method :length, :count
 
       # Clone this relation and add the condition to the where clause
       #
@@ -141,20 +145,19 @@ module Kangaroo
         (stop.nil? && Integer===start_or_range) ? c.to_a.first : c.to_a
       end
 
-      BASE_DELEGATES.each do |delegate|
-        define_method delegate do |*args|
-          args << query_parameters
-          @target.send delegate, *args
-        end
-      end
-
       protected
-      def query_parameters
+      def search_parameters
         {
           :offset => @offset_clause,
           :limit => @limit_clause,
-          :select => @select_clause,
           :order => @order_clause,
+          :context => @context_clause
+        }
+      end
+      
+      def read_parameters
+        {
+          :fields => @select_clause,
           :context => @context_clause
         }
       end

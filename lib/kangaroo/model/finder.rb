@@ -20,17 +20,14 @@ module Kangaroo
         read(id).first
       end
       
-      def count
-        search [], :count => true
+      def count conditions = [], search_options = {}
+        search conditions, search_options.merge(:count => true)
       end
 
-      def search_and_read conditions, options = {}
-        fields = options.delete :select
-        ids = search conditions, options
+      def search_and_read conditions, search_options = {}, read_options = {}
+        ids = search conditions, search_options
         return [] if ids.blank?
         
-        read_options = { :context => options[:context] }
-        read_options.merge! :fields => fields unless fields.blank?
         read ids, read_options
       end
       
