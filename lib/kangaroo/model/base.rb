@@ -5,6 +5,7 @@ require 'kangaroo/model/inspector'
 require 'kangaroo/model/persistence'
 require 'kangaroo/model/open_object_orm'
 require 'kangaroo/model/finder'
+require 'kangaroo/model/remote_execute'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 
@@ -23,6 +24,7 @@ module Kangaroo
       include Inspector
       extend OpenObjectOrm
       extend Finder
+      include RemoteExecute
 
       attr_reader :id
 
