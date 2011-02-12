@@ -5,6 +5,8 @@ Installation
 {file:README.md Readme}
 {file:docs/Installation.md Installation}
 {file:docs/Usage.md Usage}
+{file:docs/Architecture.md Architecture}
+{file:docs/AdditionalServices.md Additional Services}
 
 Rails 3
 -------
