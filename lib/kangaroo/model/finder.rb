@@ -3,7 +3,7 @@ require 'active_support/core_ext/module'
 module Kangaroo
   module Model
     module Finder
-      RELATION_DELEGATES = %w(where limit offset order select context)
+      RELATION_DELEGATES = %w(where limit offset order select context reverse)
       delegate *(RELATION_DELEGATES + [:to => :relation])
 
       # Retrieve all records
