@@ -18,9 +18,10 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'rapuncel'
+  s.add_dependency 'rapuncel', '~> 0.0.2'
   s.add_dependency "activerecord", ">= 3.0.0"
   s.add_dependency "activesupport", ">= 3.0.0"
   s.add_development_dependency 'yard'
+  s.add_development_dependency 'rspec'
   s.add_development_dependency 'ruby-debug'
 end
