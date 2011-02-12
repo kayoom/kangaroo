@@ -8,4 +8,4 @@ database:
   
   models:
     - res.*
-    
+    - product.product

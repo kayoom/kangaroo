@@ -44,7 +44,7 @@ module Kangaroo
       it 'raises an error if trying to define a parent model after a child model' do
         child_model = adapt_oo_model 'Oo::Sale::Order::Line'
 
-        lambda { adapt_oo_model('Oo::Sale::Order') }.should raise_error(Kangaroo::RubyAdapter::ChildDefinedBeforeParentError)
+        lambda { adapt_oo_model('Oo::Sale::Order') }.should raise_error(Kangaroo::ChildDefinedBeforeParentError)
       end
     end
   end

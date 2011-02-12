@@ -3,4 +3,5 @@ module Kangaroo
   class RecordNotFound < Exception ; end
   class RecordSavingFailed < Exception ; end
   class InstantiatedRecordNeedsIDError < Kangaroo::Exception ; end
+  class ChildDefinedBeforeParentError < Kangaroo::Exception ; end
 end

@@ -58,7 +58,8 @@ module Kangaroo
       # @return [Hash]
       def fields_get options = {}
         options = {
-          :fields => attribute_names
+          :fields => attribute_names,
+          :context => {}
         }.merge(options)
 
         remote.fields_get(options[:fields], options[:context]).map do |key, val|

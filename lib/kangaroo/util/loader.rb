@@ -1,16 +1,19 @@
 require 'active_support/core_ext/enumerable'
 require 'kangaroo/ruby_adapter/base'
-require 'oo'
 
 module Kangaroo
   module Util
     class Loader
-      attr_accessor :model_names, :models
+      autoload :Model, 'kangaroo/util/loader/model'
+      autoload :Namespace, 'kangaroo/util/loader/namespace'
+      attr_accessor :model_names, :models, :database, :namespace
 
       # Initialize a Loader instance
       #
       # @param [Array] model_names List of model names / patterns to load
-      def initialize model_names
+      def initialize model_names, database, namespace = "Oo"
+        @namespace = namespace[0,2] == "::" ? namespace : "::#{namespace}"
+        @database = database
         @model_names = model_names
         sanitize_model_names
       end
@@ -18,7 +21,7 @@ module Kangaroo
       # Loads matching models and uses {Kangaroo::RubyAdapter::Base RubyAdapter} to
       # create the neccessary Ruby classes.
       #
-      # @return [void]
+      # @return [Array] list of ruby models
       def load!
         load_oo_models
         sort_oo_models
@@ -26,9 +29,39 @@ module Kangaroo
       end
 
       protected
+      def root_module
+        namespace.constantize
+        
+      rescue NameError
+        eval <<-RUBY
+          module #{namespace}
+            extend Kangaroo::Util::Loader::Namespace
+          end
+        RUBY
+      end
+      
+      def ir_module
+        root_module.const_defined?("Ir") ?
+        root_module.const_get("Ir") :
+        root_module.const_set("Ir", Module.new)
+      end
+      
+      def reflection_model
+        ir_module.const_defined?("Model") ?
+        ir_module.const_get("Model") :
+        ir_module.const_set("Model", create_reflection_model)
+      end
+      
+      def create_reflection_model
+        Class.new(Kangaroo::Model::Base).tap do |model|
+          model.send :include, Model
+          model.database = database
+        end
+      end
+      
       def load_oo_models
         @models = model_names.sum([]) do |model_name|
-          Oo::Ir::Model.where("model ilike #{model_name}").all
+          reflection_model.where("model ilike #{model_name}").all
         end.uniq
       end
 

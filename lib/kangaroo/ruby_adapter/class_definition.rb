@@ -1,5 +1,4 @@
 require 'kangaroo/model/base'
-require 'kangaroo/ruby_adapter/exceptions'
 
 module Kangaroo
   module RubyAdapter
@@ -20,12 +19,13 @@ module Kangaroo
         if !@ruby_model.is_a?(Class)
           raise ChildDefinedBeforeParentError
         end
+        @ruby_model.database = @oo_model.class.database
 
         @ruby_model
       end
 
       def initialize_namespace
-        @namespace = ::Oo
+        @namespace = @root_namespace
 
         constant_names[1..-2].each do |mod|
           @namespace = set_const_in @namespace, mod, Module.new
@@ -44,16 +44,3 @@ module Kangaroo
     end
   end
 end
-    #
-    # def supplement_constants *constants
-    #   scope = ::Oo
-    #
-    #   constants[0..-2].each do |c|
-    #     scope.const_set c, Module.new unless scope.const_defined?(c)
-    #
-    #     scope = scope.const_get c
-    #   end
-    #
-    #   scope.const_set constants.last, Class.new(Kangaroo::Base) unless scope.const_defined?(constants.last)
-    #   scope.const_get constants.last
-    # end

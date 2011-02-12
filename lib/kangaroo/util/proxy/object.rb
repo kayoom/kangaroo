@@ -6,6 +6,7 @@ module Kangaroo
       # @param name function name to call
       # @return returned value
       def call! name, *args
+        puts "#{name.to_s.upcase}: #{args.inspect}"
         super :execute, name, *args
       end
 
@@ -14,7 +15,7 @@ module Kangaroo
       # @param [Array] list of field names, nil for all
       # @param [Hash] context
       # @return [Hash] field names and properties
-      def fields_get fields = nil, context = nil
+      def fields_get fields = nil, context = {}
         call! :fields_get, fields, context
       end
 
