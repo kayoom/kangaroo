@@ -9,32 +9,63 @@ module Kangaroo
         end
       end
       
+      # Retrieve all records
+      #
+      # @return [Array] records
       def all
-        search_and_read []
+        relation.all
       end
       
+      # Retrieve first record
+      #
+      # @return records
       def first
-        id = search [], :limit => 1
-        return nil if id.blank?
-        
-        read(id).first
+        relation.first
       end
       
-      def count conditions = [], search_options = {}
-        search conditions, search_options.merge(:count => true)
+      def last
+        relation.last
       end
 
+      # Count number of records
+      #
+      # @return [Number]
+      def count
+        count_by
+      end
+
+      # @private
+      # Search, read and instantiate records at once
+      #
+      # @param [Array, Hash, String] conditions
+      # @param [Hash] search_options
+      # @param [Hash] read_options
+      # @return [Array]
       def search_and_read conditions, search_options = {}, read_options = {}
-        ids = search conditions, search_options
+        ids = search conditions, search_options.merge(:count => false)
         return [] if ids.blank?
         
         read ids, read_options
+      end
+      
+      # @private
+      # Count objects matching the conditions
+      #
+      # @param [Array, Hash, String] conditions
+      # @param [Hash] search options
+      # @return [Number]
+      def count_by conditions = [], search_options = {}
+        search conditions, search_options.merge(:count => true)
       end
       
       protected
       def relation
         Relation.new self
       end
+      
+      # def with_exclusive_scope
+      #   
+      # end
     end
   end
 end

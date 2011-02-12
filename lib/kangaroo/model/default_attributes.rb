@@ -5,6 +5,8 @@ module Kangaroo
       klass.extend ClassMethods
 
       klass.before_initialize do
+        return true if persisted?
+        
         self.class.default_attributes.each do |name, value|
           write_attribute name, value
         end

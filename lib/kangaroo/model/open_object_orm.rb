@@ -41,13 +41,15 @@ module Kangaroo
       # @option options [Hash] context
       # @return [Array] list of Kangaroo::Model::Base instances
       def read ids, options = {}
-        options = {
-          :fields => attribute_names
-        }.merge(options)
-        
+        fields = options[:fields]
+        fields = attribute_names if options[:fields].blank?
         context = options[:context]
-        remote.read(ids, options[:fields], context).map do |attributes|
-          instantiate attributes, context
+        
+        [].tap do |result|
+          remote.read(ids, fields, context).each do |attributes|
+            position = ids.index(attributes[:id].to_i)
+            result[position] = instantiate attributes, context
+          end
         end
       end
       

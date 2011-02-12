@@ -19,9 +19,9 @@ module Kangaroo
       define_model_callbacks :find
 
       include Attributes
+      include Persistence
       include DefaultAttributes
       include Inspector
-      include Persistence
       extend OpenObjectOrm
       extend Finder
 

@@ -39,11 +39,31 @@ module Kangaroo
       end
       alias_method :all, :to_a
       
+      def first
+        limit(1).to_a.first
+      end
+      
+      def last
+        reverse.to_a.first
+      end
+      
       def count
-        @target.count @where_clauses, search_parameters
+        @target.count_by @where_clauses, search_parameters
       end
       alias_method :size, :count
       alias_method :length, :count
+      
+      def reverse
+        if @order_clause.blank?
+          order('id', true) 
+        else
+          __clone__.__tap__ do |c|
+            c.order_clause = c.order_clause.map do |order|
+              reverse_order order
+            end
+          end
+        end
+      end
 
       # Clone this relation and add the condition to the where clause
       #
@@ -150,7 +170,7 @@ module Kangaroo
         {
           :offset => @offset_clause,
           :limit => @limit_clause,
-          :order => @order_clause,
+          :order => @order_clause.join(", "),
           :context => @context_clause
         }
       end
@@ -160,6 +180,14 @@ module Kangaroo
           :fields => @select_clause,
           :context => @context_clause
         }
+      end
+      
+      def reverse_order order
+        if match = order.match(/(.*)\sdesc/i)
+          match[1]
+        else
+          order + " desc"
+        end
       end
     end
   end
