@@ -1,6 +1,11 @@
 Installation
 ============
 
+#### Index
+{file:README.md Readme}
+{file:docs/Installation.md Installation}
+{file:docs/Usage.md Usage}
+
 Rails 3
 -------
 If you're on Rails 3, just add Kangaroo to your Gemfile:

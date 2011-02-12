@@ -1,6 +1,11 @@
 Usage
 =====
 
+#### Index
+{file:README.md Readme}
+{file:docs/Installation.md Installation}
+{file:docs/Usage.md Usage}
+
 Basics
 ------
 Kangaroo-wrapped OpenObject models provides an ActiveRecord-ish API to find, create and update records.
@@ -65,3 +70,90 @@ additionally, there is **reverse**, which reverses all prior **order** clauses
 
     Oo::Res::Country.reverse.all
     # => [<Oo::Res::Country id: 245 ....>, <Oo::Res::Country id: 244 ....>]
+
+#### A note about "*where*"
+The OpenObject ORM expects conditions as an Array like this:
+
+    Oo::Res::Country.where(['code', '=', 'DE']).first
+    
+As this can be quite cumbersome to use, Kangaroo accepts conditions as Strings, which will simply be
+splitted in an Array
+
+    Oo::Res::Country.where('a = one').first
+    
+This implies that you can't specify complex conditions via Strings, this is only to simplify simple conditions.
+As shown before, also Hash conditions work:
+
+    Oo::Res::Country.where(:code => 'DE').first
+    
+    # Or if you use an Array Kangaroo will switch to the **in** operator
+    Oo::Res::Country.where(:code => ['DE', 'EN']).all 
+    
+    
+### Working with records
+#### Attributes
+All OpenObject fields are accessible via getters and setters:
+
+    record = Oo::Res::Country.where(:code => 'DE').first
+    record.name
+    # => "Germany"
+
+    record.name = "Dschoermany"
+    record.name
+    # => "Dschoermany"
+    
+Of course those attributes can be persisted
+
+    record.save
+    record.reload
+    record.name
+    # => "Dschoermany"
+    
+#### Dirty
+Kangaroo includes ActiveModel::Dirty to keep track of changes:
+
+    record = Oo::Res::Country.where(:code => 'DE').first
+    record.name
+    # => "Germany"
+
+    record.name = "Dschoermany"
+    record.changed?
+    # => true
+    
+    record.name_was
+    # => "Germany"
+    
+#### Creating records
+If you initialize a new record, Kangaroo fetches the default values for this model
+
+    record = Oo::Res::User.new
+    record.context_lang
+    # => 'en_US'
+    record.context_lang_changed?
+    # => true
+
+#### Destroying records
+
+    Oo::Res::User.first.destroy
+    
+    
+#### Misc
+Kangaroo also supports
+
+##### new\_record? / persisted?
+
+    record = Oo::Res::User.new
+    record.new_record?
+    # => true
+    
+    record.persisted?
+    # => false
+    
+##### destroyed?
+
+    record = Oo::Res::Country.first
+    record.destroy
+    record.destroyed?
+    # => true
+
+    

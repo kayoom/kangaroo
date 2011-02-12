@@ -46,6 +46,7 @@ module Kangaroo
       #
       # @return self
       def destroy
+        return true if destroyed? || new_record?
         _run_destroy_callbacks do
           remote.unlink [id], :context => context
         end
