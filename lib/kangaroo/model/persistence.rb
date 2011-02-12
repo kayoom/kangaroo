@@ -36,7 +36,6 @@ module Kangaroo
         !@new_record
       end
 
-
       private
       def mark_persisted
         @new_record = false
@@ -48,6 +47,11 @@ module Kangaroo
       end
 
       module ClassMethods
+        def find id
+          read([id]).first ||
+          raise(RecordNotFound)
+        end
+        
         protected
         def instantiate attributes, context = {}
           allocate.tap do |instance|

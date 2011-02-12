@@ -16,13 +16,37 @@ module Kangaroo
         relation.all
       end
       
+      # ActiveRecord-ish find method
+      #
+      # @overload find(id)
+      #   Find a record by id
+      #   @param [Number] id
+      # @overload find(keyword)
+      #   Find all, first or last record
+      #   @param [String, Symbol] keyword :all, :first or :last
+      def find id_or_keyword
+        case id_or_keyword
+        when :all, 'all'
+          all
+        when :first, 'first'
+          first
+        when :last, 'last'
+          last
+        else
+          super
+        end
+      end
+      
       # Retrieve first record
       #
-      # @return records
+      # @return record
       def first
         relation.first
       end
       
+      # Retrieve last record
+      #
+      # @return record
       def last
         relation.last
       end
@@ -62,10 +86,6 @@ module Kangaroo
       def relation
         Relation.new self
       end
-      
-      # def with_exclusive_scope
-      #   
-      # end
     end
   end
 end
