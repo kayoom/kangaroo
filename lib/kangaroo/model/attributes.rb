@@ -49,6 +49,13 @@ module Kangaroo
         end
       end
     end
+    
+    # Freeze this object
+    def freeze
+      @changed_attributes.freeze
+      @attributes.freeze
+      super
+    end
 
     module ClassMethods
       # If you need to customize your models, e.g. add attributes

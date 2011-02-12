@@ -16,7 +16,6 @@ module Kangaroo
 
       extend ActiveModel::Callbacks
       define_model_callbacks :initialize
-      define_model_callbacks :find
 
       include Attributes
       include Persistence

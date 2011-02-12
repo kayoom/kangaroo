@@ -47,6 +47,18 @@ module Kangaroo
         reverse.to_a.first
       end
       
+      def exists?
+        @target.search(@where_clauses, search_parameters.merge(:limit => 1)).present?
+      end
+      
+      def find ids
+        records = where(:id => ids)
+        
+        Array === ids ?
+        records.all :
+        records.first
+      end
+      
       def count
         @target.count_by @where_clauses, search_parameters
       end

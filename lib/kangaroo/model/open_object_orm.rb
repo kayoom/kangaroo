@@ -6,9 +6,6 @@ module Kangaroo
     module OpenObjectOrm
       include ConditionNormalizer
 
-      def self.included klass
-      end
-
       # Search for records in the OpenERP database
       #
       # @param [Hash, Array, String] conditions

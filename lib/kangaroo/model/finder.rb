@@ -1,13 +1,10 @@
+require 'active_support/core_ext/module'
+
 module Kangaroo
   module Model
     module Finder
       RELATION_DELEGATES = %w(where limit offset order select context)
-      
-      RELATION_DELEGATES.each do |d|
-        define_method d do |*args|
-          relation.send d, *args
-        end
-      end
+      delegate *(RELATION_DELEGATES + [:to => :relation])
       
       # Retrieve all records
       #
@@ -35,6 +32,10 @@ module Kangaroo
         else
           super
         end
+      end
+      
+      def exists? ids
+        where(:id => ids).exists?
       end
       
       # Retrieve first record
@@ -82,7 +83,7 @@ module Kangaroo
         search conditions, search_options.merge(:count => true)
       end
       
-      protected
+      # @private
       def relation
         Relation.new self
       end
