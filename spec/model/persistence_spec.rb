@@ -4,7 +4,7 @@ require 'kangaroo/model/base'
 module Kangaroo
   module Model
     describe Persistence do
-      
+
       before :each do
         @klass = Class.new(Kangaroo::Model::Base)
         @klass.define_multiple_accessors :a, :b
@@ -13,7 +13,7 @@ module Kangaroo
 
       context '#instantiate' do
         it 'raises error if id is missing' do
-          lambda { @klass.send(:instantiate, {}) }.should raise_error(Kangaroo::Model::Persistence::InstantiatedRecordNeedsIDError)
+          lambda { @klass.send(:instantiate, {}) }.should raise_error(Kangaroo::InstantiatedRecordNeedsIDError)
         end
 
         it 'returns an instance' do
@@ -26,8 +26,8 @@ module Kangaroo
           object.a.should == 'one'
         end
       end
-      
-      
+
+
       describe '#find' do
         it 'raises RecordNotFound error if no record was found' do
           @remote_stub = mock 'remote'

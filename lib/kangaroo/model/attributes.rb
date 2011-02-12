@@ -49,7 +49,7 @@ module Kangaroo
         end
       end
     end
-    
+
     # Freeze this object
     def freeze
       @changed_attributes.freeze

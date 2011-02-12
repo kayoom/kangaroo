@@ -12,7 +12,7 @@ module Kangaroo
         else
           Array(conditions)
         end
-        
+
         conditions.map do |condition|
           normalize_condition condition
         end

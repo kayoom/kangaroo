@@ -21,7 +21,7 @@ module Kangaroo
           :limit  => false,
           :offset => 0
         }.merge(options)
-        
+
         remote.search normalize_conditions(conditions),
                       options[:offset],
                       options[:limit],
@@ -41,7 +41,7 @@ module Kangaroo
         fields = options[:fields]
         fields = attribute_names if options[:fields].blank?
         context = options[:context]
-        
+
         [].tap do |result|
           remote.read(ids, fields, context).each do |attributes|
             position = ids.index(attributes[:id].to_i)
@@ -49,7 +49,7 @@ module Kangaroo
           end
         end
       end
-      
+
       # Retrieve field informations
       #
       # @param [Hash] options
@@ -60,12 +60,12 @@ module Kangaroo
         options = {
           :fields => attribute_names
         }.merge(options)
-        
+
         remote.fields_get(options[:fields], options[:context]).map do |key, val|
           Field.new key, val
         end
       end
-      
+
       # Create a OpenObject record.
       #
       # @param [Hash] attributes
@@ -75,8 +75,8 @@ module Kangaroo
       def create_record attributes, options = {}
         remote.create attributes, options[:context]
       end
-      
-      
+
+
       # Fetch default attribute values from OpenERP database
       #
       # @param [Hash] options
@@ -87,10 +87,10 @@ module Kangaroo
         options = {
           :fields => attribute_names
         }.merge(options)
-        
+
         remote.default_get options[:fields], options[:context]
       end
-      
+
       # Write values to records
       #
       # @param [Array] ids
@@ -101,7 +101,7 @@ module Kangaroo
       def write_record ids, attributes, options = {}
         remote.write ids, attributes, options[:context]
       end
-      
+
       # Remove records
       #
       # @param [Array] ids

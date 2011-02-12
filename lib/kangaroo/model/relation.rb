@@ -19,8 +19,8 @@ module Kangaroo
       # @private
       attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause, :context_clause
 
-      alias_method :__clone__, :clone
-      alias_method :__tap__, :tap
+      alias_method :_clone, :clone
+      alias_method :_tap, :tap
 
       delegate *(ARRAY_DELEGATES + [:to => :to_a])
 
@@ -38,38 +38,44 @@ module Kangaroo
         @target.search_and_read @where_clauses, search_parameters, read_parameters
       end
       alias_method :all, :to_a
-      
+
+      # Return only the first record
       def first
         limit(1).to_a.first
       end
-      
+
+      # Return only the last record
       def last
-        reverse.to_a.first
+        reverse.first
       end
-      
+
+      # Check if a record with fulfilling this conditions exist
       def exists?
         @target.search(@where_clauses, search_parameters.merge(:limit => 1)).present?
       end
-      
+
+      # Find record(s) by id(s)
       def find ids
         records = where(:id => ids)
-        
+
         Array === ids ?
         records.all :
         records.first
       end
-      
+
+      # Count how many records fulfill this conditions
       def count
         @target.count_by @where_clauses, search_parameters
       end
       alias_method :size, :count
       alias_method :length, :count
-      
+
+      # Reverse all order clauses
       def reverse
         if @order_clause.blank?
-          order('id', true) 
+          order('id', true)
         else
-          __clone__.__tap__ do |c|
+          _clone._tap do |c|
             c.order_clause = c.order_clause.map do |order|
               reverse_order order
             end
@@ -82,7 +88,7 @@ module Kangaroo
       # @param [Hash, Array, String] condition
       # @return [Relation] cloned relation
       def where condition
-        __clone__.__tap__ do |c|
+        _clone._tap do |c|
           c.where_clauses += [condition]
         end
       end
@@ -92,7 +98,7 @@ module Kangaroo
       # @param [Number] limit maximum records to retriebe
       # @return [Relation] cloned relation
       def limit limit
-        __clone__.__tap__ do |c|
+        _clone._tap do |c|
           c.limit_clause = limit
         end
       end
@@ -102,7 +108,7 @@ module Kangaroo
       # @param [Number] offset number of records to skip
       # @return [Relation] cloned relation
       def offset offset
-        __clone__.__tap__ do |c|
+        _clone._tap do |c|
           c.offset_clause = offset
         end
       end
@@ -113,7 +119,7 @@ module Kangaroo
       # @return [Relation] cloned relation
       def select *selects
         selects = selects.flatten.map &:to_s
-        __clone__.__tap__ do |c|
+        _clone._tap do |c|
           c.select_clause += selects
         end
       end
@@ -123,7 +129,7 @@ module Kangaroo
       # @param [Hash] context
       # @return [Relation] cloned relation
       def context context = {}
-        __clone__.__tap__ do |c|
+        _clone._tap do |c|
           c.context_clause = c.context_clause.merge(context)
         end
       end
@@ -134,7 +140,7 @@ module Kangaroo
       # @param [boolean] desc true to order descending
       def order column, desc = false
         column = column.to_s + " desc" if desc
-        __clone__.__tap__ do |c|
+        _clone._tap do |c|
           c.order_clause += [column.to_s]
         end
       end
@@ -158,7 +164,7 @@ module Kangaroo
           return to_a[start_or_range]
         end
 
-        c = __clone__
+        c = _clone
 
         c.offset_clause = if start_or_range.is_a?(Range)
           range_end = start_or_range.end
@@ -186,14 +192,14 @@ module Kangaroo
           :context => @context_clause
         }
       end
-      
+
       def read_parameters
         {
           :fields => @select_clause,
           :context => @context_clause
         }
       end
-      
+
       def reverse_order order
         if match = order.match(/(.*)\sdesc/i)
           match[1]

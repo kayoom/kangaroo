@@ -27,27 +27,27 @@ module Kangaroo
             and_return([{:a => 'one', :id => 1}])
           @klass.read([1], :fields => ['a', 'b'], :context => {:lang => 'de'}).first.context[:lang].should == 'de'
         end
-        
+
         it 'uses attribute_names as default value for field list' do
           object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'read', [1], ['a', 'b']).
             and_return([{:a => 'one', :id => 1}])
           @klass.read([1])
         end
       end
-      
+
       describe '#fields_get' do
         it 'fetches details about fields of this model' do
           object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'fields_get', ['a'], false).
             and_return({:a => {:type => "selection"}})
           @klass.fields_get(:fields => ['a']).first.read_attribute(:type).should == 'selection'
         end
-        
+
         it 'stores the name in the Field model' do
           object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'fields_get', ['a'], false).
             and_return({:a => {:type => "selection"}})
           @klass.fields_get(:fields => ['a']).first.name.should == :a
         end
-        
+
         it 'uses attribute_names as default value for field list' do
           object_service.should_receive(:xmlrpc_call).
             with('execute', 'some_class', 'fields_get', ['a', 'b'], false).
@@ -62,7 +62,7 @@ module Kangaroo
             with 'execute', 'some_class', 'search', [['a', '=', 'one']], 0, false, false, false, false
           @klass.search [['a', '=', 'one']]
         end
-        
+
         it 'allows empty conditions' do
           object_service.should_receive(:xmlrpc_call).exactly(4).times.
             with 'execute', 'some_class', 'search', [], 0, false, false, false, false

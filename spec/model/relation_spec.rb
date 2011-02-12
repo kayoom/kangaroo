@@ -70,15 +70,15 @@ module Kangaroo
           with [], hash_including(:context => {:lang => 'de_DE', :tz => 'de'}), hash_including(:context => {:lang => 'de_DE', :tz => 'de'})
         @relation.context(:lang => 'de_DE').context(:tz => 'de').all
       end
-      
+
       describe '#reverse' do
         it 'adds descending id order if no order was specified' do
           @relation.reverse.order_clause.should == ['id desc']
         end
-        
+
         it 'reverses previously specified orders' do
           @relation.order('name').reverse.order_clause.should == ['name desc']
-          @relation.order('name', true).reverse.order_clause.should == ['name']          
+          @relation.order('name', true).reverse.order_clause.should == ['name']
           @relation.order('name').order('code', true).reverse.order_clause.should == ['name desc', 'code']
         end
       end

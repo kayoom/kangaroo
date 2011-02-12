@@ -5,14 +5,14 @@ module Kangaroo
     module Finder
       RELATION_DELEGATES = %w(where limit offset order select context)
       delegate *(RELATION_DELEGATES + [:to => :relation])
-      
+
       # Retrieve all records
       #
       # @return [Array] records
       def all
         relation.all
       end
-      
+
       # ActiveRecord-ish find method
       #
       # @overload find(id)
@@ -33,18 +33,18 @@ module Kangaroo
           super
         end
       end
-      
+
       def exists? ids
         where(:id => ids).exists?
       end
-      
+
       # Retrieve first record
       #
       # @return record
       def first
         relation.first
       end
-      
+
       # Retrieve last record
       #
       # @return record
@@ -69,10 +69,10 @@ module Kangaroo
       def search_and_read conditions, search_options = {}, read_options = {}
         ids = search conditions, search_options.merge(:count => false)
         return [] if ids.blank?
-        
+
         read ids, read_options
       end
-      
+
       # @private
       # Count objects matching the conditions
       #
@@ -82,7 +82,7 @@ module Kangaroo
       def count_by conditions = [], search_options = {}
         search conditions, search_options.merge(:count => true)
       end
-      
+
       # @private
       def relation
         Relation.new self

@@ -3,7 +3,7 @@ require 'bundler/setup'
 
 require 'kangaroo'
 
-module SpecHelper  
+module SpecHelper
   def anythings count
     [anything] * count
   end

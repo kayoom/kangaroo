@@ -5,9 +5,6 @@ module Kangaroo
   module Model
     module Persistence
       # @private
-      class InstantiatedRecordNeedsIDError < Kangaroo::Exception ; end
-
-      # @private
       def self.included klass
         klass.extend ClassMethods
         klass.define_model_callbacks :destroy, :save, :update, :create, :find
@@ -37,14 +34,14 @@ module Kangaroo
       def persisted?
         !@new_record
       end
-      
+
       # Check if this record has been destroyed
       #
       # @return [boolean] true/false
       def destroyed?
         @destroyed
       end
-      
+
       # Destroy this record
       #
       # @return self
@@ -52,27 +49,29 @@ module Kangaroo
         _run_destroy_callbacks do
           remote.unlink [id], :context => context
         end
-        
+
         self
       end
-      
+
       # Save this record
       #
       # @param [Hash] options unused
       # @return [boolean] true/false
       def save options = {}
-        create_or_update
+        _run_save_callbacks do
+          create_or_update
+        end
       end
-      
+
       # Save this record or raise an error
       #
       # @param [Hash] options unused
       # @return [boolean] true
       def save! options = {}
-        save options || 
+        save options ||
         raise(RecordSavingFailed)
       end
-      
+
       # Reload this record, or just a subset of fields
       #
       # @param [Array] fields to reload
@@ -82,10 +81,10 @@ module Kangaroo
         fields.each do |field|
           @changed_attributes.delete field.to_s
         end
-        
+
         self
       end
-      
+
       module ClassMethods
         # Initialize a record and immediately save it
         #
@@ -96,7 +95,7 @@ module Kangaroo
             new_record.save
           end
         end
-        
+
         # Retrieve a record by id
         #
         # @param [Number] id
@@ -107,17 +106,17 @@ module Kangaroo
           find_every(ids) :
           find_single(id)
         end
-        
+
         protected
         def find_single id
           read([id]).first ||
           raise(RecordNotFound)
         end
-        
+
         def find_every ids
           read ids
         end
-        
+
         def instantiate attributes, context = {}
           allocate.tap do |instance|
             instance.instance_exec(attributes.stringify_keys, context) do |attributes, context|
@@ -136,20 +135,20 @@ module Kangaroo
           end
         end
       end
-      
+
       protected
       def attributes_for_update
         @attributes
       end
-      
+
       def attributes_for_create
         @attributes
       end
-      
+
       def create_or_update
         new_record? ? create : update
       end
-      
+
       private
       def create
         _run_create_callbacks do
@@ -160,13 +159,13 @@ module Kangaroo
           end
         end
       end
-      
+
       def update
         _run_update_callbacks do
           self.class.write_record [id], attributes_for_update, :context => context
         end
       end
-      
+
       def mark_persisted
         @new_record = false
       end
