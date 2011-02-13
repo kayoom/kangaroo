@@ -81,6 +81,8 @@ module Kangaroo
           raise 'No models specified.'
         when :all
           ['%']
+        when String
+          [replace_wildcard(@model_names)]
         when Array
           @model_names.map do |model_name|
             replace_wildcard model_name

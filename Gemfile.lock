@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kangaroo (0.0.1)
+    kangaroo (0.0.1.pre)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       rapuncel (~> 0.0.2)

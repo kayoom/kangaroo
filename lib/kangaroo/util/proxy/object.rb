@@ -6,7 +6,6 @@ module Kangaroo
       # @param name function name to call
       # @return returned value
       def call! name, *args
-        puts "#{name.to_s.upcase}: #{args.inspect}"
         super :execute, name, *args
       end
 
