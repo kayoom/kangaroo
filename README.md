@@ -1,16 +1,11 @@
 Kangaroo
 ========
 
-NOTE
-----
-This branch is NOT functional. We're refactoring big time!
-
 Overview
 --------
 
 Kangaroo is an OpenObject client/wrapper for Rails 3, based on ActiveModel. It provides CRUD access to OpenERP objects via XMLRPC.
-It's fast, provides default data for new objects and basic validations (for required fields etc), as well as a simple ARel like
-query syntax and (not yet fully, but it's coming) associations. This is pre-pre-alpha ;).
+It's fast and provides default data for new objects.
 
 Installation
 ------------
@@ -38,3 +33,33 @@ Adjust your connection and database settings and specify the models you need.
 
 Usage
 -----
+
+OpenObject models are mapped to ruby classes:
+
+    Oo::Res::Country
+    # represents 'res.country'
+    
+    Oo::Product::Product
+    # represents 'product.product'
+    
+    Oo::Sale::Order::Line
+    # represents 'sale.order.line
+    
+You can use this models like ActiveRecord models:
+
+    country = Oo::Res::Country.find 1
+    country = Oo::Res::Country.where(:code => 'DE').first
+    
+    country.name = "Schland"
+    country.save
+    
+    country.reload
+    
+    countries = Oo::Res::Country.limit(100).all
+    countries = Oo::Res::Country.limit(100).order('code').all
+    
+    Oo::Res::Country.create :code => 'DE', :name => 'Germany'
+    
+etc.
+Please refer to {file:docs/Usage.md Usage} to learn about limitations/features not yet
+implemented.

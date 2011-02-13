@@ -1,6 +1,5 @@
 require 'rake'
 require 'rake/rdoctask'
-require 'rspec/core/rake_task'
 require 'bundler'
 
 Bundler::GemHelper.install_tasks
@@ -15,8 +14,23 @@ Rake::RDocTask.new(:rdoc) do |rdoc|
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
 
-desc 'Run RSpec suite.'
-RSpec::Core::RakeTask.new('spec')
+begin
+  require 'rspec/core/rake_task'
+  desc 'Run RSpec suite.'
+  RSpec::Core::RakeTask.new('spec')
+rescue LoadError
+  puts "RSpec is not available. In order to run specs, you must: gem install rspec"
+end
+
+begin
+  require 'cucumber/rake/task'
+  desc "Run Cucumber features."
+  Cucumber::Rake::Task.new(:features)
+rescue LoadError
+  puts "Cucumber is not available. In order to run features, you must: gem install cucumber"
+end
+
+
 
 # If you want to make this the default task
 task :default => :spec

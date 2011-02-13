@@ -20,9 +20,12 @@ module Kangaroo
 
       # Get OpenERP Servers timezone configuration
       #
+      # @param database
+      # @param login
+      # @param password
       # @return Timezone information
-      def timezone_get
-        call! :timezone_get, *@curry_args
+      def timezone_get database, login, password
+        call! :timezone_get, database, login, password
       end
 
       # Get server environment
