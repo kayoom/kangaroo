@@ -31,7 +31,7 @@ module Kangaroo
         end
 
         login
-        Loader.new(@database, models).load!
+        Loader.new(models, @database).load!
         logger.info "Loaded OpenERP models matching #{models.inspect}."
       rescue Exception => e
         logger.error "Loading of OpenERP models failed.\n#{e.inspect}"
