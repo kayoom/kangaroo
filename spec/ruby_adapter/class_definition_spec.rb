@@ -7,7 +7,10 @@ module Kangaroo
   module RubyAdapter
     describe ClassDefinition do
       def stub_oo_model name
+        eval('module ::Oo ; end')
         oo_model = mock 'oo_model'
+        oo_model.stub_chain(:class, :namespace).and_return(Oo)
+        oo_model.stub_chain(:class, :database)
         oo_model.stub!('model_class_name').and_return(name)
         oo_model
       end
