@@ -48,6 +48,7 @@ Kang.class_eval do
     Kang.config.login
   
     Kangaroo::Util::Loader.new('res.*', Kang.config.database).load!
+    true
   end
 end
 
