@@ -54,6 +54,10 @@ module Kangaroo
       def db
         @db_proxy ||= Proxy::Db.new db_service
       end
+      
+      def inspect
+        "#Kangaroo::Util::Client:0x#{hash.to_s(16)}>"
+      end
     end
   end
 end
