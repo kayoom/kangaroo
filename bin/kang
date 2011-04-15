@@ -1,0 +1,79 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'kangaroo'
+rescue LoadError
+  begin
+    require 'rubygems'
+    require 'kangaroo'
+  rescue LoadError
+    require 'bundler/setup'
+    require 'kangaroo'
+  end
+end
+
+require 'ostruct'
+require 'optparse'
+options = {}
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: kang -c config_file.yaml"
+  
+  options[:config_file] = nil
+  opts.on '-c', '--config FILE', 'Specify config file' do |file|
+    options[:config_file] = file
+  end   
+  
+  # This displays the help screen, all programs are
+  # assumed to have this option.
+  opts.on( '-h', '--help', 'Display this screen' ) do
+    puts opts
+    exit
+  end
+end
+
+optparse.parse!
+
+Kang = OpenStruct.new
+Kang.logger = Logger.new(STDOUT)
+
+Kang.class_eval do
+  def inspect
+    "Kang console"
+  end
+  
+  def init file_or_hash    
+    Kang.logger.info "Loading Kangaroo configuration #{file_or_hash.inspect}"
+    Kang.config = Kangaroo::Util::Configuration.new file_or_hash, Kang.logger
+    Kang.config.login
+  
+    Kangaroo::Util::Loader.new('res.*', Kang.config.database).load!
+  end
+end
+
+options[:config_file] && Kang.init(options[:config_file])
+
+require 'irb'
+require 'irb/completion'
+
+Hirb.enable
+IRB.start
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

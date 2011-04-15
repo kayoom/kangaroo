@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rapuncel', '~> 0.0.2'
   s.add_dependency "activerecord", ">= 3.0.0"
   s.add_dependency "activesupport", ">= 3.0.0"
+  s.add_dependency "hirb"
   
   s.add_development_dependency 'yard'
   s.add_development_dependency 'rspec'
