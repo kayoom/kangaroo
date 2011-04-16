@@ -118,3 +118,15 @@ models as they are accessed:
     
 Please refer to {file:docs/Usage.md Usage} to learn about limitations/features not yet
 implemented.
+
+Development
+-----------
+
+SCM:
+[https://github.com/cice/kangARoo](https://github.com/cice/kangARoo)
+
+Issues:
+[https://kayoom.lighthouseapp.com/projects/73738-kangaroo/tickets](https://kayoom.lighthouseapp.com/projects/73738-kangaroo/tickets)
+
+Rubygems:
+[https://rubygems.org/gems/kangaroo](https://rubygems.org/gems/kangaroo)
