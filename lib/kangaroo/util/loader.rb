@@ -6,6 +6,7 @@ module Kangaroo
     class Loader
       autoload :Model, 'kangaroo/util/loader/model'
       autoload :Namespace, 'kangaroo/util/loader/namespace'
+      autoload :RootNamespace, 'kangaroo/util/loader/root_namespace'
       attr_accessor :model_names, :models, :database, :namespace
 
       # Initialize a Loader instance
@@ -35,6 +36,7 @@ module Kangaroo
       rescue NameError
         eval <<-RUBY
           module #{namespace}
+            extend Kangaroo::Util::Loader::RootNamespace
             extend Kangaroo::Util::Loader::Namespace
           end
         RUBY

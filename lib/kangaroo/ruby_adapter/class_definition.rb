@@ -28,7 +28,9 @@ module Kangaroo
         @namespace = @root_namespace
 
         constant_names[1..-2].each do |mod|
-          @namespace = set_const_in @namespace, mod, Module.new
+          const = Module.new
+          const.send :extend, Util::Loader::Namespace
+          @namespace = set_const_in @namespace, mod, const
         end
       end
 
