@@ -100,7 +100,21 @@ console:
     +------+-----------------------------+
     5 rows in set
 
+
+Lazy model loading
+------------------
+
+You don't have to specify all models you ever need in your configuration file. Kangaroo will lazy load
+models as they are accessed:
+
+    ruby-1.8.7-p302 :001 > Oo.const_defined? "Product"
+     => false 
+    ruby-1.8.7-p302 :002 > Oo::Product
+     => Module 'Oo::Product' contains loaded OpenERP Models/Namespaces:  
+    ruby-1.8.7-p302 :003 > Oo::Product.const_defined? "Product"
+     => false 
+    ruby-1.8.7-p302 :004 > Oo::Product::Product
+     => <Oo::Product::Product id, loc_case, volume, type, uos_coeff, incoming_qty, price_margin, sale_ok, loc_rack, description_purchase, code, ean13, warranty, description_sale, outgoing_qty, product_tmpl_id, standard_price, rental, uom_po_id, default_code, supply_method, categ_id, procure_method, virtual_available, variants, packaging, pricelist_id, name_template, uos_id, lst_price, cost_method, description, seller_delay, price_extra, seller_id, price, active, company_id, qty_available, list_price, produce_delay, partner_ref, state, name, purchase_ok, mes_type, sale_delay, weight_net, seller_qty, weight, seller_ids, loc_row, product_manager, uom_id> 
     
-etc.
 Please refer to {file:docs/Usage.md Usage} to learn about limitations/features not yet
 implemented.
