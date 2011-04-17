@@ -10,7 +10,7 @@ module Kangaroo
       Kangaroo::Util::Loader.new('res.partner', config.database).load!
     end
     
-    it 'should raise error if trying to access constant without corresponding OpenERP Model' do
+    it 'raises an error if trying to access constant without corresponding OpenERP Model' do
       lambda {
         Oo::Abcd
       }.should raise_error
@@ -20,19 +20,19 @@ module Kangaroo
       }.should raise_error
     end
     
-    it 'should lazy load additional models in an OpenERP namespace' do
+    it 'lazy loads additional models in an OpenERP namespace' do
       lambda {
         Oo::Res::Country
       }.should_not raise_error
     end
     
-    it 'should create namespace modules on demand' do
+    it 'creates namespace modules on demand' do
       lambda {
         Oo::Product
       }.should_not raise_error
     end
     
-    it 'should lazy load missing models in other namespaces' do
+    it 'lazy loads missing models in other namespaces' do
       lambda {
         Oo::Product::Product
       }.should_not raise_error

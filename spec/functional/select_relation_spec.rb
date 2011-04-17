@@ -16,5 +16,11 @@ module Kangaroo
       partner.attribute_names.should =~ %w(lang email)
       Oo::Res::Partner.attribute_names.count.should > 2
     end
+    
+    it 'returns only selected attributes' do
+      partner = Oo::Res::Partner.select(:lang, :email).first
+      
+      partner.attributes.keys.should =~ %w(lang email)
+    end
   end
 end
