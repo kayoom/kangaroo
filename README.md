@@ -7,6 +7,11 @@ Overview
 Kangaroo is an OpenObject client/wrapper for Ruby, based on ActiveModel. It provides CRUD access to OpenERP objects via XMLRPC.
 It's fast and provides default data for new objects.
 
+Documentation and Feedback
+--------------------------
+
+Please give us some feedback especially on the documentation, which surely requires a lot of work.
+
 Installation
 ------------
 
@@ -18,20 +23,38 @@ If you're on Rails 3, just add Kangaroo to your Gemfile:
 
 And create a **kangaroo.yml** configuration file in **[RAILS\_ROOT]/config**, containing these options:
 
+    # Hostname or ip address and XMLRPC port of your OpenERP Server
     host: 127.0.0.1
     port: 8069
 
+    # Configure the database you want to use
     database:
-      name: my_openerp
+      # Database name and credentials
+      name: kangaroo_test_database
       user: admin
       password: admin
-
+  
+      # Namespace (top-level Module) for your OpenObject classes, e.g. 
+      # OpenObjects 'product.product' will be accessible via Ruby class OpenObject::Product::Product
+      # __must__ begin with a capital letter!
+      namespace: 'OpenObject'
+  
+      # Specify models to load on startup, e.g. all models in the 'product' namespace, and the single 'res.company' model
+      # Keep in mind, that Kangaroo will lazy load any model not specified here on first access. You can even leave this
+      # blank to load all models as late as they're needed.
       models:
-        - account.*
         - product.*
         - res.company
 
 Adjust your connection and database settings and specify the models you need.
+Fire up your Rails console:
+
+    rails console
+    
+and start exploring, e.g.:
+
+    OpenObject::Res::Partner.select(:email).limit(5).all
+    OpenObject::Product::Product.first
 
 ### Ruby
 
