@@ -48,9 +48,7 @@ Kang.class_eval do
   def init file_or_hash    
     Kang.logger.info "Loading Kangaroo configuration #{file_or_hash.inspect}"
     Kang.config = Kangaroo::Util::Configuration.new file_or_hash, Kang.logger
-    Kang.config.login
-  
-    Kangaroo::Util::Loader.new('res.*', Kang.config.database).load!
+    Kang.config.load_models
     true
   end
 end

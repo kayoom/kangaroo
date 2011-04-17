@@ -31,8 +31,8 @@ module Kangaroo
         end
 
         login
-        Loader.new(models, @database).load!
-        logger.info "Loaded OpenERP models matching #{models.inspect}."
+        loaded_models = Loader.new(models, @database, @namespace).load!
+        logger.info "Loaded OpenERP models matching #{models.inspect} into namespace #{@namespace}: #{loaded_models.join(', ')}"
       rescue Exception => e
         logger.error "Loading of OpenERP models failed.\n#{e.inspect}"
       end
@@ -65,6 +65,7 @@ module Kangaroo
       def configure_database db_config
         @database = Database.new @client, *db_config.values_at('name', 'user', 'password')
         @models =  db_config['models']
+        @namespace = db_config['namespace'] || "Oo"
         logger.info %Q(Configured OpenERP database "#{db_config['name']}" at "#{client.connection.host}")
       end
 
