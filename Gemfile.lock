@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    kangaroo (0.0.2)
+    kangaroo (0.0.3)
       activerecord (>= 3.0.0)
       activesupport (>= 3.0.0)
       hirb

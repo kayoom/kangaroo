@@ -1,12 +1,15 @@
 #!/usr/bin/env ruby
 
 begin
+  # Try to just load kangaroo
   require 'kangaroo'
 rescue LoadError
   begin
+    # Try kangaroo as installed gem
     require 'rubygems'
     require 'kangaroo'
   rescue LoadError
+    # Used for development, if you exec 'bin/kang' from kangaroo source dir and gem not installed
     require 'bundler/setup'
     require 'kangaroo'
   end
@@ -17,7 +20,7 @@ require 'optparse'
 options = {}
 
 optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: kang -c config_file.yaml"
+  opts.banner = "Usage: kang -c config_file.yml"
   
   options[:config_file] = nil
   opts.on '-c', '--config FILE', 'Specify config file' do |file|
@@ -59,22 +62,3 @@ require 'irb/completion'
 
 Hirb.enable
 IRB.start
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

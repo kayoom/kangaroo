@@ -1,4 +1,5 @@
 require 'active_model/dirty'
+require 'active_support/core_ext/class/attribute'
 
 module Kangaroo
   module Attributes
@@ -6,6 +7,8 @@ module Kangaroo
     def self.included base
       base.send :include, ActiveModel::Dirty
       base.extend ClassMethods
+      
+      base.send :class_attribute, :attribute_names
     end
 
     # Read an attribute value by name
@@ -44,7 +47,7 @@ module Kangaroo
     # @return [Hash] attributes
     def attributes
       {}.tap do |attributes|
-        self.class.attribute_names.each do |key|
+        attribute_names.each do |key|
           attributes[key] = send(key)
         end
       end
@@ -87,13 +90,6 @@ module Kangaroo
         end
       end
 
-      # Get a list of available attributes
-      #
-      # @return [Array] attribute names
-      def attribute_names
-        @attribute_names ||= []
-      end
-
       # Define getter and setter for an attribute
       #
       # @param [String, Symbol] attribute_name
@@ -106,6 +102,7 @@ module Kangaroo
           write_attribute attribute_name, value
         end
 
+        self.attribute_names ||= []
         attribute_names << attribute_name.to_s
       end
 

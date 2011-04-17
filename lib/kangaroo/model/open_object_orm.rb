@@ -45,7 +45,9 @@ module Kangaroo
         [].tap do |result|
           remote.read(ids, fields, context).each do |attributes|
             position = ids.index(attributes[:id].to_i)
-            result[position] = instantiate attributes, context
+            result[position] = instantiate(attributes, context).tap do |record|
+              record.attribute_names = fields.map &:to_s
+            end
           end
         end
       end

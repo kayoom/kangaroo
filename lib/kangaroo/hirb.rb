@@ -15,7 +15,8 @@ module Hirb::Views::Kangaroo
       sorted_columns += (selected_columns - sorted_columns)
       fields = sorted_columns.map {|e| e.to_sym}
     end
-    fields
+    
+    [:id] + fields
   end
 end
 
