@@ -37,5 +37,13 @@ module Kangaroo
         Oo::Product::Product
       }.should_not raise_error
     end
+    
+    it 'lazy loads nested models' do
+      lambda {
+        Oo::Sale::Order::Line
+      }.should_not raise_error
+      
+      Oo::Sale::Order.should be_a(Class)
+    end
   end
 end
