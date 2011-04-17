@@ -45,6 +45,17 @@ module Kangaroo
           model_name = ruby_to_oo model_name
           Loader.new([model_name], reflection_model.database, name).load!.first
         end
+        
+        def class_for oo_name
+          oo_to_ruby(oo_name).constantize
+        end
+        
+        def by_xml_id openerp_module, xml_id = nil
+          openerp_module, xml_id = openerp_module.split('.') if xml_id.blank?
+          type, id = reflection_model.database.object('ir.model.data').get_object_reference openerp_module.to_s, xml_id.to_s
+          
+          class_for(type).find id
+        end
       end
     end
   end
