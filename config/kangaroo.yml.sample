@@ -1,12 +1,22 @@
+# Hostname or ip address and XMLRPC port of your OpenERP Server
 host: 127.0.0.1
 port: 8069
 
+# Configure the database you want to use
 database:
-  namespace: 'Abc'
+  # Database name and credentials
   name: kangaroo_test_database
   user: admin
   password: admin
   
+  # Namespace (top-level Module) for your OpenObject classes, e.g. 
+  # OpenObjects 'product.product' will be accessible via Ruby class Abc::Product::Product
+  # __must__ begin with a capital letter!
+  namespace: 'Abc'
+  
+  # Specify models to load on startup, e.g. all models in the 'product' namespace, and the single 'res.company' model
+  # Keep in mind, that Kangaroo will lazy load any model not specified here on first access. You can even leave this
+  # blank to load all models as late as they're needed.
   models:
     - product.*
     - res.company
