@@ -17,8 +17,46 @@ module Kangaroo
         @name = name
         
         attributes.each do |key, val|
-          write_attribute key, val
+          send "#{key}=", val
         end
+      end
+      
+      def readonly?
+        !!readonly
+      end
+      
+      def eventually_readonly?
+        !!readonly || (states.present? && states.any? { |key, value|
+          !!value['readonly']
+        })
+      end
+      
+      def always_readonly?
+        readonly? && (states.blank? || states.all? { |key, value|
+          value['readonly'].nil? || value['readonly'] == true
+        })
+      end
+      
+      def readonly_in? state
+        s = states && states[state.to_s]
+        if readonly?
+          return true unless s
+          
+          s['readonly'] == true
+        else
+          return false unless s
+          
+          s['readonly'] == false
+        end
+      end
+      
+      def states= states
+        coerced_states = {}
+        
+        states.each do |name, effects|
+          coerced_states[name.to_s] = Hash[effects]
+        end
+        write_attribute :states, coerced_states
       end
     end
   end

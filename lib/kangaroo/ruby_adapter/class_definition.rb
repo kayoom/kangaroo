@@ -20,7 +20,8 @@ module Kangaroo
           raise ChildDefinedBeforeParentError
         end
         @ruby_model.database = @oo_model.class.database
-
+        @ruby_model.namespace = @oo_model.class.namespace
+        @ruby_model.oo_name = @oo_model.model
         @ruby_model
       end
 

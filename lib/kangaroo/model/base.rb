@@ -6,14 +6,14 @@ require 'kangaroo/model/persistence'
 require 'kangaroo/model/open_object_orm'
 require 'kangaroo/model/finder'
 require 'kangaroo/model/remote_execute'
-require 'kangaroo/model/validations'
+require 'kangaroo/model/readonly_attributes'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 
 module Kangaroo
   module Model
     class Base
-      class_attribute :database
+      class_attribute :database, :namespace, :oo_name
       class_inheritable_array :field_names
 
       extend ActiveModel::Callbacks
@@ -26,8 +26,10 @@ module Kangaroo
       extend OpenObjectOrm
       extend Finder
       include RemoteExecute
+      extend ReadonlyAttributes
 
       attr_reader :id
+      
 
       # Initialize a new object, and set attributes
       #
@@ -47,23 +49,27 @@ module Kangaroo
       end
 
       class << self
+        def fields_hash
+          @fields_hash ||= fields_to_hash(fields_get)
+        end
+        
         def fields
-          @fields ||= fields_get
-        end
-        
-        def namespace
-          ("::" + name.match(/^(?:\:\:)?([^\:]+)/)[1]).constantize
-        end
-        
-        # Return this models OpenObject name
-        def oo_name
-          namespace.ruby_to_oo self.name
+          @fields ||= fields_hash.values
         end
 
         # Send method calls via xmlrpc to OpenERP
         #
         def remote
           @remote ||= database.object oo_name
+        end
+        
+        protected
+        def fields_to_hash fields
+          {}.tap do |h|
+            fields.each do |field|
+              h[field.name] = field
+            end
+          end
         end
       end
     end

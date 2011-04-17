@@ -72,12 +72,12 @@ module Kangaroo
         end
       end
 
-      # Define getters for attributes
+      # Define setter
       #
-      # @param [Array] attribute_names
-      def define_getters *attribute_names
-        attribute_names.flatten.each do |name|
-          define_getter name
+      # @param [String, Symbol] attribute_name
+      def define_setter attribute_name
+        define_method "#{attribute_name}=" do |value|
+          write_attribute attribute_name, value
         end
       end
 
@@ -94,13 +94,8 @@ module Kangaroo
       #
       # @param [String, Symbol] attribute_name
       def define_accessors attribute_name
-        define_method attribute_name do
-          read_attribute attribute_name
-        end
-
-        define_method "#{attribute_name}=" do |value|
-          write_attribute attribute_name, value
-        end
+        define_getter attribute_name
+        define_setter attribute_name
 
         self.attribute_names ||= []
         attribute_names << attribute_name.to_s

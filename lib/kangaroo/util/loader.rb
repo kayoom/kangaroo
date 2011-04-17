@@ -56,8 +56,10 @@ module Kangaroo
       
       def create_reflection_model
         Class.new(Kangaroo::Model::Base).tap do |model|
-          model.send :include, Model
           model.database = database
+          model.namespace = root_module
+          model.oo_name = 'ir.model'
+          model.send :include, Model
         end
       end
       

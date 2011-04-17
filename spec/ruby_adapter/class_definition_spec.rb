@@ -12,6 +12,7 @@ module Kangaroo
         oo_model.stub_chain(:class, :namespace).and_return(Oo)
         oo_model.stub_chain(:class, :database)
         oo_model.stub!('model_class_name').and_return(name)
+        oo_model.stub!(:model)
         oo_model
       end
 
