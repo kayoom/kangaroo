@@ -6,6 +6,7 @@ require 'kangaroo/model/persistence'
 require 'kangaroo/model/open_object_orm'
 require 'kangaroo/model/finder'
 require 'kangaroo/model/remote_execute'
+require 'kangaroo/model/validations'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 

@@ -32,6 +32,7 @@ module Kangaroo
 
         login
         loaded_models = Loader.new(models, @database, @namespace).load!
+        loaded_models ||= []
         logger.info "Loaded OpenERP models matching #{models.inspect} into namespace #{@namespace}: #{loaded_models.join(', ')}"
       rescue Exception => e
         logger.error "Loading of OpenERP models failed.\n#{e.inspect}"
