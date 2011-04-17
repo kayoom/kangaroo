@@ -7,18 +7,18 @@ module Kangaroo
       config = Kangaroo::Util::Configuration.new 'spec/test_env/test.yml'
       config.login
   
-      Kangaroo::Util::Loader.new('res.partner', config.database).load!
+      Kangaroo::Util::Loader.new('res.partner', config.database, 'SelectRelationSpec').load!
     end
     
     it 'adjusts "attribute_names" when record is fetched with select clause' do
-      partner = Oo::Res::Partner.select(:lang, :email).first
+      partner = SelectRelationSpec::Res::Partner.select(:lang, :email).first
       
       partner.attribute_names.should =~ %w(lang email)
-      Oo::Res::Partner.attribute_names.count.should > 2
+      SelectRelationSpec::Res::Partner.attribute_names.count.should > 2
     end
     
     it 'returns only selected attributes' do
-      partner = Oo::Res::Partner.select(:lang, :email).first
+      partner = SelectRelationSpec::Res::Partner.select(:lang, :email).first
       
       partner.attributes.keys.should =~ %w(lang email)
     end

@@ -1,49 +1,48 @@
 require 'spec_helper'
 
-
 module Kangaroo
   describe 'Lazy Loading' do
     before :all do
       config = Kangaroo::Util::Configuration.new 'spec/test_env/test.yml'
       config.login
   
-      Kangaroo::Util::Loader.new('res.partner', config.database).load!
+      Kangaroo::Util::Loader.new('res.partner', config.database, 'LazyLoadSpec').load!
     end
     
     it 'raises an error if trying to access constant without corresponding OpenERP Model' do
       lambda {
-        Oo::Abcd
+        LazyLoadSpec::Abcd
       }.should raise_error
       
       lambda {
-        Oo::Res::Bcde
+        LazyLoadSpec::Res::Bcde
       }.should raise_error
     end
     
     it 'lazy loads additional models in an OpenERP namespace' do
       lambda {
-        Oo::Res::Country
+        LazyLoadSpec::Res::Country
       }.should_not raise_error
     end
     
     it 'creates namespace modules on demand' do
       lambda {
-        Oo::Product
+        LazyLoadSpec::Product
       }.should_not raise_error
     end
     
     it 'lazy loads missing models in other namespaces' do
       lambda {
-        Oo::Product::Product
+        LazyLoadSpec::Product::Product
       }.should_not raise_error
     end
     
     it 'lazy loads nested models' do
       lambda {
-        Oo::Sale::Order::Line
+        LazyLoadSpec::Sale::Order::Line
       }.should_not raise_error
       
-      Oo::Sale::Order.should be_a(Class)
+      LazyLoadSpec::Sale::Order.should be_a(Class)
     end
   end
 end
