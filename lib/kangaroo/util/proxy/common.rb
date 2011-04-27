@@ -106,6 +106,18 @@ module Kangaroo
       def get_migration_scripts super_password, contract_id, contract_password
         call! :get_migration_scripts, contract_id, contract_password
       end
+      
+      # def ir_set keys, args, name, value, options = {}
+      #   call! :ir_set, keys, args, name, value, options
+      # end
+      # 
+      # def ir_get keys, options = {}
+      #   call! :ir_get, keys, options
+      # end
+      # 
+      # def ir_del id
+      #   call! :ir_del, id
+      # end
     end
   end
 end

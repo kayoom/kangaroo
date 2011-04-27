@@ -13,7 +13,7 @@ module Kangaroo
           Array(conditions)
         end
 
-        conditions.map do |condition|
+        conditions.sum([]) do |condition|
           normalize_condition condition
         end
       end
@@ -21,7 +21,7 @@ module Kangaroo
       def normalize_condition condition
         case condition
         when Array
-          condition
+          [condition]
         when Hash
           convert_hash_condition condition
         when String
@@ -32,8 +32,8 @@ module Kangaroo
       end
 
       def convert_hash_condition condition
-        condition.sum([]) do |key_val|
-          convert_key_value_condition *key_val
+        condition.map do |key_val|
+          convert_key_value_condition(*key_val)
         end
       end
 
@@ -42,7 +42,7 @@ module Kangaroo
           value = value.map &:to_s
           'in'
         else
-          value = value.to_s
+          value = value
           '='
         end
 
@@ -53,9 +53,9 @@ module Kangaroo
         # Ugly workaround, if you know how to make 'not in' work along the other operators
         # with a single RegExp, please let me now
         if (key_val = string.split("not in")).length > 1
-          [key_val.first.strip, 'not in', key_val.last.strip]
+          [[key_val.first.strip, 'not in', key_val.last.strip]]
         else
-          CONDITION_PATTERN.match(string).try(:captures) || string
+          [CONDITION_PATTERN.match(string).try(:captures) || string]
         end
       end
     end

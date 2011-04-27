@@ -25,8 +25,9 @@ module Kangaroo
     # @param value attribute value to set
     # @return attribute value
     def write_attribute name, value
-      attribute_will_change! name.to_s
-      @attributes[name.to_s] = value
+      name = name.to_s
+      attribute_will_change! name unless @attributes[name] == value
+      @attributes[name] = value
     end
 
     # Mass set attributes. Attribute values are set via setters, not directly stored

@@ -114,6 +114,10 @@ module Kangaroo
       def unlink ids, options = {}
         remote.unlink ids, options[:context]
       end
+      
+      def ir_get key1, key2 = false
+        namespace.ir_get key1, key2, self
+      end
     end
   end
 end

@@ -17,7 +17,15 @@ module Kangaroo
         @name = name
         
         attributes.each do |key, val|
-          send "#{key}=", val
+          setter = "#{key}="
+          
+          unless respond_to?(setter)
+            self.class.class_eval do
+              define_multiple_accessors key.to_sym
+            end
+          end
+            
+          send setter, val
         end
       end
       

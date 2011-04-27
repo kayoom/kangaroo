@@ -45,7 +45,13 @@ module Kangaroo
       def ir_module
         root_module.const_defined?("Ir") ?
         root_module.const_get("Ir") :
-        root_module.const_set("Ir", Module.new)
+        define_ir_namespace
+      end
+      
+      def define_ir_namespace
+        mod = Module.new
+        mod.send :extend, Kangaroo::Util::Loader::Namespace
+        root_module.const_set("Ir", mod)
       end
       
       def reflection_model

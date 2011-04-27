@@ -20,6 +20,16 @@ module Kangaroo
           @new_record = !@id
         end
       end
+      
+      def update_attributes attributes
+        self.attributes = attributes
+        save
+      end
+      
+      def update_attributes! attributes
+        self.attributes = attributes
+        save!
+      end
 
       # Check if this record hasnt been persisted yet
       #
@@ -104,7 +114,7 @@ module Kangaroo
         # @raise RecordNotFound
         def find id
           Array === id ?
-          find_every(ids) :
+          find_every(id) :
           find_single(id)
         end
 
@@ -139,7 +149,7 @@ module Kangaroo
 
       protected
       def attributes_for_update
-        @attributes
+        @attributes.slice(*changed)
       end
 
       def attributes_for_create

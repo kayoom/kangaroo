@@ -12,12 +12,28 @@ module Kangaroo
         # Ruby class name, respecting current namespace (e.g. "Oo::Product::Product")
         # to OpenObject name (e.g. "product.product")
         def ruby_to_oo ruby_name
-           ruby_name.sub(name + "::",'').underscore.gsub '/', '.'
+           ruby_name.to_s.sub(name + "::",'').underscore.gsub '/', '.'
         end
         
         # Return the Reflection model ('ir.model') for this namespace
         def reflection_model
           const_get('Ir').const_get('Model')
+        end
+        
+        def values_model
+          const_get('Ir').const_get('Values')
+        end
+        
+        def ir_get key1, key2, model
+          model = ruby_to_oo model
+          results = values_model.remote.get key1, key2, [model]
+          
+          {}.tap do |hsh|
+            results.each do |result|
+              id, name, value = result
+              hsh[name.to_sym] = value
+            end
+          end
         end
         
         # Check if a model exists, accepts Ruby or OpenObject name parameter
