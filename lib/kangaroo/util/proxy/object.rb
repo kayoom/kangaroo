@@ -147,6 +147,30 @@ module Kangaroo
       def read_group domain, fields, groupby, offset = 0, limit = nil, order = nil
         call! :read_group, domain, fields, groupby, offset, limit, order
       end
+      
+      # Export a set of records
+      #
+      # @param [Array] ids list of ids of records to export
+      # @param [Array] fields list of fields of the selected records to export
+      # @param [Hash] context
+      def export_data ids, fields, context = nil
+        call! :export_data, ids, fields, context
+      end
+      
+      # Import a set of records with a single request
+      #
+      # @param [Array] fields fields to import
+      # @param [Array<Hash>] data an Array of Hashes which represent the records to import
+      # @param [Hash] options for options see OpenERPs Technical Memento
+      def import_data fields, data, options = {}
+        options = {
+          :mode => 'init',
+          :current_module => '',
+          :noupdate => false
+        }.merge options.symbolize_keys
+        
+        call! :import_data, fields, data, options
+      end
     end
   end
 end

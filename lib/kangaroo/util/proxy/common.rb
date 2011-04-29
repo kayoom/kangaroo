@@ -1,6 +1,16 @@
 module Kangaroo
   module Util
     class Proxy::Common < Proxy
+      LogLevel = {
+        :error            => 40,
+        :warning          => 30,
+        :info             => 20,
+        :test             => 15,
+        :debug            => 10,
+        :debug_rpc        => 8,
+        :debug_rpc_answer => 6,
+        :debug_sql        => 5
+      }.freeze
       # Login to an OpenERP database
       #
       # @param [String] db_name The database to log in
@@ -45,10 +55,11 @@ module Kangaroo
       # Set log level
       #
       # @param super_password Superadmin password
-      # @param loglevel Loglevel to set
+      # @param loglevel Loglevel to set, either as integer or as Symbol/String
       # @return true
       def set_loglevel super_password, loglevel
-        call! :set_loglevel, loglevel.upcase
+        loglevel = LogLevel[loglevel.to_sym] unless loglevel.is_a?(Numeric)
+        call! :set_loglevel, super_password, loglevel
       end
 
       # Get server stats
@@ -83,8 +94,8 @@ module Kangaroo
       # Get SQL count, needs loglevel DEBUG_SQL
       #
       # @return Count of SQL queries
-      def get_sqlcount
-        call! :get_sqlcount
+      def get_sqlcount super_password
+        call! :get_sqlcount, super_password
       end
 
       # Get list of available updates, needs valid Publisher's Warranty
@@ -106,18 +117,6 @@ module Kangaroo
       def get_migration_scripts super_password, contract_id, contract_password
         call! :get_migration_scripts, contract_id, contract_password
       end
-      
-      # def ir_set keys, args, name, value, options = {}
-      #   call! :ir_set, keys, args, name, value, options
-      # end
-      # 
-      # def ir_get keys, options = {}
-      #   call! :ir_get, keys, options
-      # end
-      # 
-      # def ir_del id
-      #   call! :ir_del, id
-      # end
     end
   end
 end

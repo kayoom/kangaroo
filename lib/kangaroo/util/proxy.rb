@@ -18,6 +18,11 @@ module Kangaroo
 
       def call! name, *args
         super name, *__curry__(*args)
+      rescue Rapuncel::Response::Fault => f
+        case f.message
+        when /^Method not found\: (.+)/
+          raise NoMethodError, $1, caller + ["OpenERP Traceback:"] + f.backtrace
+        end
       end
 
       def self.new *args

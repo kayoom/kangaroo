@@ -56,7 +56,7 @@ module Kangaroo
       end
       
       def inspect
-        "#Kangaroo::Util::Client:0x#{hash.to_s(16)}>"
+        "<#Kangaroo::Util::Client:0x#{hash.to_s(16)}>"
       end
     end
   end

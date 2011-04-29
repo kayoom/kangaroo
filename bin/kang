@@ -45,10 +45,14 @@ Kang.class_eval do
     "Kang console"
   end
   
+  delegate :common, :db, :superadmin, :to => :client
+  
   def init file_or_hash    
     Kang.logger.info "Loading Kangaroo configuration #{file_or_hash.inspect}"
     Kang.config = Kangaroo::Util::Configuration.new file_or_hash, Kang.logger
     Kang.config.load_models
+    Kang.client = Kang.config.client
+    
     true
   end
 end

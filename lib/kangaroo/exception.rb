@@ -5,4 +5,6 @@ module Kangaroo
   class RecordSavingFailed < Exception ; end
   class InstantiatedRecordNeedsIDError < Exception ; end
   class ChildDefinedBeforeParentError < Exception ; end
+  
+  class NoMethodError < ::NoMethodError ; end
 end
