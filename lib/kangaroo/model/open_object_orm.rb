@@ -118,6 +118,14 @@ module Kangaroo
       def ir_get key1, key2 = false
         namespace.ir_get key1, key2, self
       end
+      
+      def export_data ids, fields = attribute_names, options = {}
+        remote.export_data(ids, fields, options)[:datas]
+      end
+      
+      def import_data fields, datas, options = {}
+        remote.import_data(fields, datas, options)
+      end
     end
   end
 end
