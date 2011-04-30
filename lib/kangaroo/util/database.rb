@@ -16,49 +16,49 @@ module Kangaroo
       # Access to the {Kangaroo::Util::Proxy::Superadmin Superadmin Proxy}
       #
       # @param super_password superadmin password
-      # @return superadmin service proxy
+      # @return [Kangaroo::Util::Proxy::Superadmin] superadmin service proxy
       def superadmin super_password
         client.superadmin super_password
       end
 
       # Access to the {Kangaroo::Util::Proxy::Db Database Proxy}
       #
-      # @return database service proxy
+      # @return [Kangaroo::Util::Proxy::Db] database service proxy
       def db
         client.db
       end
 
       # Access to the {Kangaroo::Util::Proxy::Common Common Proxy}
       #
-      # @return common service proxy
+      # @return [Kangaroo::Util::Proxy::Common] common service proxy
       def common
         client.common
       end
 
       # Access to the {Kangaroo::Util::Proxy::Workflow Workflow Proxy}
       #
-      # @return workflow service proxy
+      # @return [Kangaroo::Util::Proxy::Workflow] workflow service proxy
       def workflow
         @workflow_proxy ||= Proxy::Workflow.new client.object_service, db_name, user_id, password
       end
 
-      # Access to the {Kangaroo::Util::Proxy::Object Object Proxy}
+      # Access to the Kangaroo::Util::Proxy::Object
       #
-      # @return object service proxy
+      # @return [Kangaroo::Util::Proxy::Object] object service proxy
       def object model_name
         Proxy::Object.new client.object_service, db_name, user_id, password, model_name
       end
 
       # Access to the {Kangaroo::Util::Proxy::Wizard Wizard Proxy}
       #
-      # @return wizard service proxy
+      # @return [Kangaroo::Util::Proxy::Wizard] wizard service proxy
       def wizard
         @wizard_proxy ||= Proxy::Wizard.new client.wizard_service, db_name, user_id, password
       end
 
       # Access to the {Kangaroo::Util::Proxy::Report Report Proxy}
       #
-      # @return report service proxy
+      # @return [Kangaroo::Util::Proxy::Report] report service proxy
       def report
         @report_proxy ||= Proxy::Report.new client.report_service, db_name, user_id, password
       end

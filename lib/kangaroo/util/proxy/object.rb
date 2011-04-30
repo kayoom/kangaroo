@@ -1,5 +1,20 @@
 module Kangaroo
   module Util
+    # Proxy to the object service (at /xmlrpc/object), which provides everything
+    # to read, create and modify OpenERP objects.
+    #
+    # @example Configure Kangaroo and get the database instance
+    #     config = Kangaroo::Util::Configuration.new 'spec/test_env/test.yml'
+    #     client = config.client
+    #     database = client.database
+    #
+    # @example
+    #     database.object('product.product').fields_get ['name', 'description']
+    #
+    # @note OpenERPs object service actually only exposes the method 'execute', which needs the 
+    #     ORM method to call (e.g. fields_get) as first argument, and then the model to operate on.
+    #     Proxy::Object already takes care of that, so that you can call ORM methods directly. (see example)
+    #     
     class Proxy::Object < Proxy
       # Call function via execute on OpenERPs object service.
       #

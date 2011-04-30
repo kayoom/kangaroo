@@ -1,5 +1,18 @@
 module Kangaroo
   module Util
+    
+    # Proxy to the Db service (at /xmlrpc/db), specifically
+    # to those functions, that need the superadmin password.
+    # You can access this Proxy via your client instance:
+    # @example
+    #
+    #     config = Kangaroo::Util::Configuration.new 'spec/test_env/test.yml'
+    #     client = config.client
+    #     superadmin_proxy = client.superadmin 'admin'
+    #     superadmin_proxy.drop 'test_database'
+    #
+    # For functions that need superadmin authentication (like create, drop etc)
+    # @see Kangaroo::Util::Proxy::Superadmin
     class Proxy::Superadmin < Proxy
       # Create a new database
       #

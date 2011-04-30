@@ -1,5 +1,17 @@
 module Kangaroo
   module Util
+    
+    # Proxy to the Common service (at /xmlrpc/common). This service provides
+    # numerous auxiliary functions to get information about the running OpenERP
+    # instance, and e.g. set the current log level, or login.
+    # You can access this Proxy via your client instance:
+    # @example
+    #    
+    #     config = Kangaroo::Util::Configuration.new 'spec/test_env/test.yml'
+    #     client = config.client
+    #     client.common
+    # 
+    # @note that some of these functions need the superadmin password as first argument. 
     class Proxy::Common < Proxy
       LogLevel = {
         :error            => 40,
@@ -11,6 +23,7 @@ module Kangaroo
         :debug_rpc_answer => 6,
         :debug_sql        => 5
       }.freeze
+      
       # Login to an OpenERP database
       #
       # @param [String] db_name The database to log in

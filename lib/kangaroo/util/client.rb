@@ -4,6 +4,31 @@ require 'kangaroo/util/proxy'
 
 module Kangaroo
   module Util
+    # This is the central point to interact with OpenERP. You can configure your
+    # connection via Kangaroo::Util::Configuration.
+    #
+    # @see Kangaroo::Util::Configuration
+    # @see Kangaroo::Util::Database
+    # @example Configure Kangaroo and get the client instance
+    #     config = Kangaroo::Util::Configuration.new 'spec/test_env/test.yml'
+    #     client = config.client
+    #
+    # @example Use non-database dependent services
+    #     client.common
+    #     client.db
+    #     client.superadmin 'superadminpassword'
+    #
+    # @example Use database dependent services
+    #     client.database.object 'product.product'
+    #     client.database.wizard
+    #     client.database.report
+    #     client.database.workflow
+    #
+    # @example For convenience, the non-database dependent services are also available via database
+    #     client.database.common
+    #     client.database.db
+    #     client.database.superadmin 'superadminpassword'
+    #
     class Client < Rapuncel::Client
       SERVICES = %w(db common object wizard report).freeze
 
@@ -33,7 +58,7 @@ module Kangaroo
         RUBY
       end
 
-      # Access the {Kangaroo::Util::Proxy::Superadmin Superadmin Proxy}
+      # Access the Kangaroo::Util::Proxy::Superadmin
       #
       # @param [String] super_password Superadmin password
       # @return [Kangaroo::Util::Proxy::Superadmin] Superadmin proxy
@@ -41,14 +66,14 @@ module Kangaroo
         Proxy::Superadmin.new db_service, super_password
       end
 
-      # Access the {Kangaroo::Util::Proxy::Common Common Proxy}
+      # Access the Kangaroo::Util::Proxy::Common
       #
       # @return [Kangaroo::Util::Proxy::Common] Common proxy
       def common
         @common_proxy ||= Proxy::Common.new common_service
       end
 
-      # Access the {Kangaroo::Util::Proxy::Db Db Proxy}
+      # Access the Kangaroo::Util::Proxy::Db
       #
       # @return [Kangaroo::Util::Proxy::Db] Db proxy
       def db
