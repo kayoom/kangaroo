@@ -1,21 +1,23 @@
 module Kangaroo
-  module DefaultAttributes
-    # @private
-    def self.included klass
-      klass.extend ClassMethods
+  module Model
+    module DefaultAttributes
+      # @private
+      def self.included klass
+        klass.extend ClassMethods
 
-      klass.before_initialize do
-        return true if persisted?
+        klass.before_initialize do
+          return true if persisted?
 
-        self.class.default_attributes.each do |name, value|
-          write_attribute name, value
+          self.class.default_attributes.each do |name, value|
+            write_attribute name, value
+          end
         end
       end
-    end
 
-    module ClassMethods
-      def default_attributes
-        default_get :fields => attribute_names
+      module ClassMethods
+        def default_attributes
+          default_get :fields => attribute_names
+        end
       end
     end
   end

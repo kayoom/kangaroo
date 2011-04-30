@@ -7,6 +7,7 @@ Architecture
 {file:docs/Usage.md Usage}
 {file:docs/Architecture.md Architecture}
 {file:docs/AdditionalServices.md Additional Services}
+{file:docs/Classes.md Classes}
 
 
 Components

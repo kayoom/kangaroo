@@ -1,5 +1,5 @@
 Installation
-============
+=====
 
 #### Index
 {file:README.md Readme}
@@ -7,6 +7,7 @@ Installation
 {file:docs/Usage.md Usage}
 {file:docs/Architecture.md Architecture}
 {file:docs/AdditionalServices.md Additional Services}
+{file:docs/Classes.md Classes}
 
 Rails 3
 -------
