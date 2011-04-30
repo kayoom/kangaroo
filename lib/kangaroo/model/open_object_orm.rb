@@ -115,14 +115,40 @@ module Kangaroo
         remote.unlink ids, options[:context]
       end
       
+      # Get values from information repository for this model
+      # e.g.
+      #     
+      #     Oo::Product::Product.ir_get 'default'
+      #     # => {:supplier_taxes_id => [1], :taxes_id => [2]}
+      #
+      # @param [Symbol] key1
+      # @param [Symbol] key2
+      # @return values
       def ir_get key1, key2 = false
         namespace.ir_get key1, key2, self
       end
       
-      def export_data ids, fields = attribute_names, options = {}
-        remote.export_data(ids, fields, options)[:datas]
+      # Export data via OpenERPs export_data method
+      # (which is used by OpenERP to export to CSV)
+      #
+      # @param [Array] ids
+      # @param [Array] fields
+      # @param [Hash] context
+      # @option options [boolean] import_comp Force import compatibility
+      def export_data ids, fields = attribute_names, context = {}
+        remote.export_data(ids, fields, context)[:datas]
       end
       
+      # Import data via OpenERPs import data method
+      # (which is used by OpenERP to import by CSV)
+      #
+      # @param [Array] fields
+      # @param [Array<Array>] datas
+      # @param [Hash] options
+      # @option options mode "init" or "update", defaults to "init"
+      # @option options current_module
+      # @option options [boolean] noupdate, defaults to false
+      # @option options filename optional file to store partial import state for recovery
       def import_data fields, datas, options = {}
         remote.import_data(fields, datas, options)
       end
