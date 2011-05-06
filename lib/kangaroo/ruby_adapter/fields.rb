@@ -7,7 +7,7 @@ module Kangaroo
       
       protected
       def field_names
-        fields.map &:name
+        fields.map(&:name) - [:id]
       end
       
       def fields

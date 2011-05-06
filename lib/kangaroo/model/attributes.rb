@@ -101,6 +101,7 @@ module Kangaroo
 
           self.attribute_names ||= []
           attribute_names << attribute_name.to_s
+          attribute_names.uniq!
         end
 
         # Define getters and setters for attributes

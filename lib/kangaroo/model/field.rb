@@ -46,7 +46,10 @@ module Kangaroo
       end
       
       def readonly_in? state
+        return true if always_readonly?
+        
         s = states && states[state.to_s]
+        
         if readonly?
           return true unless s
           

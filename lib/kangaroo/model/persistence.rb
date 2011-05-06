@@ -15,6 +15,7 @@ module Kangaroo
         klass.send :attr_accessor, :context
 
         klass.before_initialize do
+          @context    = {}
           @destroyed  = false
           @readonly   = false
           @new_record = !@id
@@ -79,7 +80,7 @@ module Kangaroo
       # @param [Hash] options unused
       # @return [boolean] true
       def save! options = {}
-        save options ||
+        save(options) ||
         raise(RecordSavingFailed)
       end
 
@@ -133,7 +134,8 @@ module Kangaroo
             instance.instance_exec(attributes.stringify_keys, context) do |attributes, context|
               @attributes = attributes.except 'id'
               @id = attributes['id']
-              @context = context
+              @context = context || {}
+              
               raise InstantiatedRecordNeedsIDError if @id.nil?
 
               @new_record = false

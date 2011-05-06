@@ -7,8 +7,13 @@ module Kangaroo
 
         klass.before_initialize do
           return true if persisted?
+          
+          default_attributes = self.class.default_attributes
+          if default_attributes.blank?
+            return true
+          end
 
-          self.class.default_attributes.each do |name, value|
+          default_attributes.each do |name, value|
             write_attribute name, value
           end
         end

@@ -64,8 +64,8 @@ module Kangaroo
       # @option db_config [String] 'password' Password for authentication
       # @option db_config [Enumerable] 'models' List of models(-patterns) to load
       def configure_database db_config
-        @database = Database.new @client, *db_config.values_at('name', 'user', 'password')
-        @models =  db_config['models']
+        @database  = Database.new @client, *db_config.values_at('name', 'user', 'password')
+        @models    = db_config['models']
         @namespace = db_config['namespace'] || "Oo"
         logger.info %Q(Configured OpenERP database "#{db_config['name']}" at "#{client.connection.host}")
       end
