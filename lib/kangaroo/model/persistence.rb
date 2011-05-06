@@ -15,7 +15,7 @@ module Kangaroo
         klass.send :attr_accessor, :context
 
         klass.before_initialize do
-          @context    = {}
+          @context    ||= {}
           @destroyed  = false
           @readonly   = false
           @new_record = !@id
