@@ -6,6 +6,7 @@ module Kangaroo
     describe DefaultAttributes do
       before :all do
         @klass = Class.new(Kangaroo::Model::Base)
+        @klass.stub!(:fields_hash).and_return({})
         @klass.define_multiple_accessors :a, :b
       end
 
@@ -24,6 +25,7 @@ module Kangaroo
 
       it 'fetches default values via default_get on the object service' do
         @klass = Class.new(Kangaroo::Model::Base)
+        @klass.stub!(:fields_hash).and_return({})
         @klass.define_multiple_accessors :a, :b
         @klass.field_names = %w(a b)
         @klass.stub!(:remote).and_return mock('object_service')

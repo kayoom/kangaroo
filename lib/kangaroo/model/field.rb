@@ -3,7 +3,10 @@ require 'kangaroo/model/attributes'
 module Kangaroo
   module Model
     class Field
+      autoload :Readonly, 'kangaroo/model/field/readonly'
+      
       include Attributes
+      include Readonly
 
       attr_accessor :name
       define_multiple_accessors :change_default, :context, :digits, :domain, :fnct_inv, :fnct_inv_arg, 
@@ -29,36 +32,8 @@ module Kangaroo
         end
       end
       
-      def readonly?
-        !!readonly
-      end
-      
-      def eventually_readonly?
-        !!readonly || (states.present? && states.any? { |key, value|
-          !!value['readonly']
-        })
-      end
-      
-      def always_readonly?
-        readonly? && (states.blank? || states.all? { |key, value|
-          value['readonly'].nil? || value['readonly'] == true
-        })
-      end
-      
-      def readonly_in? state
-        return true if always_readonly?
-        
-        s = states && states[state.to_s]
-        
-        if readonly?
-          return true unless s
-          
-          s['readonly'] == true
-        else
-          return false unless s
-          
-          s['readonly'] == false
-        end
+      def required?
+        !!required
       end
       
       def states= states

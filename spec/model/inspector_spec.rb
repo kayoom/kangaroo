@@ -6,6 +6,7 @@ module Kangaroo
     describe Inspector do
       before :all do
         SomeClass = Class.new(Kangaroo::Model::Base)
+        SomeClass.stub!(:fields_hash).and_return({})
         SomeClass.define_multiple_accessors :first_attribute, :second_attribute
       end
 

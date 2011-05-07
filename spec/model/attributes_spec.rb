@@ -6,6 +6,7 @@ module Kangaroo
     describe Attributes do
       before :all do
         @klass = Class.new(Kangaroo::Model::Base)
+        @klass.stub!(:fields_hash).and_return({})
         @klass.define_multiple_accessors :a, :b
       end
 
