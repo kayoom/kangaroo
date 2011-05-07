@@ -1,7 +1,7 @@
 module Kangaroo
   module Model
     module Associations
-      Types = %w(many2one).freeze
+      Types = %w(many2one one2many).freeze
       extend ActiveSupport::Concern
    
       included do

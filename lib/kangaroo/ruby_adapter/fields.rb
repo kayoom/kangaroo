@@ -1,9 +1,11 @@
 require 'kangaroo/ruby_adapter/many2one'
+require 'kangaroo/ruby_adapter/one2many'
 
 module Kangaroo
   module RubyAdapter
     module Fields
       include Many2one
+      include One2many
       
       def add_fields
         @ruby_model.define_multiple_accessors *field_names
@@ -19,6 +21,8 @@ module Kangaroo
         case association_field.type
         when 'many2one'
           add_many2one_association association_field
+        when 'one2many'
+          add_one2many_association association_field
         end
       end
       
