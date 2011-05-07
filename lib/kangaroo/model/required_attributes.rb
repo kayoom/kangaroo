@@ -8,9 +8,13 @@ module Kangaroo
         extend ClassMethods
       end
       
-      # def save options = {}
-      #   super
-      # end
+      def save options = {}
+        if options[:validate] != false
+          valid? && super
+        else
+          super
+        end
+      end
       
       module ClassMethods
         def define_setter attribute_name

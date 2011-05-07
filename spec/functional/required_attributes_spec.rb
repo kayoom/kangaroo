@@ -21,9 +21,13 @@ module Kangaroo
     end
     
     it 'refuses to save invalid records' do
+      a = RequiredAttributesSpec::Res::Country.where(:name => 'ABCXYZ').first
+      a && a.destroy
+      
       c = RequiredAttributesSpec::Res::Country.new :name => 'ABCXYZ'
       
       c.save.should_not == true
+      c.errors.keys.should include :code
       
       lambda {
         c.save!
