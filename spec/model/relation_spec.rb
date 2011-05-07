@@ -72,8 +72,8 @@ module Kangaroo
       end
 
       describe '#reverse' do
-        it 'adds descending id order if no order was specified' do
-          @relation.reverse.order_clause.should == ['id desc']
+        it 'sets the reverse flag if no order was specified' do
+          @relation.reverse.reverse_flag.should == true
         end
 
         it 'reverses previously specified orders' do

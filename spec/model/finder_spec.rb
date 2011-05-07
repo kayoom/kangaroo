@@ -91,7 +91,7 @@ module Kangaroo
           @klass.first
         end
       end
-
+      
       describe '#count' do
         it 'only counts how many records are present' do
           @remote_stub.should_receive(:search).with([], 0, anything, anything, anything, true).

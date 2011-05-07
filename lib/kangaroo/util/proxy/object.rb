@@ -184,7 +184,7 @@ module Kangaroo
           :noupdate => false
         }.merge options.symbolize_keys
         
-        call! :import_data, fields, data, options
+        call! :import_data, fields, data, *options.values_at(:mode, :current_module, :noupdate, :context, :filename)
       end
     end
   end

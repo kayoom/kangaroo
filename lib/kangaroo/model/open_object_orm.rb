@@ -45,6 +45,7 @@ module Kangaroo
         end
         
         context = options[:context]
+        ids = ids.reverse if options[:reverse_flag]
 
         [].tap do |result|
           remote.read(ids, fields, context).each do |attributes|

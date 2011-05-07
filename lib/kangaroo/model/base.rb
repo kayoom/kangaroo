@@ -7,6 +7,7 @@ require 'kangaroo/model/open_object_orm'
 require 'kangaroo/model/finder'
 require 'kangaroo/model/remote_execute'
 require 'kangaroo/model/readonly_attributes'
+require 'kangaroo/model/data_import'
 require 'active_model/callbacks'
 require 'active_support/core_ext/class'
 
@@ -27,6 +28,7 @@ module Kangaroo
       extend Finder
       include RemoteExecute
       extend ReadonlyAttributes
+      extend DataImport
 
       attr_reader :id
       
@@ -46,6 +48,14 @@ module Kangaroo
       #
       def remote
         self.class.remote
+      end
+      
+      def == other
+        if new_record?
+          false
+        else
+          self.class === other and id == other.id
+        end
       end
 
       class << self

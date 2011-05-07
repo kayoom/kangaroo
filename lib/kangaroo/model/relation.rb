@@ -17,7 +17,14 @@ module Kangaroo
                             type uniq uniq! uniq_by uniq_by! unshift values_at yaml_initialize zip |).freeze
 
       # @private
-      attr_accessor :target, :where_clauses, :offset_clause, :limit_clause, :select_clause, :order_clause, :context_clause
+      attr_accessor :target,
+                    :where_clauses,
+                    :offset_clause,
+                    :limit_clause,
+                    :select_clause,
+                    :order_clause,
+                    :context_clause,
+                    :reverse_flag
 
       alias_method :_clone, :clone
       alias_method :_tap, :tap
@@ -46,7 +53,8 @@ module Kangaroo
 
       # Return only the last record
       def last
-        reverse.first
+        count = self.count
+        offset(count - 1).limit(1).first
       end
 
       # Check if a record with fulfilling this conditions exist
@@ -73,9 +81,12 @@ module Kangaroo
       # Reverse all order clauses
       def reverse
         if @order_clause.blank?
-          order('id', true)
+          _clone._tap do |c|
+            c.reverse_flag = !c.reverse_flag
+          end
         else
           _clone._tap do |c|
+            c.reverse_flag = false
             c.order_clause = c.order_clause.map do |order|
               reverse_order order
             end
@@ -140,7 +151,9 @@ module Kangaroo
       # @param [boolean] desc true to order descending
       def order column, desc = false
         column = column.to_s + " desc" if desc
+        
         _clone._tap do |c|
+          c.reverse_flag = true if column.downcase == 'id desc'
           c.order_clause += [column.to_s]
         end
       end
@@ -186,17 +199,18 @@ module Kangaroo
       protected
       def search_parameters
         {
-          :offset => @offset_clause,
-          :limit => @limit_clause,
-          :order => @order_clause.join(", "),
+          :offset  => @offset_clause,
+          :limit   => @limit_clause,
+          :order   => @order_clause.join(", "),
           :context => @context_clause
         }
       end
 
       def read_parameters
         {
-          :fields => @select_clause,
-          :context => @context_clause
+          :fields       => @select_clause,
+          :context      => @context_clause,
+          :reverse_flag => @reverse_flag
         }
       end
 
