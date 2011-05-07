@@ -22,6 +22,16 @@ module Kangaroo
         end
       end
       
+      def update_attribute key, val
+        self.send "#{key}=", val
+        save
+      end
+      
+      def update_attribute! key, val
+        self.send "#{key}=", val
+        save!
+      end
+      
       def update_attributes attributes
         self.attributes = attributes
         save
@@ -43,7 +53,7 @@ module Kangaroo
       #
       # @return [boolean] true/false
       def persisted?
-        !@new_record
+        !new_record? and !destroyed?
       end
 
       # Check if this record has been destroyed
@@ -103,9 +113,11 @@ module Kangaroo
         # @param [Hash] attributes
         # @return saved record
         def create attributes = {}
-          new(attributes).tap do |new_record|
-            new_record.save
-          end
+          new(attributes).tap &:save
+        end
+        
+        def create! attributes = {}
+          new(attributes).tap &:save!
         end
 
         # Retrieve a record by id

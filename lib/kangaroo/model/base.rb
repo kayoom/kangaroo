@@ -12,6 +12,7 @@ require 'kangaroo/model/remote_execute'
 require 'kangaroo/model/readonly_attributes'
 require 'kangaroo/model/required_attributes'
 require 'kangaroo/model/data_import'
+require 'kangaroo/model/dynamic_finder'
 
 module Kangaroo
   module Model
@@ -32,6 +33,7 @@ module Kangaroo
       extend  ReadonlyAttributes
       include RequiredAttributes
       extend  DataImport
+      extend  DynamicFinder
 
       attr_reader :id
 

@@ -4,7 +4,7 @@ require 'kangaroo/model/base'
 module Kangaroo
   module Model
     describe DefaultAttributes do
-      before :all do
+      before :each do
         @klass = Class.new(Kangaroo::Model::Base)
         @klass.stub!(:fields_hash).and_return({})
         @klass.define_multiple_accessors :a, :b

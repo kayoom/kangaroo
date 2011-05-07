@@ -85,7 +85,7 @@ module Kangaroo
 
       # @private
       def relation
-        Relation.new self
+        @relation ||= Relation.new self
       end
     end
   end

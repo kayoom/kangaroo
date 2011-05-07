@@ -1,6 +1,10 @@
+require 'kangaroo/model/dynamic_finder'
+
 module Kangaroo
   module Model
     class Relation
+      include DynamicFinder
+      
       # @private
       ARRAY_DELEGATES = %w( all? any? as_json at b64encode blank? choice class clone collect collect! combination compact compact! concat
                             cycle decode64 delete delete_at delete_if detect drop drop_while dup duplicable? each each_cons each_index
