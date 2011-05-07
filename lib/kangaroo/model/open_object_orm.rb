@@ -70,7 +70,7 @@ module Kangaroo
         }.merge(options)
 
         remote.fields_get(options[:fields], options[:context]).map do |key, val|
-          Field.new key, val
+          Field.new key, val.merge(:namespace => namespace)
         end
       end
 

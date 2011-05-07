@@ -154,7 +154,8 @@ module Kangaroo
       # @param [String, Symbol] column field to order by
       # @param [boolean] desc true to order descending
       def order column, desc = false
-        column = column.to_s + " desc" if desc
+        column = column.to_s
+        column = column + " desc" if desc
         
         _clone._tap do |c|
           c.reverse_flag = true if column.downcase == 'id desc'

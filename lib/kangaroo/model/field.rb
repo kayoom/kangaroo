@@ -13,23 +13,17 @@ module Kangaroo
                                 :fnct_search, :func_method, :func_obj, :function, :help, :invisible, 
                                 :readonly, :related_columns, :relation, :required, :select, :selectable, 
                                 :selection, :size, :states, :store, :string, :third_table, :translate, 
-                                :type
+                                :type, :namespace
                                 
       def initialize name, attributes = {}
         @attributes = {}
         @name = name
         
         attributes.each do |key, val|
-          setter = "#{key}="
-          
-          unless respond_to?(setter)
-            self.class.class_eval do
-              define_multiple_accessors key.to_sym
-            end
-          end
-            
-          send setter, val
+          write_attribute key, val
         end
+        
+        self.states = attributes[:states] if attributes[:states]
       end
       
       def required?
@@ -43,6 +37,10 @@ module Kangaroo
           coerced_states[name.to_s] = Hash[effects]
         end
         write_attribute :states, coerced_states
+      end
+      
+      def relation_class
+        @relation_class ||= namespace.class_for relation
       end
     end
   end

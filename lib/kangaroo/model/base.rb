@@ -13,6 +13,7 @@ require 'kangaroo/model/readonly_attributes'
 require 'kangaroo/model/required_attributes'
 require 'kangaroo/model/data_import'
 require 'kangaroo/model/dynamic_finder'
+require 'kangaroo/model/associations'
 
 module Kangaroo
   module Model
@@ -34,7 +35,8 @@ module Kangaroo
       include RequiredAttributes
       extend  DataImport
       extend  DynamicFinder
-
+      include Associations
+      
       attr_reader :id
 
       # Initialize a new object, and set attributes
