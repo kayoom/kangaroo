@@ -9,6 +9,10 @@ module Kangaroo
       Kangaroo::Util::Loader.new('res.partner', @config.database, 'ImportExportSpec').load!
     end
     
+    after :each do
+      @cleanup && @cleanup.call
+    end
+    
     it 'exports records' do
       ids = ImportExportSpec::Res::Partner.select(:id).limit(3).all.map &:id
       
@@ -20,10 +24,16 @@ module Kangaroo
     end
     
     it 'imports records' do
-      id = ImportExportSpec::Res::Partner.first.id
+      name = ImportExportSpec::Res::Partner.find(1).name
       
-      ImportExportSpec::Res::Partner.import_data [".id", "name"], [[id, "XYZ"]]
-      ImportExportSpec::Res::Partner.find(id).name.should == "XYZ"
+      @cleanup = lambda do
+        partner = ImportExportSpec::Res::Partner.find(1)
+        partner.name = name
+        partner.save!
+      end
+      
+      ImportExportSpec::Res::Partner.import_data [".id", "name"], [[1, "XYZ"]]
+      ImportExportSpec::Res::Partner.find(1).name.should == "XYZ"
     end
   end
 end
