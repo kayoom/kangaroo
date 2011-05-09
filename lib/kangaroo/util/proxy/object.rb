@@ -130,7 +130,7 @@ module Kangaroo
       # @param [Hash] context
       # @return [Array] Array of Hashes with field names and values
       def read ids, fields = [], context = nil
-        call! :read, ids, fields
+        call! :read, ids, fields, context
       end
 
       # Update records
