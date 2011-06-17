@@ -1,3 +1,6 @@
+require 'active_model'
+require 'active_support/core_ext/class'
+
 require 'kangaroo/model/relation'
 require 'kangaroo/model/attributes'
 require 'kangaroo/model/default_attributes'
@@ -7,8 +10,10 @@ require 'kangaroo/model/open_object_orm'
 require 'kangaroo/model/finder'
 require 'kangaroo/model/remote_execute'
 require 'kangaroo/model/readonly_attributes'
-require 'active_model/callbacks'
-require 'active_support/core_ext/class'
+require 'kangaroo/model/required_attributes'
+require 'kangaroo/model/data_import'
+require 'kangaroo/model/dynamic_finder'
+require 'kangaroo/model/associations'
 
 module Kangaroo
   module Model
@@ -23,13 +28,16 @@ module Kangaroo
       include Persistence
       include DefaultAttributes
       include Inspector
-      extend OpenObjectOrm
-      extend Finder
+      extend  OpenObjectOrm
+      extend  Finder
       include RemoteExecute
-      extend ReadonlyAttributes
-
-      attr_reader :id
+      extend  ReadonlyAttributes
+      include RequiredAttributes
+      extend  DataImport
+      extend  DynamicFinder
+      include Associations
       
+      attr_reader :id
 
       # Initialize a new object, and set attributes
       #
@@ -46,6 +54,14 @@ module Kangaroo
       #
       def remote
         self.class.remote
+      end
+      
+      def == other
+        if new_record?
+          false
+        else
+          self.class === other and id == other.id
+        end
       end
 
       class << self
@@ -65,6 +81,8 @@ module Kangaroo
         
         protected
         def fields_to_hash fields
+          return nil if fields.nil?
+          
           {}.tap do |h|
             fields.each do |field|
               h[field.name] = field

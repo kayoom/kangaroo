@@ -2,3 +2,4 @@
 *.gem
 .rvmrc
 .bundle
+Gemfile.lock

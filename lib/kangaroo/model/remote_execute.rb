@@ -2,7 +2,7 @@ module Kangaroo
   module Model
     module RemoteExecute
       def call name, *args
-        return_value = remote.send name, ids_for_execute, *args
+        return_value = remote.call! name, ids_for_execute, *args
         
         # TODO: handle warnings etc
         if Hash === return_value && return_value[:value]

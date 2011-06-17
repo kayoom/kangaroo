@@ -8,7 +8,7 @@ module Kangaroo
     def client
       @configuration.try :client
     end
-    
+   
     initializer 'kangaroo.initialize' do
       begin
         config_file = File.join(Rails.root, %w(config kangaroo.yml))

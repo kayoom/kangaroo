@@ -27,7 +27,7 @@ module Kangaroo
           else
             super
           end
-        rescue
+        rescue Exception => e
           super
         end
       end

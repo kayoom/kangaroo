@@ -8,6 +8,7 @@ module Kangaroo
 
       before :each do
         @klass = Class.new(Kangaroo::Model::Base)
+        @klass.stub!(:fields_hash).and_return({})
         @klass.define_multiple_accessors :a, :b
         @klass.stub!(:default_attributes).and_return({})
         @remote_stub = mock 'remote'
@@ -91,7 +92,7 @@ module Kangaroo
           @klass.first
         end
       end
-
+      
       describe '#count' do
         it 'only counts how many records are present' do
           @remote_stub.should_receive(:search).with([], 0, anything, anything, anything, true).

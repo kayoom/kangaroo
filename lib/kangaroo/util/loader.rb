@@ -31,7 +31,15 @@ module Kangaroo
 
       protected
       def root_module
-        namespace.constantize
+        namespace.constantize.tap do |ns|
+          unless ns.respond_to?(:namespace)
+            ns.send :extend, Kangaroo::Util::Loader::Namespace
+          end
+          
+          unless ns.respond_to?(:oo_to_ruby)
+            ns.send :extend, Kangaroo::Util::Loader::RootNamespace
+          end
+        end
         
       rescue NameError
         eval <<-RUBY

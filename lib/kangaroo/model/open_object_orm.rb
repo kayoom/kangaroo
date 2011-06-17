@@ -38,9 +38,14 @@ module Kangaroo
       # @option options [Hash] context
       # @return [Array] list of Kangaroo::Model::Base instances
       def read ids, options = {}
-        fields = options[:fields]
-        fields = attribute_names if options[:fields].blank?
+        fields = if options[:fields].present?
+          options[:fields] & attribute_names
+        else
+          attribute_names
+        end
+        
         context = options[:context]
+        ids = ids.reverse if options[:reverse_flag]
 
         [].tap do |result|
           remote.read(ids, fields, context).each do |attributes|
@@ -65,7 +70,7 @@ module Kangaroo
         }.merge(options)
 
         remote.fields_get(options[:fields], options[:context]).map do |key, val|
-          Field.new key, val
+          Field.new key, val.merge(:namespace => namespace)
         end
       end
 
@@ -88,7 +93,8 @@ module Kangaroo
       # @return [Hash] default values
       def default_get options = {}
         options = {
-          :fields => attribute_names
+          :fields => attribute_names,
+          :context => {}
         }.merge(options)
 
         remote.default_get options[:fields], options[:context]

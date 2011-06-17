@@ -15,10 +15,21 @@ module Kangaroo
         klass.send :attr_accessor, :context
 
         klass.before_initialize do
+          @context    ||= {}
           @destroyed  = false
           @readonly   = false
           @new_record = !@id
         end
+      end
+      
+      def update_attribute key, val
+        self.send "#{key}=", val
+        save
+      end
+      
+      def update_attribute! key, val
+        self.send "#{key}=", val
+        save!
       end
       
       def update_attributes attributes
@@ -42,7 +53,7 @@ module Kangaroo
       #
       # @return [boolean] true/false
       def persisted?
-        !@new_record
+        !new_record? and !destroyed?
       end
 
       # Check if this record has been destroyed
@@ -79,7 +90,7 @@ module Kangaroo
       # @param [Hash] options unused
       # @return [boolean] true
       def save! options = {}
-        save options ||
+        save(options) ||
         raise(RecordSavingFailed)
       end
 
@@ -102,9 +113,11 @@ module Kangaroo
         # @param [Hash] attributes
         # @return saved record
         def create attributes = {}
-          new(attributes).tap do |new_record|
-            new_record.save
-          end
+          new(attributes).tap &:save
+        end
+        
+        def create! attributes = {}
+          new(attributes).tap &:save!
         end
 
         # Retrieve a record by id
@@ -133,7 +146,8 @@ module Kangaroo
             instance.instance_exec(attributes.stringify_keys, context) do |attributes, context|
               @attributes = attributes.except 'id'
               @id = attributes['id']
-              @context = context
+              @context = context || {}
+              
               raise InstantiatedRecordNeedsIDError if @id.nil?
 
               @new_record = false

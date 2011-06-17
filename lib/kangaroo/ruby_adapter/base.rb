@@ -20,7 +20,8 @@ module Kangaroo
       def to_ruby
         define_class
         add_fields
-
+        add_associations
+        
         @ruby_model
       end
     end

@@ -69,7 +69,7 @@ module Kangaroo
       def search_and_read conditions, search_options = {}, read_options = {}
         ids = search conditions, search_options.merge(:count => false)
         return [] if ids.blank?
-
+        
         read ids, read_options
       end
 
@@ -85,7 +85,7 @@ module Kangaroo
 
       # @private
       def relation
-        Relation.new self
+        @relation ||= Relation.new self
       end
     end
   end

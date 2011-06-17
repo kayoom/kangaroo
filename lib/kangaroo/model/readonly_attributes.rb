@@ -22,6 +22,22 @@ module Kangaroo
           end
         end
       end
+      
+      
+      protected
+      def attributes_for_update
+        without_readonly_attributes super
+      end
+
+      def attributes_for_create
+        without_readonly_attributes super
+      end
+      
+      def without_readonly_attributes attributes
+        attributes.reject do |key, val|
+          state && fields_hash[key.to_sym].readonly_in?(state)
+        end
+      end
     end
   end
 end
