@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8'>
+
+  <title>{{ page.title }}</title>
+  
+  <link rel="stylesheet" href="/css/reset.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/typography.css" type="text/css" media="screen, projection" />
+  <link rel="stylesheet" href="/css/style.css" type="text/css" media="screen, projection" />
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+      <div id="kangaroo">
+        <img src="images/kangaroo.png" alt="Kangaroo - Ruby OpenObject Client"/>
+      </div>
+      <div id="navigation">
+        <ul>
+          <li>
+            <a href='index.html'>Introduction</a>
+          </li>
+          <li>
+            <a href='documentation.html'>Documentation</a>
+          </li>
+          <li>
+            <a href='contribute.html'>Contribute</a>
+          </li>
+          <li>
+            <a href='source.html'>Source</a>
+          </li>
+          <li>
+            <a href='issues.html'>Issues</a>
+          </li>
+        </ul>
+        <br class="clearfix" />
+      </div>
+    </div>
+    <div id="content">
+      {{ content }}
+    </div>
+  </div>
+</body>

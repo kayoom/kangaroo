@@ -1,0 +1,52 @@
+body {
+  background-image: url(../images/background.png);
+}
+
+#container {
+  background-image: url(../images/background2.png);
+  width: 940px;
+  margin: 0 auto;
+  padding: 20px 30px;
+  
+  border: 1px solid #000;
+  border-top: none;
+	-moz-box-shadow: 3px 3px 4px #222;
+	-webkit-box-shadow: 3px 3px 4px #222;
+	box-shadow: 3px 3px 4px #222;
+	/* For IE 8 */
+	-ms-filter: "progid:DXImageTransform.Microsoft.Shadow(Strength=4, Direction=135, Color='#222222')";
+}
+
+#kangaroo {
+  position: relative;
+  height: 250px;
+}
+
+#kangaroo img {
+  position: absolute;
+  top: 49px;
+  left: 190px;
+}
+
+#navigation {
+  margin: 40px auto 40px;
+  width: 805px;
+}
+
+#navigation li {
+  float: left;
+  margin: 0 8px;
+}
+
+#navigation li a {
+  display: block;
+  background-image: url(../images/button.png);
+  text-align: center;
+  padding: 8px;
+  width: 129px;
+  height: 14px;
+}
+
+br.clearfix {
+  clear: both;
+}
