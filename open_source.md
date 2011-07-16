@@ -25,7 +25,6 @@ If you want to patch something up, or add a feature, just fork [kangaroo on Gith
 and send us a pull request. Same thing to enhance this documentation / homepage [kangaroo pages on Github](https://github.com/cice/kangARoo/tree/gh-pages).
 <br/><br/>
 If you really want to dig into Kangaroo, read the [Advanced Section](/advanced.html).
-<br/><br/>
 
 Wiki
 ----

@@ -73,4 +73,48 @@ coming
 
 ### Any other non-Bundler project
 
-coming
+Use Kangaroo in any Ruby project!
+
+    gem install kangaroo
+    
+In your code
+
+    require 'rubygems'
+    require 'kangaroo'
+    
+    # Configure a connection to an OpenERP server
+    config = Kangaroo::Util::Configuration.new yaml_file_or_hash, Logger.new(STDOUT)
+    config.login
+  
+    # Load OpenERP models matching "res.*" into namespace ::Oo
+    # Kangaroo::Util::Loader can be called several times, whenever needed.
+    Kangaroo::Util::Loader.new('res.*', config.database, 'Oo').load!
+    
+First Steps
+-----------
+
+OpenObject models are mapped to ruby classes:
+
+    Oo::Res::Country
+    # represents 'res.country'
+    
+    Oo::Product::Product
+    # represents 'product.product'
+    
+    Oo::Sale::Order::Line
+    # represents 'sale.order.line
+    
+You can use this models like ActiveRecord models:
+
+    country = Oo::Res::Country.find 1
+    country = Oo::Res::Country.where(:code => 'DE').first
+    
+    country.name = "Schland"
+    country.save
+    
+    country.reload
+    
+    countries = Oo::Res::Country.limit(100).all
+    countries = Oo::Res::Country.limit(100).order('code').all
+    
+    Oo::Res::Country.create :code => 'DE', :name => 'Germany'

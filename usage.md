@@ -20,11 +20,15 @@ Table Of Contents
       4. [A note about where](#a_note_about_)
       
    2. [Working with records](#working_with_records)
+   
       1. [Attributes](#attributes)
       2. [Dirty](#dirty)
       3. [Creating records](#creating_records)
       4. [Destroying records](#destroying_records)
-      5. [Misc](#misc)
+      
+   3. [Misc](#misc)
+      1. [new\_record? / persisted? / destroyed?](#new_record__persisted__destroyed)
+      2. [Lazy model loading](#lazy_model_loading)
 
 Installation
 ------------
@@ -155,7 +159,9 @@ If you initialize a new record, Kangaroo fetches the default values for this mod
     Oo::Res::User.first.destroy
     
     
-#### Misc
+### Misc
+#### new\_record? / persisted? / destroyed?
+
 Kangaroo also supports `new_record?` and `persisted?`
 
     record = Oo::Res::User.new
@@ -171,5 +177,23 @@ as well as `destroyed?`
     record.destroy
     record.destroyed?
     # => true
+    
+#### Lazy model loading
 
+You don't have to specify all models you ever need in your configuration file. Kangaroo will lazy load
+models as they are accessed:
+
+    Oo.const_defined? "Product"
+    # => false 
+    Oo::Product
+    # => Module 'Oo::Product' contains loaded OpenERP Models/Namespaces:  
+    Oo::Product.const_defined? "Product"
+    # => false 
+    Oo::Product::Product
+    # => <Oo::Product::Product id, loc_case, volume, type, uos_coeff, incoming_qty, price_margin, sale_ok, loc_rack, 
+    # description_purchase, code, ean13, warranty, description_sale, outgoing_qty, product_tmpl_id, standard_price, 
+    # rental, uom_po_id, default_code, supply_method, categ_id, procure_method, virtual_available, variants, packaging, 
+    # pricelist_id, name_template, uos_id, lst_price, cost_method, description, seller_delay, price_extra, seller_id, 
+    # price, active, company_id, qty_available, list_price, produce_delay, partner_ref, state, name, purchase_ok, 
+    # mes_type, sale_delay, weight_net, seller_qty, weight, seller_ids, loc_row, product_manager, uom_id> 
     
