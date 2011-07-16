@@ -29,7 +29,6 @@ module IRB
   end
 end
 
-
 module Kangaroo
   module Commands
     class CLI < Base

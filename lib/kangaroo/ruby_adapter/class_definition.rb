@@ -17,11 +17,6 @@ module Kangaroo
         @ruby_model = set_const_in @namespace, constant_names.last, model_subclass
         
         if !@ruby_model.is_a?(Class)
-          puts @ruby_model.inspect
-          puts @namespace.inspect
-          puts constant_names.inspect
-          puts model_subclass.inspect
-          
           raise ChildDefinedBeforeParentError
         end
         @ruby_model.database = @oo_model.class.database
