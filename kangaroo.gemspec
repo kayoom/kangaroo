@@ -22,10 +22,9 @@ Gem::Specification.new do |s|
   s.add_dependency "activemodel", ">= 3.0.0"
   s.add_dependency "activesupport", ">= 3.0.0"
   s.add_dependency "hirb"
+  s.add_dependency "highline"
   
   s.add_development_dependency 'yard'
   s.add_development_dependency 'rspec'
-  s.add_development_dependency 'ruby-debug'
-  s.add_development_dependency 'cucumber'
   s.add_development_dependency 'bundler'
 end

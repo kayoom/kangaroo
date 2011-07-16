@@ -88,14 +88,14 @@ module Kangaroo
         partner = AssociationsSpec::Res::Partner.find 1
         partner.address.should == [2]
       end
-      # 
-      # it 'reads associated object' do
-      #   address = AssociationsSpec::Res::Partner::Address.find 1
-      #   partner = AssociationsSpec::Res::Partner.find 1
-      #   
-      #   address.partner_id_id.should == 1
-      #   address.partner_id_obj.should == partner
-      # end
+      
+      it 'reads associated objects' do
+        partner = AssociationsSpec::Res::Partner.find 1
+        address = AssociationsSpec::Res::Partner::Address.find 1
+        
+        partner.address_objs.should be_an Array
+        partner.address_objs.first.should == partner
+      end
       # 
       # it 'writes association' do
       #   @cleanup = lambda do

@@ -15,52 +15,7 @@ rescue LoadError
   end
 end
 
-require 'ostruct'
-require 'optparse'
-options = {}
+require 'kangaroo/commands/cli'
 
-optparse = OptionParser.new do |opts|
-  opts.banner = "Usage: kang -c config_file.yml"
-  
-  options[:config_file] = nil
-  opts.on '-c', '--config FILE', 'Specify config file' do |file|
-    options[:config_file] = file
-  end   
-  
-  # This displays the help screen, all programs are
-  # assumed to have this option.
-  opts.on( '-h', '--help', 'Display this screen' ) do
-    puts opts
-    exit
-  end
-end
+Kangaroo::Commands::CLI.new(*ARGV).run
 
-optparse.parse!
-
-Kang = OpenStruct.new
-Kang.logger = Logger.new(STDOUT)
-
-Kang.class_eval do
-  def inspect
-    "Kang console"
-  end
-  
-  delegate :common, :db, :superadmin, :to => :client
-  
-  def init file_or_hash    
-    Kang.logger.info "Loading Kangaroo configuration #{file_or_hash.inspect}"
-    Kang.config = Kangaroo::Util::Configuration.new file_or_hash, Kang.logger
-    Kang.config.load_models
-    Kang.client = Kang.config.client
-    
-    true
-  end
-end
-
-options[:config_file] && Kang.init(options[:config_file])
-
-require 'irb'
-require 'irb/completion'
-
-Hirb.enable
-IRB.start

@@ -17,6 +17,7 @@ module Kangaroo
         @database = database
         @model_names = model_names
         sanitize_model_names
+        reflection_model
       end
 
       # Loads matching models and uses {Kangaroo::RubyAdapter::Base RubyAdapter} to
@@ -96,7 +97,7 @@ module Kangaroo
       def sanitize_model_names
         @model_names = case @model_names
         when nil, []
-          raise 'No models specified.'
+          []
         when :all
           ['%']
         when String

@@ -6,6 +6,11 @@ require 'kangaroo/util/loader'
 module Kangaroo
   module Util
     class Configuration
+      Defaults = {
+        'host' => 'localhost',
+        'port' => 8069
+      }
+      
       attr_accessor :logger, :database, :models, :client
 
       # Initialize the Kangaroo configuration
@@ -25,15 +30,11 @@ module Kangaroo
       # Load configured models with {Kangaroo::Util::Loader Loader}
       #
       def load_models
-        if models.blank?
-          logger.info "No models to load."
-          return
-        end
-
         login
+
         loaded_models = Loader.new(models, @database, @namespace).load!
         loaded_models ||= []
-        logger.info "Loaded OpenERP models matching #{models.inspect} into namespace #{@namespace}: #{loaded_models.join(', ')}"
+        logger.info "Loaded OpenERP models matching #{models.inspect} into namespace #{@namespace}: #{loaded_models.map(&:name).join(', ')}" if models
       rescue Exception => e
         logger.error "Loading of OpenERP models failed.\n#{e.inspect}"
       end
