@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Kangaroo - Ruby OpenObject Client / ORM
+title: Introduction
 ---
 
 Introduction
@@ -19,23 +19,23 @@ Quickstart
 
 The quickest way to start trying Kangaroo, is probably using the CLI, which provides a ruby console (IRB) to play around.  
 
-##### First of all, install the gem
+First of all, install the gem
 
     gem install kangaroo
     
-##### Make sure your OpenERP Server is running and fire up the `kang` CLI
+Make sure your OpenERP Server is running and fire up the `kang` CLI
 
     kang -h localhost -p 8069 -u admin -p admin -d your_erp_db_name
     
 If your server is running on the same machine, and you haven't changed its default ports, you can omit the `-h` server and `-p` port options.
 
-##### Go ahead, and try some things, like
+Go ahead, and try some things, like
 
     Oo::Res::Country.all
     Oo::Product::Product.where(:name => "1984").first
     Oo::Res::Partner.order(:name).all
     
-##### You can access common methods too via `Kang`
+You can access common methods too via `Kang`
 
     Kang.common.about
     Kang.common.set_loglevel 'superadminpassword', :debug_sql
@@ -47,15 +47,15 @@ If your server is running on the same machine, and you haven't changed its defau
 
 ### Rails
 
-##### Put the gem in your Gemfile
+Put the gem in your Gemfile
 
     gem 'kangaroo'
     
-##### update your bundle
+update your bundle
 
     bundle install
     
-##### and create a `kangaroo.yml` in `#{Rails.root}/config/` with
+and create a `kangaroo.yml` in `#{Rails.root}/config/` with
 
     host: 127.0.0.1
     port: 8069
@@ -64,6 +64,8 @@ If your server is running on the same machine, and you haven't changed its defau
       name: kangaroo_test_database
       user: admin
       password: admin
+      
+Use your OpenERP models anywhere, see [Usage](/usage.html) to see how.
       
 ### Any other project using Bundler
 
