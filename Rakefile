@@ -22,14 +22,6 @@ rescue LoadError
   puts "RSpec is not available. In order to run specs, you must: gem install rspec"
 end
 
-begin
-  require 'cucumber/rake/task'
-  desc "Run Cucumber features."
-  Cucumber::Rake::Task.new(:features)
-rescue LoadError
-  puts "Cucumber is not available. In order to run features, you must: gem install cucumber"
-end
-
 
 
 # If you want to make this the default task
