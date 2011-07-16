@@ -47,6 +47,24 @@ body {
   height: 14px;
 }
 
+#navigation a {
+  display: block;
+  text-decoration: none;
+}
+
 br.clearfix {
   clear: both;
+}
+
+/* Fork me on github ribbon */
+#container {
+  position: relative;
+}
+
+.fork-me img{
+  position: absolute; 
+  top: 0; 
+  right: 0; 
+  border: 0;
+  z-index: 10;
 }
