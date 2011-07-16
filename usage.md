@@ -165,7 +165,7 @@ Kangaroo also supports `new_record?` and `persisted?`
     record.persisted?
     # => false
     
-as well as `destroyed?``
+as well as `destroyed?`
 
     record = Oo::Res::Country.first
     record.destroy

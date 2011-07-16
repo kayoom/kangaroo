@@ -10,6 +10,7 @@ body {
   
   border: 1px solid #000;
   border-top: none;
+  border-bottom: none;
 	-moz-box-shadow: 3px 3px 4px #222;
 	-webkit-box-shadow: 3px 3px 4px #222;
 	box-shadow: 3px 3px 4px #222;
