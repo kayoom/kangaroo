@@ -18,7 +18,7 @@ require 'kangaroo/model/associations'
 module Kangaroo
   module Model
     class Base
-      class_attribute :database, :namespace, :oo_name
+      class_attribute :database, :namespace, :oo_name, :oo_model
       class_inheritable_array :field_names
 
       extend ActiveModel::Callbacks

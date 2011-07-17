@@ -7,6 +7,7 @@ module Kangaroo
         nspace = register_with_yard 'module', name do |r|
           mixin = P('Kangaroo::Util::Loader::Namespace')
           r.mixins(:class).unshift(mixin) unless r.mixins(:class).include?(mixin)
+          r.add_file "(none)"
         end
         
         register_namespaces_or_models

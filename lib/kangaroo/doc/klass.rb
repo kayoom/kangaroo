@@ -10,6 +10,7 @@ module Kangaroo
       def register
         klass = register_with_yard 'class', name do |r|
           r.superclass = P('Kangaroo::Model::Base')
+          r.add_file "#{@klass.database.db_name}/#{@klass.oo_name}"
         end
         
         register_attributes_in klass
@@ -69,6 +70,10 @@ module Kangaroo
             key, value = *key_value
             "'#{key}' (#{value})"
         end
+      end
+      
+      def add_uniq_tag obj, name, *args
+        add_tag obj, name, *args unless obj.tags(name).present?
       end
       
       def add_tag obj, name, *args
