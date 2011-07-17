@@ -17,7 +17,7 @@ module Kangaroo
       def register_namespaces_in
         @root_namespace.constants.each do |namespace|
           namespace_const = @root_namespace.const_get(namespace)
-          Namespace.new(namespace_const).register
+          Namespace.new(namespace_const, logger).register
         end
       end
     end

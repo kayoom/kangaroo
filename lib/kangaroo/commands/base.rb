@@ -95,6 +95,7 @@ module Kangaroo
       end
       
       def set_models models
+        models = "*" if models.strip == "all"
         database_configuration['models'] = models.split(':')
       end
       

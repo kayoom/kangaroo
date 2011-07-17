@@ -9,17 +9,17 @@ module Kangaroo
           r.mixins(:class).unshift(mixin) unless r.mixins(:class).include?(mixin)
         end
         
-        register_namespaces_or_models_in
+        register_namespaces_or_models
       end
       
-      def register_namespaces_or_models_in
+      def register_namespaces_or_models
         @object.constants.each do |obj_name|
           obj_const = @object.const_get obj_name
           
           if obj_const.is_a?(Class) && obj_const.included_modules.map(&:name).include?("Kangaroo::Model::Attributes")
-            Klass.new(obj_const).register
+            Klass.new(obj_const, logger).register
           elsif obj_const.is_a?(Module) && obj_const.included_modules.map(&:name).include?("Kangaroo::Util::Loader::Namespace")
-            Namespace.new(obj_const).register
+            Namespace.new(obj_const, logger).register
           end
         end
       end

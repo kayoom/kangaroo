@@ -3,7 +3,10 @@ require 'yard'
 module Kangaroo
   module Doc
     class Base
-      def initialize object
+      attr_accessor :logger
+      
+      def initialize object, logger
+        @logger = logger
         ivar_name = self.class.name.demodulize.underscore
         @object = object
         instance_variable_set "@#{ivar_name}", object
@@ -28,9 +31,11 @@ module Kangaroo
       end
       
       class << self
-        def generate root_namespace
-          RootNamespace.new(root_namespace).register
-          YARD::Templates::Engine.generate YARD::Registry.all(:root, :module, :class), yard_options
+        def generate root_namespace, logger = Logger.new(STDOUT)
+          RootNamespace.new(root_namespace, logger).register
+          logger.info "Generating documentation ..."
+          YARD::Templates::Engine.generate YARD::Registry.all(:root, :module, :class), yard_options(root_namespace)
+          logger.info "Great success!"
         end
         
         protected
@@ -39,7 +44,7 @@ module Kangaroo
              "object.type != :method || [:public].include?(object.visibility)")
         end
         
-        def yard_options
+        def yard_options root_namespace
           {
             :files            => [],
             :verifier         =>  verifier,
@@ -50,7 +55,7 @@ module Kangaroo
             :template         => :default,
             :no_highlight     => false,
             :markup           => :rdoc,
-            :title            => "Documentation by YARD 0.7.2"
+            :title            => "OpenERP Database: #{root_namespace.reflection_model.database.db_name}"
           }
         end
       end
