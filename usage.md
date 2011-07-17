@@ -29,6 +29,12 @@ Table Of Contents
    3. [Misc](#misc)
       1. [new\_record? / persisted? / destroyed?](#new_record__persisted__destroyed)
       2. [Lazy model loading](#lazy_model_loading)
+      
+3. [Tools](#tools)
+    
+   1. [Command Line Interface](#command_line_interface)
+      
+      1. [Generate Documentation](#generate_documentation)
 
 Installation
 ------------
@@ -197,3 +203,13 @@ models as they are accessed:
     # price, active, company_id, qty_available, list_price, produce_delay, partner_ref, state, name, purchase_ok, 
     # mes_type, sale_delay, weight_net, seller_qty, weight, seller_ids, loc_row, product_manager, uom_id> 
     
+Tools
+-----
+
+### Command Line Interface
+
+#### Generate Documentation
+
+You can generate a YARD documentation exactly for your database, including your own modules and modifications with `kangdoc`.
+`kangdoc` expects the same arguments as `kang`. You can see a demo of the documentation generated for my `kangaroo_test_database` here:
+[Kangaroo Documentation Demo](http://demo.kangaroogem.org).
