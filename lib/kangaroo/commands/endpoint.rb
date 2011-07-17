@@ -1,7 +1,7 @@
 module Kangaroo
   module Commands
     class Endpoint
-      attr_reader :configuration, :config, :client, :logger
+      attr_reader :configuration, :config, :client, :logger, :models
       
       delegate :common, :db, :superadmin, :to => :client
       delegate :database, :to => :config
@@ -14,7 +14,13 @@ module Kangaroo
       end
       
       def load_models!
-        config.load_models
+        @models = config.load_models
+      end
+      
+      def load_associated_models!
+        @models.each do |m|
+          m.fields.each &:associated_model
+        end
       end
       
       def namespace

@@ -1,5 +1,9 @@
 require 'kangaroo/doc/namespace'
 
+YARD::Tags::Library.define_tag "Selection Values", :selection
+YARD::Tags::Library.define_tag "Properties", :flags
+YARD::Tags::Library.visible_tags << :selection << :flags
+
 module Kangaroo
   module Doc
     class Klass < Namespace
@@ -21,15 +25,17 @@ module Kangaroo
             m.docstring.replace [field.string, field.help] * "\n\n"
             add_tag m, :return, field.name.to_s, coerced_type
             
-            
-            if field.type == 'selection'
-              sel_values = field.selection.map do |key_value|
-                key, value = *key_value
-                "* '#{key}' (#{value})"
-              end.join("\n")
-
-              add_tag m, :note, "Possible values:\n#{sel_values}"
+            if field.selection?
+              selection_values(field).each do |val|
+                add_tag m, :selection, val
+              end
             end
+            
+            flags(field).each do |flag|
+              add_tag m, :flags, flag
+            end
+            
+            m.source = field.attributes_inspect
           end
           
           # next if field.always_readonly?
@@ -43,8 +49,30 @@ module Kangaroo
       end
       
       protected
+      def flags field
+        [].tap do |f|
+          f << '*Required*: true' if field.required?
+          f << '*Readonly*: true' if field.always_readonly?
+          f << "*Max* *length*: #{field.size}" if field.char? && field.size
+          f << "*Digits*: #{field.digits * '.'}" if field.float? && field.digits
+          f << "*Functional*: true" if field.functional?
+          f << "*Selectable*: true" if field.selectable?
+          
+          if field.association?
+            f << "*Associated* *Model*: {#{field.associated_model}}"
+          end
+        end
+      end
+      
+      def selection_values field
+        field.selection.map do |key_value|
+            key, value = *key_value
+            "'#{key}' (#{value})"
+        end
+      end
+      
       def add_tag obj, name, *args
-        obj.docstring.add_tag YARD::Tags::Tag.new(name, *args) if obj.tag(name).nil?
+        obj.docstring.add_tag YARD::Tags::Tag.new(name, *args)
       end
       
       def coerce_type field

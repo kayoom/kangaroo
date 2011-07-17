@@ -33,7 +33,7 @@ module Kangaroo
       class << self
         def generate root_namespace, logger = Logger.new(STDOUT)
           RootNamespace.new(root_namespace, logger).register
-          logger.info "Generating documentation ..."
+          logger.info "Generating documentation ... (this may take a while)"
           YARD::Templates::Engine.generate YARD::Registry.all(:root, :module, :class), yard_options(root_namespace)
           logger.info "Great success!"
         end

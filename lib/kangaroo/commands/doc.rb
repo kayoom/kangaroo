@@ -13,9 +13,19 @@ module Kangaroo
       end
       
       protected
+      def set_load_associations
+        @load_associations = true
+      end
+      
+      def setup_options p
+        super
+        setup_option p, '--load_associations', 'Wether to load associated models too.'
+      end
+      
       def initialize_global_endpoint
         ::Kang.connect configuration, logger
         ::Kang.load_models!
+        ::Kang.load_associated_models! if @load_associations
       end
       
       def generate_yardoc
