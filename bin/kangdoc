@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+begin
+  # Try to just load kangaroo
+  require 'kangaroo'
+rescue LoadError
+  begin
+    # Try kangaroo as installed gem
+    require 'rubygems'
+    require 'kangaroo'
+  rescue LoadError
+    # Used for development, if you exec 'bin/kang' from kangaroo source dir and gem not installed
+    require 'bundler/setup'
+    require 'kangaroo'
+  end
+end
+
+require 'kangaroo/commands/doc'
+
+Kangaroo::Commands::Doc.new(*ARGV).run
+

@@ -94,6 +94,10 @@ module Kangaroo
         exit
       end
       
+      def set_models models
+        database_configuration['models'] = models.split(':')
+      end
+      
       def setup_options p
         setup_option p, '--help', "Display this help screen"
         setup_option p, '--config FILE', 'Specify a configuration file'
@@ -103,6 +107,7 @@ module Kangaroo
         setup_option p, '--port PORT', 'Set port (default: 8069)', '-i'
         setup_option p, '--database DATABASE', 'Set name of database to use'
         setup_option p, '--namespace NAMESPACE', 'Set namespace / root module to use for models (default: Oo)'
+        setup_option p, '--models MODELS', 'Set models to load eagerly, separate with : (e.g. res.*:product.product:sale.* )'
       end
       
       def setup_option p, param, desc = '', short = nil

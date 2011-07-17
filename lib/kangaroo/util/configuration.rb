@@ -11,7 +11,7 @@ module Kangaroo
         'port' => 8069
       }
       
-      attr_accessor :logger, :database, :models, :client
+      attr_accessor :logger, :database, :models, :client, :namespace
 
       # Initialize the Kangaroo configuration
       #

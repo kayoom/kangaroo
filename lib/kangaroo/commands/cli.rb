@@ -48,10 +48,7 @@ module Kangaroo
       def start_irb
         ARGV.clear
         
-        user = ::Kang.configuration['database']['user']
-        db = ::Kang.configuration['database']['name']
-        
-        IRB.prompt = "#{user}@#{db}"
+        IRB.prompt = ::Kang.configuration['database'].values_at('user', 'name').join("@")
         ::Hirb.enable
         ::IRB.start
       end

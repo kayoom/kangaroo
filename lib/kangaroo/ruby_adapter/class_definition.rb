@@ -41,8 +41,21 @@ module Kangaroo
 
       # Set constant only if not already defined
       def set_const_in mod, name, const
-        mod.const_set name, const unless mod.const_defined?(name, false)
+        mod.const_set name, const unless const_already_defined?(mod, name)
         mod.const_get name
+      end
+      
+      def const_already_defined? mod, name
+        if is_18?
+          mod.const_defined? name
+        else
+          mod.const_defined? name, false
+        end
+      end
+      
+      protected
+      def is_18?
+        RUBY_VERSION =~ /^1\.8/
       end
     end
   end

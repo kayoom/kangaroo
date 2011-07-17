@@ -16,6 +16,10 @@ module Kangaroo
       def load_models!
         config.load_models
       end
+      
+      def namespace
+        Kernel.const_get config.namespace
+      end
     end
   end
 end
