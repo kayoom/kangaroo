@@ -11,12 +11,12 @@ h1 {
 
 h2 {
   font-size: 18px;
-  margin: 24px 0 12px;
+  margin: 32px 0 12px;
 }
 
 h3 {
   font-size: 14px;
-  margin: 24px 0 20px;
+  margin: 32px 0 20px;
 }
 
 h4 {
@@ -31,17 +31,17 @@ h5 {
 }
 
 code {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   color: #ddd;
   padding: 2px 6px;
   font-style: normal;
 }
 
 pre {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.7);
   font-family: "Bitstream Vera Sans Mono", "Monaco", "sans serif";
   font-size: 12px;
-  line-height: 22px;
+  line-height: 16px;
   padding: 12px 24px;
   margin: 4px 0 16px;
   color: #ddd;
@@ -77,25 +77,4 @@ a:hover {
 
 blockquote {
   text-align: justify;
-}
-
-#content ol {
-  list-style-type: decimal;
-  list-style-position: inside;
-  font-size: 12px;
-  font-style: normal;
-  padding-left: 14px;
-}
-
-#content ol li {
-  padding-left: 4px;
-  line-height: 14px;
-}
-
-#content ol a {
-  font-size: 12px;
-}
-
-#content ol ol {
-  margin: 6px 0;
 }

@@ -4,13 +4,17 @@
   {% include head.html %}
 </head>
 
-<body>
+<body class='two-col'>
   <div id="container">
     {% include header.html %}
-    <div id="content">
-      <hr/>
-      {{ content }}
-      <hr/>
+    <hr/>
+    <div id="sidebar">
+      {% include sidebar.html %}
     </div>
+    <div id="content">
+      {{ content }}
+    </div>
+    <br class='clearfix' />
+    <hr/>
   </div>
 </body>

@@ -69,3 +69,38 @@ br.clearfix {
   border: 0;
   z-index: 10;
 }
+
+
+#sidebar ul {
+/*  list-style-type: disc;*/
+/*  list-style-type: square;*/
+  list-style-type: none;
+  font-size: 12px;
+  font-style: normal;
+  padding-left: 8px;
+}
+
+#sidebar ul li {
+  padding-left: 4px;
+  line-height: 12px;
+  padding-top: 4px;
+}
+
+#sidebar ul a {
+  font-size: 12px;
+}
+
+#sidebar ul ul {
+  margin: 6px 0;
+}
+
+body.two-col #sidebar {
+  width: 200px;
+  float: left;
+}
+
+body.two-col #content {
+  margin-left: 20px;
+  width: 720px;
+  float: left;
+}
