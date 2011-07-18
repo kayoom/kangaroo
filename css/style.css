@@ -100,7 +100,7 @@ body.two-col #sidebar {
 }
 
 body.two-col #content {
-  margin-left: 20px;
-  width: 720px;
+  margin-left: 40px;
+  width: 700px;
   float: left;
 }

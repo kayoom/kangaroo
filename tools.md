@@ -35,8 +35,8 @@ kang - The Kangaroo command line interface
 Usage:
         --help                       Display this help screen
     -c, --config FILE                Specify a configuration file
-    -u, --user USER                  Set user to use to login to OpenERP, must be a valid OpenERP 
-                                     user with sufficient privileges
+    -u, --user USER                  Set user to use to login to OpenERP, must be a valid 
+                                     OpenERP user with sufficient privileges
     -p, --password PASSWORD          Set password for user
     -h, --host HOST                  Set hostname (default: localhost)
     -i, --port PORT                  Set port (default: 8069)
