@@ -78,3 +78,14 @@ a:hover {
 blockquote {
   text-align: justify;
 }
+
+ul {
+  list-style-type: disc;
+  list-style-position: outside;
+  padding-left: 16px;
+}
+
+ul li{
+  font-size: 12px;
+  line-height: 18px;
+}
