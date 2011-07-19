@@ -56,7 +56,7 @@ module Kangaroo
       def banner
         "".tap do |s|
           s << 'kang - The Kangaroo command line interface'
-          s << ''
+          s << "\n\n"
           s << 'Usage:'
         end
       end

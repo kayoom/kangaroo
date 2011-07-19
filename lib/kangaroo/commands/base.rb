@@ -108,7 +108,7 @@ module Kangaroo
         setup_option p, '--port PORT', 'Set port (default: 8069)', '-i'
         setup_option p, '--database DATABASE', 'Set name of database to use'
         setup_option p, '--namespace NAMESPACE', 'Set namespace / root module to use for models (default: Oo)'
-        setup_option p, '--models MODELS', 'Set models to load eagerly, separate with : (e.g. res.*:product.product:sale.* )'
+        setup_option p, '--models MODELS', 'Set models to load eagerly, separate with : (e.g. res.*:product.product:sale.* or "all" to load everything)'
       end
       
       def setup_option p, param, desc = '', short = nil
