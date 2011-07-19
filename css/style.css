@@ -34,6 +34,11 @@ body {
   width: 805px;
 }
 
+#navigation ul {
+  list-style-type: none;
+  padding: 0;
+}
+
 #navigation li {
   float: left;
   margin: 0 8px;
