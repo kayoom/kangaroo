@@ -11,10 +11,10 @@ module Kangaroo
       def config_file
         File.join File.dirname(__FILE__), '..', 'test_env', 'test.yml'
       end
-
+      
       it "replaces wildcards in model names" do
         loader = Loader.new ['res.*'], nil
-
+        
         loader.model_names.should == ['res.%']
       end
 
