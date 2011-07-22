@@ -22,6 +22,8 @@ module Kangaroo
         case f.message
         when /^Method not found\: (.+)/
           raise NoMethodError, $1, caller + ["OpenERP Server Traceback:"] + f.backtrace.reverse
+        else
+          raise f
         end
       end
 
