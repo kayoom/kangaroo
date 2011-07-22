@@ -18,7 +18,7 @@ module Kangaroo
       describe '#read' do
         it 'reads and instantiates records' do
           object_service.stub!(:xmlrpc_call).
-            with('execute', 'some_class', 'read', [1], ['a', 'b']).
+            with('execute', 'some_class', 'read', [1], ['a', 'b'], false).
             and_return([{:a => 'one', :id => 1}])
           @klass.read([1], :fields => ['a', 'b']).first.a.should == 'one'
         end
@@ -30,7 +30,9 @@ module Kangaroo
         end
 
         it 'uses attribute_names as default value for field list' do
-          object_service.should_receive(:xmlrpc_call).with('execute', 'some_class', 'read', [1], ['a', 'b']).
+          object_service.
+            should_receive(:xmlrpc_call).
+            with('execute', 'some_class', 'read', [1], ['a', 'b'], false).
             and_return([{:a => 'one', :id => 1}])
           @klass.read([1])
         end

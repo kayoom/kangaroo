@@ -3,4 +3,4 @@ gemspec
 
 gem 'autotest-growl'
 gem 'autotest-fsevent'
-gem 'ruby-debug'
+# gem 'ruby-debug'

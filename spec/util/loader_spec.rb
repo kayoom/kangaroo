@@ -24,11 +24,11 @@ module Kangaroo
         loader.model_names.should == ['%']
       end
 
-      it 'raises error if model_names = nil or empty' do
-        lambda { Loader.new nil, nil }.should raise_error
-        lambda { Loader.new [], nil }.should raise_error
+      it 'it ignores empty models' do
+        loader = Loader.new nil, nil
+        
+        loader.model_names.should be_empty
       end
-
     end
   end
 end
