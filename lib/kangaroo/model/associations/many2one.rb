@@ -5,7 +5,13 @@ module Kangaroo
         extend ActiveSupport::Concern
         
         def read_many2one_id_for field
-          send(field.name).try :first
+          field_value = send field.name
+          
+          if Array === field_value
+            field_value.first
+          else
+            field_value
+          end
         end
         
         def write_many2one_id_for field, id
@@ -13,13 +19,19 @@ module Kangaroo
         end
         
         def read_many2one_name_for field
-          send(field.name).try :last
+          field_value = send field.name
+          
+          if Array === field_value
+            field_value.last
+          else
+            read_many2one_obj_for(field).try :name
+          end
         end
         
         def read_many2one_obj_for field
           id = read_many2one_id_for(field)
           
-          field.associated_model.find_by_id id
+          field.relation_class.find_by_id id
         end
         
         def write_many2one_obj_for field, obj

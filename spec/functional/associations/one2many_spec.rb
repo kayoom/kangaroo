@@ -16,8 +16,14 @@ module Kangaroo
     it 'reads ids of associated objects' do
       partner = AssociationsSpec::Res::Partner.find 1
       
-      partner.address_ids.should be_an Array
-      partner.address_ids.first.should == 1
+      partner.address_ids.should == [1]
+    end
+    
+    it 'reads ids of associate objects after change' do
+      partner = AssociationsSpec::Res::Partner.find 1
+      
+      partner.address_ids = [2]
+      partner.address_ids.should == [2]
     end
     
     it 'writes ids of objects to associate' do

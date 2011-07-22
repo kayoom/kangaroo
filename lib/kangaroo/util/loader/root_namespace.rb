@@ -15,13 +15,17 @@ module Kangaroo
            ruby_name.to_s.sub(name + "::",'').underscore.gsub '/', '.'
         end
         
+        def ir_module
+          const_get('Ir')
+        end
+        
         # Return the Reflection model ('ir.model') for this namespace
         def reflection_model
-          const_get('Ir').const_get('Model')
+          ir_module.const_get('Model')
         end
         
         def values_model
-          const_get('Ir').const_get('Values')
+          ir_module.const_get('Values')
         end
         
         def ir_get key1, key2, model

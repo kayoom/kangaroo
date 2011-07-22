@@ -39,10 +39,6 @@ module Kangaroo
       def association?
         AssociationTypes.include? type
       end
-      
-      def associated_model
-        namespace.class_for relation rescue namespace.oo_to_ruby(relation) if association?
-      end
                                 
       def initialize name, attributes = {}
         @attributes = {}
