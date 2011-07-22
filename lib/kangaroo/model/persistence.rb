@@ -4,17 +4,17 @@ require 'active_support/core_ext/hash'
 module Kangaroo
   module Model
     module Persistence
-      # @private
-      def self.included klass
-        klass.extend ClassMethods
-        klass.define_model_callbacks :destroy, :save, :update, :create, :find
-        klass.after_destroy :mark_destroyed
-        klass.after_create :mark_persisted
-        klass.after_save :reload
+      extend ActiveSupport::Concern
+      
+      included do
+        define_model_callbacks :destroy, :save, :update, :create, :find
+        after_destroy :mark_destroyed
+        after_create :mark_persisted
+        after_save :reload
 
-        klass.send :attr_accessor, :context
+        attr_accessor :context
 
-        klass.before_initialize do
+        before_initialize do
           @context    ||= {}
           @destroyed  = false
           @readonly   = false

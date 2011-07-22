@@ -5,7 +5,6 @@ module Kangaroo
       extend ActiveSupport::Concern
    
       included do
-        extend ClassMethods
       end
       
       def id_for_associated field
