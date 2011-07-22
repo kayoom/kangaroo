@@ -37,5 +37,12 @@ module Kangaroo
       
       a.should_not == b
     end
+    
+    it ': Arrays of same instances should be equal' do
+      a = IdentitySpec::Res::Partner.first
+      b = IdentitySpec::Res::Partner.first
+      
+      [a].should == [b]
+    end
   end
 end
