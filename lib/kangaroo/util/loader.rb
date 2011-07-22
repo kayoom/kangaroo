@@ -17,7 +17,7 @@ module Kangaroo
         @database = database
         @model_names = model_names
         sanitize_model_names
-        reflection_model
+        root_module
       end
 
       # Loads matching models and uses {Kangaroo::RubyAdapter::Base RubyAdapter} to
