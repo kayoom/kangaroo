@@ -55,6 +55,10 @@ module Kangaroo
         self.states = attributes[:states] if attributes[:states]
       end
       
+      def setter_name
+        "#{name}="
+      end
+      
       def required?
         !!required
       end

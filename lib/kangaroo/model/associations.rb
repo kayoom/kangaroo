@@ -1,10 +1,16 @@
 module Kangaroo
   module Model
     module Associations
-      Types = %w(many2one one2many).freeze
       extend ActiveSupport::Concern
-   
+      
+      autoload :Many2one, 'kangaroo/model/associations/many2one'
+      autoload :One2many, 'kangaroo/model/associations/one2many'
+      
+      Types = %w(many2one one2many).freeze
+      
       included do
+        include Many2one
+        include One2many
       end
       
       def id_for_associated field
