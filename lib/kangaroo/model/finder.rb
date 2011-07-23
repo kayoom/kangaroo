@@ -5,6 +5,10 @@ module Kangaroo
     module Finder
       RELATION_DELEGATES = %w(where limit offset order select context reverse)
       delegate *(RELATION_DELEGATES + [:to => :relation])
+      
+      def find_in_batches batch_size = 100
+        relation.find_in_batches batch_size
+      end
 
       # Retrieve all records
       #
