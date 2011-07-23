@@ -1,5 +1,5 @@
 require 'kangaroo/doc/base'
-require 'ruby-debug'
+
 module Kangaroo
   module Doc
     class Namespace < Base

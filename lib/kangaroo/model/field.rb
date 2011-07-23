@@ -69,28 +69,7 @@ module Kangaroo
       end
       
       def relation_class
-        @relation_class ||= namespace.class_for relation
-      end
-      
-      def attributes_inspect
-        keys = attributes.keys.sort_by(&:to_s)
-        
-        a = []
-        len = 0
-        keys.each do |key|
-          val = send(key)
-          
-          if val.present? && key != 'namespace'
-            len = key.to_s.length if len < key.to_s.length
-            a << [key, val] 
-          end
-        end
-        
-        "".tap do |s|
-          a.each do |kv|
-            s << ":" << kv.first.to_s.ljust(len, " ") << " => " << kv.last.pretty_inspect
-          end
-        end
+        @relation_class ||= namespace.class_for relation rescue nil
       end
     end
   end

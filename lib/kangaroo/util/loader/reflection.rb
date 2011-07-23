@@ -2,6 +2,7 @@ module Kangaroo
   module Util
     class Loader
       module Reflection
+        attr_accessor :dont_load_models
         
         # Return the Reflection model ('ir.model') for this namespace
         def reflection_model
@@ -31,6 +32,8 @@ module Kangaroo
         
         # Load an additional model into the current namespace
         def load_model model_name
+          return if @dont_load_models
+          
           existing_ruby_class = oo_to_ruby(model_name).constantize rescue nil
           return existing_ruby_class if existing_ruby_class
           
