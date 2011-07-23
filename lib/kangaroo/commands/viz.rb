@@ -13,7 +13,7 @@ module Kangaroo
       end
       
       protected
-      def set_load_associations
+      def set_load_associations *args
         @load_associations = true
       end
       
