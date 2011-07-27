@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Michael Eickenberg", "Marian Theisen"]
   s.email       = 'marian@cice-online.net'
   s.summary     = "Kang! ActiveRecord-ish OpenObject"
-  s.homepage    = "http://github.com/cice/kangARoo"
+  s.homepage    = "http://github.com/kayoom/kangaroo"
   s.description = "ActiveRecord-ish OpenObject Wrapper"
 
   s.files         = `git ls-files`.split("\n")
