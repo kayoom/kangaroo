@@ -6,29 +6,29 @@ layout: default
 Open Source
 ===========
 
-Kangaroo is Open Source and hosted on [Github](http://github.com/cice/kangaroo). It's released under the [MIT License](#mit_license),
+Kangaroo is Open Source and hosted on [Github](http://github.com/kayoom/kangaroo). It's released under the [MIT License](#mit_license),
 and everybody is welcome to contribute, fork, enhance, patch, improve, refactor, document, test, re-release, distribute and of course, use it.
 
 Source
 ------
-Source code is hosted on [Github](http://github.com/cice/kangaroo), where it can be cloned, forked or downloaded. Version control system is [git](http://git-scm.com/).
+Source code is hosted on [Github](http://github.com/kayoom/kangaroo), where it can be cloned, forked or downloaded. Version control system is [git](http://git-scm.com/).
 
 Issues
 ------
-Submit bugs, feature requests, or any other issues/questions to our [Issue tracker at Github](http://github.com/cice/kangARoo/issues).
+Submit bugs, feature requests, or any other issues/questions to our [Issue tracker at Github](http://github.com/kayoom/kangaroo/issues).
 
 Contribute
 ----------
 You want to contribute? That's awesome. Every contribution matters, new features, patched bugs or just reported issues. All your feedback helps, e.g. about mistakable bits in the documentation, or breaking of OpenERP / Rails / Ruby conventions or a violation of the [principle of least surprise](http://en.wikipedia.org/wiki/Principle_of_least_surprise).
 <br/><br/>
-If you want to patch something up, or add a feature, just fork [kangaroo on Github](http://github.com/cice/kangaroo), do your thing,
-and send us a pull request. Same thing to enhance this documentation / homepage [kangaroo pages on Github](https://github.com/cice/kangARoo/tree/gh-pages).
+If you want to patch something up, or add a feature, just fork [kangaroo on Github](http://github.com/kayoom/kangaroo), do your thing,
+and send us a pull request. Same thing to enhance this documentation / homepage [kangaroo pages on Github](https://github.com/kayoom/kangaroo/tree/gh-pages).
 <br/><br/>
 If you really want to dig into Kangaroo, read the [Advanced Section](/advanced.html).
 
 Wiki
 ----
-You want to share a neat trick? Or a useful recipe? Go ahead, and write it down in the [Wiki](http://github.com/cice/kangARoo/wiki), and share it with everyone.
+You want to share a neat trick? Or a useful recipe? Go ahead, and write it down in the [Wiki](http://github.com/kayoom/kangaroo/wiki), and share it with everyone.
 
 MIT License
 -----------
