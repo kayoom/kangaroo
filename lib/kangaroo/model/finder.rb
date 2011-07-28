@@ -7,7 +7,7 @@ module Kangaroo
       delegate *(RELATION_DELEGATES + [:to => :relation])
       
       def find_in_batches batch_size = 100
-        relation.find_in_batches batch_size
+        relation.find_in_batches(batch_size)
       end
 
       # Retrieve all records

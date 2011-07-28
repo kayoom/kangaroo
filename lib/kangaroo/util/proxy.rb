@@ -23,7 +23,7 @@ module Kangaroo
         when /^Method not found\: (.+)/
           raise NoMethodError, $1, caller + ["OpenERP Server Traceback:"] + f.backtrace.reverse
         else
-          message = "OpenERP Server Exception " + f.message
+          message = "OpenERP Server Exception " + f.message.to_s
           
           raise Rapuncel::Response::Fault, message, f.backtrace.reverse[0..-2]
         end
