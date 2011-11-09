@@ -39,10 +39,10 @@ Homepage:
 [http://kangaroogem.org](http://kangaroogem.org)
 
 SCM:
-[https://github.com/cice/kangARoo](https://github.com/cice/kangARoo)
+[https://github.com/kayoom/kangaroo](https://github.com/kayoom/kangaroo)
 
 Issues:
-[http://github.com/cice/kangARoo/issues](http://github.com/cice/kangARoo/issues)
+[http://github.com/kayoom/kangaroo/issues](http://github.com/kayoom/kangaroo/issues)
 
 Rubygems:
 [https://rubygems.org/gems/kangaroo](https://rubygems.org/gems/kangaroo)

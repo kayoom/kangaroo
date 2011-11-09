@@ -14,6 +14,8 @@ require 'kangaroo/model/required_attributes'
 require 'kangaroo/model/data_import'
 require 'kangaroo/model/dynamic_finder'
 require 'kangaroo/model/associations'
+require 'kangaroo/model/mass_import'
+require 'kangaroo/util/loader/namespace'
 
 module Kangaroo
   module Model
@@ -36,6 +38,8 @@ module Kangaroo
       extend  DataImport
       extend  DynamicFinder
       include Associations
+      include MassImport
+      extend Util::Loader::Namespace
       
       attr_reader :id
 

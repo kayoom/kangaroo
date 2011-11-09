@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Michael Eickenberg", "Marian Theisen"]
   s.email       = 'marian@cice-online.net'
   s.summary     = "Kang! ActiveRecord-ish OpenObject"
-  s.homepage    = "http://github.com/cice/kangARoo"
+  s.homepage    = "http://github.com/kayoom/kangaroo"
   s.description = "ActiveRecord-ish OpenObject Wrapper"
 
   s.files         = `git ls-files`.split("\n")
@@ -18,13 +18,14 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-  s.add_dependency 'rapuncel', '~> 0.0.3'
+  s.add_dependency "rapuncel", "~> 0.0.5.RC1"
   s.add_dependency "activemodel", ">= 3.0.0"
   s.add_dependency "activesupport", ">= 3.0.0"
   s.add_dependency "hirb"
   s.add_dependency "highline"
+  s.add_dependency "ruby-graphviz", ">= 1.0.0"
   
-  s.add_development_dependency 'yard'
-  s.add_development_dependency 'rspec'
-  s.add_development_dependency 'bundler'
+  s.add_development_dependency "yard"
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "bundler"
 end

@@ -4,9 +4,12 @@ require 'kangaroo/ruby_adapter/base'
 module Kangaroo
   module Util
     class Loader
-      autoload :Model, 'kangaroo/util/loader/model'
-      autoload :Namespace, 'kangaroo/util/loader/namespace'
-      autoload :RootNamespace, 'kangaroo/util/loader/root_namespace'
+      autoload :Model,                 'kangaroo/util/loader/model'
+      autoload :Namespace,             'kangaroo/util/loader/namespace'
+      autoload :RootNamespace,         'kangaroo/util/loader/root_namespace'
+      autoload :Reflection,            'kangaroo/util/loader/reflection'
+      autoload :InformationRepository, 'kangaroo/util/loader/information_repository'
+      
       attr_accessor :model_names, :models, :database, :namespace
 
       # Initialize a Loader instance
@@ -17,7 +20,7 @@ module Kangaroo
         @database = database
         @model_names = model_names
         sanitize_model_names
-        reflection_model
+        root_module.database = database
       end
 
       # Loads matching models and uses {Kangaroo::RubyAdapter::Base RubyAdapter} to
@@ -46,36 +49,12 @@ module Kangaroo
         eval <<-RUBY
           module #{namespace}
             extend Kangaroo::Util::Loader::RootNamespace
-            extend Kangaroo::Util::Loader::Namespace
           end
         RUBY
       end
       
-      def ir_module
-        root_module.const_defined?("Ir") ?
-        root_module.const_get("Ir") :
-        define_ir_namespace
-      end
-      
-      def define_ir_namespace
-        mod = Module.new
-        mod.send :extend, Kangaroo::Util::Loader::Namespace
-        root_module.const_set("Ir", mod)
-      end
-      
       def reflection_model
-        ir_module.const_defined?("Model") ?
-        ir_module.const_get("Model") :
-        ir_module.const_set("Model", create_reflection_model)
-      end
-      
-      def create_reflection_model
-        Class.new(Kangaroo::Model::Base).tap do |model|
-          model.database = database
-          model.namespace = root_module
-          model.oo_name = 'ir.model'
-          model.send :include, Model
-        end
+        root_module.reflection_model
       end
       
       def load_oo_models

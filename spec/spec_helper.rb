@@ -1,6 +1,9 @@
 require 'rubygems'
 require 'bundler/setup'
 
+require 'simplecov'
+SimpleCov.start
+
 require 'kangaroo'
 
 module SpecHelper

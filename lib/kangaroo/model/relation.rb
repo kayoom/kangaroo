@@ -74,6 +74,18 @@ module Kangaroo
         records.all :
         records.first
       end
+      
+      def find_in_batches batch_size = 100
+        objects_count = count
+        batches_count = objects_count / batch_size + 1
+        
+        objects = []
+        batches_count.times do |batch_no|
+          objects += limit(batch_size).offset(batch_no * batch_size).all
+        end
+        
+        objects
+      end
 
       # Count how many records fulfill this conditions
       def count

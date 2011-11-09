@@ -19,7 +19,7 @@ module Kangaroo
       
       def load_associated_models!
         @models.each do |m|
-          m.fields.each &:associated_model
+          m.fields.each &:relation_class
         end
       end
       

@@ -1,10 +1,7 @@
 module Kangaroo
   module Model
     module Inspector
-      # @private
-      def self.included klass
-        klass.extend ClassMethods
-      end
+      extend ActiveSupport::Concern
 
       # @private
       def inspect

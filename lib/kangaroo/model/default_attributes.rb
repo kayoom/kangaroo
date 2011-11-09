@@ -1,11 +1,10 @@
 module Kangaroo
   module Model
     module DefaultAttributes
-      # @private
-      def self.included klass
-        klass.extend ClassMethods
-
-        klass.before_initialize do
+      extend ActiveSupport::Concern
+      
+      included do
+        before_initialize do
           return true if persisted?
           
           default_attributes = self.class.default_attributes
@@ -16,7 +15,7 @@ module Kangaroo
           default_attributes.each do |name, value|
             write_attribute name, value
           end
-        end
+        end        
       end
 
       module ClassMethods

@@ -4,12 +4,11 @@ require 'active_support/core_ext/class/attribute'
 module Kangaroo
   module Model
     module Attributes
-      # @private
-      def self.included base
-        base.send :include, ActiveModel::Dirty
-        base.extend ClassMethods
+      extend ActiveSupport::Concern
       
-        base.send :class_attribute, :attribute_names
+      included do
+        include ActiveModel::Dirty
+        class_attribute :attribute_names
       end
 
       # Read an attribute value by name

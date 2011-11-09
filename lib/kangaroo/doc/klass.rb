@@ -36,20 +36,33 @@ module Kangaroo
               add_tag m, :flags, flag
             end
             
-            m.source = field.attributes_inspect
+            m.source = render_source field
           end
-          
-          # next if field.always_readonly?
-          # register_with_yard 'method', "#{field.name}=", klass do |m|
-          #   m.parameters << ["value"] if m.parameters.blank?
-          #   m.docstring.replace [field.string, field.help] * "\n\n"
-          #   add_tag m, :param, 'value', coerced_type
-          #   add_tag m, :return, field.name.to_s, coerced_type
-          # end
         end
       end
       
       protected
+      def render_source field
+        keys = field.attributes.keys.sort_by(&:to_s)
+        
+        a = []
+        len = 0
+        keys.each do |key|
+          val = field.send(key)
+          
+          if val.present? && key != 'namespace'
+            len = key.to_s.length if len < key.to_s.length
+            a << [key, val] 
+          end
+        end
+        
+        "".tap do |s|
+          a.each do |kv|
+            s << ":" << kv.first.to_s.ljust(len, " ") << " => " << kv.last.pretty_inspect
+          end
+        end
+      end
+      
       def flags field
         [].tap do |f|
           f << '*Required*: true' if field.required?

@@ -3,10 +3,6 @@ module Kangaroo
     module RequiredAttributes
       extend ActiveSupport::Concern
       include ActiveModel::Validations
-   
-      included do
-        extend ClassMethods
-      end
       
       def save options = {}
         if options[:validate] != false
