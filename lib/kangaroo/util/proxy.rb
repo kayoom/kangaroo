@@ -18,14 +18,15 @@ module Kangaroo
 
       def call! name, *args
         super name, *__curry__(*args)
+        
       rescue Rapuncel::Response::Fault => f
         case f.message
         when /^Method not found\: (.+)/
-          raise NoMethodError, $1, caller + ["OpenERP Server Traceback:"] + f.backtrace.reverse
+          raise NoMethodError, $1, caller + ["OpenERP Server Traceback:"] + f.backtrace.reverse + [''] + caller
         else
           message = "OpenERP Server Exception " + f.message.to_s
           
-          raise Rapuncel::Response::Fault, message, f.backtrace.reverse[0..-2]
+          raise Rapuncel::Response::Fault, message, f.backtrace.reverse[0..-2] + [''] + caller
         end
       end
 
