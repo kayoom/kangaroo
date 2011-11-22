@@ -32,6 +32,11 @@ module Kangaroo
         sort_oo_models
         adapt_oo_models
       end
+      
+      def create_namespace!
+        database.login
+        root_module
+      end
 
       protected
       def root_module
