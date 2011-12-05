@@ -100,8 +100,11 @@ module Kangaroo
       # @return self
       def reload fields = self.class.attribute_names
         @attributes = remote.read([id], fields, context).first.except(:id).stringify_keys
-        fields.each do |field|
-          @changed_attributes.delete field.to_s
+        
+        if @changed_attributes.present?
+          fields.each do |field|
+            @changed_attributes.delete field.to_s
+          end
         end
 
         self
