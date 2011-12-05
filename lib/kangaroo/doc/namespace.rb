@@ -19,7 +19,7 @@ module Kangaroo
           
           if obj_const.is_a?(Class) && obj_const.included_modules.map(&:name).include?("Kangaroo::Model::Attributes")
             Klass.new(obj_const, logger).register
-          elsif obj_const.is_a?(Module) && obj_const.included_modules.map(&:name).include?("Kangaroo::Util::Loader::Namespace")
+          elsif obj_const.is_a?(Module) && obj_const.respond_to?(:namespace)
             Namespace.new(obj_const, logger).register
           end
         end
