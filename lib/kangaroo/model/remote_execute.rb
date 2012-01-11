@@ -8,6 +8,8 @@ module Kangaroo
         if Hash === return_value && return_value[:value]
           handle_updated_values return_value[:value] 
           self
+        elsif Hash === return_value && return_value[id.to_s.to_sym]
+          return_value[id.to_s.to_sym]
         else
           return_value
         end
