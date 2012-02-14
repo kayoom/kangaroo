@@ -58,7 +58,7 @@ module Kangaroo
       # @option config [String, Number] 'port' Port
       # @option config [Hash] 'database' Configuration for database
       def configure_by_hash config
-        @client = Client.new config.slice('host', 'port')
+        @client = Client.new config.slice('host', 'port').merge(:logger => logger)
         configure_database config['database']
         
         @loader = Loader.new(models, @database, @namespace)
@@ -75,7 +75,7 @@ module Kangaroo
         @database  = Database.new @client, *db_config.values_at('name', 'user', 'password')
         @models    = db_config['models']
         @namespace = db_config['namespace'] || "Oo"
-        logger.info %Q(Configured OpenERP database "#{db_config['name']}" at "#{client.connection.host}")
+        logger.info %Q(Configured OpenERP database "#{db_config['name']}")
       end
 
       # Login to the configured database

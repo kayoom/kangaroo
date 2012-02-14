@@ -15,6 +15,10 @@ module Kangaroo
     # @see Kangaroo::Util::Proxy::Superadmin
     class Proxy::Db < Proxy
       
+      def initialize client, *args
+        super client, 'db', *args
+      end
+      
       # Check if a database exists
       #
       # @param db_name Name of database to check

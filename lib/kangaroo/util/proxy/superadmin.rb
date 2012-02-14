@@ -14,6 +14,10 @@ module Kangaroo
     # For functions that need superadmin authentication (like create, drop etc)
     # @see Kangaroo::Util::Proxy::Superadmin
     class Proxy::Superadmin < Proxy
+      
+      def initialize client, *args
+        super client, 'db', *args
+      end
       # Create a new database
       #
       # @param [String] db_name name for new database

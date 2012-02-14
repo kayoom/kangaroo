@@ -1,6 +1,10 @@
 module Kangaroo
   module Util
     class Proxy::Wizard < Proxy
+      
+      def initialize client, *args
+        super client, 'wizard', *args
+      end
       # Create Wizard
       #
       # @param [String] name wizard name to create

@@ -16,12 +16,16 @@ module Kangaroo
     #     Proxy::Object already takes care of that, so that you can call ORM methods directly. (see example)
     #     
     class Proxy::Object < Proxy
+      
+      def initialize client, *args
+        super client, 'object', *args
+      end
       # Call function via execute on OpenERPs object service.
       #
       # @param name function name to call
       # @return returned value
       def call! name, *args
-        super :execute, name, *args
+        super :execute, name.to_s, *args
       end
 
       # Get for a model

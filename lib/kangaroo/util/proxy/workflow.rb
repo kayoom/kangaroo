@@ -1,6 +1,11 @@
 module Kangaroo
   module Util
     class Proxy::Workflow < Proxy
+      
+      def initialize client, *args
+        super client, 'object', *args
+      end
+      
       # Advance workflow via exec_workflow on OpenERPs object service.
       #
       # @param name function name to call

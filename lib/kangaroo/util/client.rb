@@ -1,4 +1,4 @@
-require 'rapuncel'
+require 'bsonrpc'
 require 'kangaroo/util/database'
 require 'kangaroo/util/proxy'
 
@@ -29,7 +29,7 @@ module Kangaroo
     #     client.database.db
     #     client.database.superadmin 'superadminpassword'
     #
-    class Client < Rapuncel::Client
+    class Client < Bsonrpc::Client
       SERVICES = %w(db common object wizard report).freeze
 
       # Initialize a Kangaroo XMLRPC Client
@@ -38,24 +38,7 @@ module Kangaroo
       # @option configuration [String] 'host' Hostname or IP address
       # @option configuration [String, Number] 'port' Port
       def initialize configuration
-        super configuration.merge(:raise_on => :both)
-      end
-
-      # @private
-      def clone
-        super.tap do |c|
-          c.connection = connection.clone
-        end
-      end
-
-      SERVICES.each do |name|
-        class_eval <<-RUBY
-          def #{name}_service
-            @#{name}_service ||= clone.tap do |c|
-              c.connection.path = '/xmlrpc/#{name}'
-            end
-          end
-        RUBY
+        super
       end
 
       # Access the Kangaroo::Util::Proxy::Superadmin
@@ -63,21 +46,21 @@ module Kangaroo
       # @param [String] super_password Superadmin password
       # @return [Kangaroo::Util::Proxy::Superadmin] Superadmin proxy
       def superadmin super_password
-        Proxy::Superadmin.new db_service, super_password
+        Proxy::Superadmin.new self, super_password
       end
 
       # Access the Kangaroo::Util::Proxy::Common
       #
       # @return [Kangaroo::Util::Proxy::Common] Common proxy
       def common
-        @common_proxy ||= Proxy::Common.new common_service
+        @common_proxy ||= Proxy::Common.new self
       end
 
       # Access the Kangaroo::Util::Proxy::Db
       #
       # @return [Kangaroo::Util::Proxy::Db] Db proxy
       def db
-        @db_proxy ||= Proxy::Db.new db_service
+        @db_proxy ||= Proxy::Db.new self
       end
       
       def inspect

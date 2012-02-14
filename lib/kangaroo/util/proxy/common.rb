@@ -24,6 +24,10 @@ module Kangaroo
         :debug_sql        => 5
       }.freeze
       
+      def initialize client, *args
+        super client, 'common', *args
+      end
+      
       # Login to an OpenERP database
       #
       # @param [String] db_name The database to log in

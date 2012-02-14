@@ -1,6 +1,10 @@
 module Kangaroo
   module Util
     class Proxy::Report < Proxy
+      
+      def initialize client, *args
+        super client, 'report', *args
+      end
       # Initiate report generation
       #
       # @param object
