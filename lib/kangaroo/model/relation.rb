@@ -4,7 +4,7 @@ module Kangaroo
   module Model
     class Relation
       include DynamicFinder
-      
+
       # @private
       ARRAY_DELEGATES = %w( all? any? as_json at b64encode blank? choice class clone collect collect! combination compact compact! concat
                             cycle decode64 delete delete_at delete_if detect drop drop_while dup duplicable? each each_cons each_index
@@ -44,6 +44,11 @@ module Kangaroo
         @context_clause = {}
       end
 
+      def pluck column
+        column = column.to_sym
+        select(column).to_a.map &column
+      end
+
       # Submit the query
       def to_a
         @target.search_and_read @where_clauses, search_parameters, read_parameters
@@ -74,16 +79,16 @@ module Kangaroo
         records.all :
         records.first
       end
-      
+
       def find_in_batches batch_size = 100
         objects_count = count
         batches_count = objects_count / batch_size + 1
-        
+
         objects = []
         batches_count.times do |batch_no|
           objects += limit(batch_size).offset(batch_no * batch_size).all
         end
-        
+
         objects
       end
 
@@ -168,7 +173,7 @@ module Kangaroo
       def order column, desc = false
         column = column.to_s
         column = column + " desc" if desc
-        
+
         _clone._tap do |c|
           c.reverse_flag = true if column.downcase == 'id desc'
           c.order_clause += [column.to_s]

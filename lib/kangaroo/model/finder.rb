@@ -5,7 +5,7 @@ module Kangaroo
     module Finder
       RELATION_DELEGATES = %w(where limit offset order select context reverse)
       delegate *(RELATION_DELEGATES + [:to => :relation])
-      
+
       def find_in_batches batch_size = 100
         relation.find_in_batches(batch_size)
       end
@@ -15,6 +15,14 @@ module Kangaroo
       # @return [Array] records
       def all
         relation.all
+      end
+
+      # Retrieve one column
+      #
+      # @param [String, Symbol] column/field
+      # #return [Array] values
+      def pluck column
+        relation.pluck column
       end
 
       # ActiveRecord-ish find method
@@ -73,7 +81,7 @@ module Kangaroo
       def search_and_read conditions, search_options = {}, read_options = {}
         ids = search conditions, search_options.merge(:count => false)
         return [] if ids.blank?
-        
+
         read ids, read_options
       end
 
