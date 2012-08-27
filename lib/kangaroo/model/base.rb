@@ -21,7 +21,6 @@ module Kangaroo
   module Model
     class Base
       class_attribute :database, :namespace, :oo_name, :oo_model
-      class_inheritable_array :field_names
 
       extend ActiveModel::Callbacks
       define_model_callbacks :initialize
@@ -40,7 +39,7 @@ module Kangaroo
       include Associations
       include MassImport
       extend Util::Loader::Namespace
-      
+
       attr_reader :id
 
       # Initialize a new object, and set attributes
@@ -59,7 +58,7 @@ module Kangaroo
       def remote
         self.class.remote
       end
-      
+
       def == other
         if new_record?
           false
@@ -72,7 +71,7 @@ module Kangaroo
         def fields_hash
           @fields_hash ||= fields_to_hash(fields_get)
         end
-        
+
         def fields
           @fields ||= fields_hash.values
         end
@@ -82,11 +81,11 @@ module Kangaroo
         def remote
           @remote ||= database.object oo_name
         end
-        
+
         protected
         def fields_to_hash fields
           return nil if fields.nil?
-          
+
           {}.tap do |h|
             fields.each do |field|
               h[field.name] = field
