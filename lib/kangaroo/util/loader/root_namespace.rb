@@ -5,9 +5,9 @@ module Kangaroo
         include Namespace
         include InformationRepository
         include Reflection
-        
+
         mattr_accessor :database
-        
+
         # Apply naming convention: convert OpenObject name (e.g. "product.product") to
         # Ruby class name, respecting current namespace (e.g. "Oo::Product::Product")
         def oo_to_ruby oo_name

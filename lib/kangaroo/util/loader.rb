@@ -9,7 +9,7 @@ module Kangaroo
       autoload :RootNamespace,         'kangaroo/util/loader/root_namespace'
       autoload :Reflection,            'kangaroo/util/loader/reflection'
       autoload :InformationRepository, 'kangaroo/util/loader/information_repository'
-      
+
       attr_accessor :model_names, :models, :database, :namespace
 
       # Initialize a Loader instance
@@ -32,7 +32,7 @@ module Kangaroo
         sort_oo_models
         adapt_oo_models
       end
-      
+
       def create_namespace!
         database.login
         root_module
@@ -43,25 +43,27 @@ module Kangaroo
         namespace.constantize.tap do |ns|
           unless ns.respond_to?(:namespace)
             ns.send :extend, Kangaroo::Util::Loader::Namespace
+            ns.namespace = ns
           end
-          
+
           unless ns.respond_to?(:oo_to_ruby)
             ns.send :extend, Kangaroo::Util::Loader::RootNamespace
           end
         end
-        
+
       rescue NameError
         eval <<-RUBY
           module #{namespace}
             extend Kangaroo::Util::Loader::RootNamespace
+            self.namespace = #{namespace}
           end
         RUBY
       end
-      
+
       def reflection_model
         root_module.reflection_model
       end
-      
+
       def load_oo_models
         @models = model_names.sum([]) do |model_name|
           reflection_model.where("model ilike #{model_name}").all
