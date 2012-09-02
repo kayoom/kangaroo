@@ -39,6 +39,7 @@ module Kangaroo
       #
       # @return [Kangaroo::Util::Proxy::Workflow] workflow service proxy
       def workflow
+        login
         @workflow_proxy ||= Proxy::Workflow.new client.object_service, db_name, user_id, password
       end
 
@@ -46,6 +47,7 @@ module Kangaroo
       #
       # @return [Kangaroo::Util::Proxy::Object] object service proxy
       def object model_name
+        login
         Proxy::Object.new client.object_service, db_name, user_id, password, model_name
       end
 
@@ -53,6 +55,7 @@ module Kangaroo
       #
       # @return [Kangaroo::Util::Proxy::Wizard] wizard service proxy
       def wizard
+        login
         @wizard_proxy ||= Proxy::Wizard.new client.wizard_service, db_name, user_id, password
       end
 
@@ -60,6 +63,7 @@ module Kangaroo
       #
       # @return [Kangaroo::Util::Proxy::Report] report service proxy
       def report
+        login
         @report_proxy ||= Proxy::Report.new client.report_service, db_name, user_id, password
       end
 

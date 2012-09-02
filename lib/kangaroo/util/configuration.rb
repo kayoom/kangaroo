@@ -10,7 +10,7 @@ module Kangaroo
         'host' => 'localhost',
         'port' => 8069
       }
-      
+
       attr_accessor :logger, :database, :models, :client, :namespace, :loader
 
       # Initialize the Kangaroo configuration
@@ -27,8 +27,7 @@ module Kangaroo
         else
           raise ArgumentError, 'Expected a filename or Hash as configuration options'
         end
-        
-        login
+
         loader.create_namespace!
       end
 
@@ -38,7 +37,7 @@ module Kangaroo
         loaded_models = loader.load!
         loaded_models ||= []
         logger.info "Loaded OpenERP models matching #{models.inspect} into namespace #{@namespace}: #{loaded_models.map(&:name).join(', ')}" if models
-        
+
         loaded_models
       rescue Exception => e
         logger.error "Loading of OpenERP models failed.\n#{e.inspect}"
@@ -60,7 +59,7 @@ module Kangaroo
       def configure_by_hash config
         @client = Client.new config.slice('host', 'port')
         configure_database config['database']
-        
+
         @loader = Loader.new(models, @database, @namespace)
       end
 

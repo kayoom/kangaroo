@@ -34,7 +34,6 @@ module Kangaroo
       end
 
       def create_namespace!
-        database.login
         root_module
       end
 
